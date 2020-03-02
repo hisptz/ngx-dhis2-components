@@ -1,24 +1,108 @@
-# NgxDhis2HttpClient
+# DHIS2 Http Client library
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.3.
+DHIS2 Http Client is angular 6+ library that exposes services for fetching, posting, updating and deleting dhis2 resources, simple configurable index DB support for dhis2 APIs
 
-## Code scaffolding
+## Installation
 
-Run `ng generate component component-name --project ngx-dhis2-http-client` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ngx-dhis2-http-client`.
-> Note: Don't forget to add `--project ngx-dhis2-http-client` or else it will be added to the default project in your `angular.json` file. 
+`npm install @iapps/ngx-dhis2-http-client --save`
 
-## Build
+## Contents
 
-Run `ng build ngx-dhis2-http-client` to build the project. The build artifacts will be stored in the `dist/` directory.
+ngx-dhis2-http-client exposes two services .i.e NgxHttpClientService and ManifestService
 
-## Publishing
+- NgxHttpClientService: This service exposes all REST-API methods .i.e. GET, POST, PUT, DELETE
 
-After building your library with `ng build ngx-dhis2-http-client`, go to the dist folder `cd dist/ngx-dhis2-http-client` and run `npm publish`.
+  - GET: `get(url: string, httpConfig: HttpConfig)`
 
-## Running unit tests
+  - POST: `post(url: string, data: any, httpConfig: HttpConfig)`
 
-Run `ng test ngx-dhis2-http-client` to execute the unit tests via [Karma](https://karma-runner.github.io).
+  - PUT: `put(url: string, data: any, httpConfig: HttpConfig)`
 
-## Further help
+  - DELETE `delete(url: string, httpConfig: HttpConfig)`
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+  where HttpConfig has a data model of
+
+  ```
+   {
+    includeVersionNumber?: boolean;
+    preferPreviousApiVersion?: boolean;
+    useRootUrl?: boolean;
+    isExternalLink?: boolean;
+    useIndexDb?: boolean;
+  }
+  ```
+
+- ManifestService: This service exposes manifest two methods get() and getRootUrl()
+  - get(): This returns payload with the format
+
+```
+  {
+    name: string;
+    version: number | string;
+    description: string;
+    launch_path: string;
+    appType: string;
+    icons: {
+      16: string;
+      48: string;
+      128: string;
+    };
+    developer: {
+      name: string;
+      url: string;
+    };
+    default_locale: string;
+    activities: {
+    dhis: {
+      href: string;
+      namespace: string;
+      };
+    };
+    authorities: Array<string>;
+}
+```
+
+- getRootUrl(): This method returns rootUrl as specified in the manifest file in activities.dhis.href. This method will return `../../../` if manifest file could not be loaded or href is not specified
+
+## Usage
+
+**1. Import NgxDhis2HttpClientModule:**
+
+You have to import NgxDhis2HttpClientModule.forRoot() in the root NgModule of your application
+
+This library support index DB as based on [dexie library](https://dexie.org/). In order to initiatiate index db then you have to passed index db configuration in forRoot of the module, so in app.module.ts
+
+```ts
+........
+@NgModule({
+  declarations: [AppComponent, ...fromPages.pages],
+  imports: [
+   ..........
+    NgxDhis2HttpClientModule.forRoot({
+      namespace: 'iapps',
+      version: 1,
+      models: {
+        users: 'id',
+        dataElements: 'id',
+        .......
+      }
+    })
+    .......
+    ]
+    ......
+    })
+```
+
+where in the models, for example user will be a table "users" and 'id' will be a keyIndex for the table
+
+**2. Injecting in services**
+
+Inject NgxHttpClientService or ManifestService any where in constructor in your angular application eg
+
+```ts
+ import { NgxDhis2HttpClientService } from '@iapps/ngx-dhis2-http-client';
+ ...
+ constructor(private http: NgxDhis2HttpClientService) {
+  }
+ ...
+```
