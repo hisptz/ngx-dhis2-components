@@ -1,7 +1,7 @@
 # Angular DHIS2 Components
 
 [![Build Status](https://travis-ci.com/hisptz/ngx-dhis2-components.svg?branch=master)](https://travis-ci.com/hisptz/ngx-dhis2-components)
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![Greenkeeper badge](https://badges.greenkeeper.io/hisptz/ngx-dhis2-components.svg)](https://greenkeeper.io/)
 
 Angular 8+ based DHIS2 components
 
