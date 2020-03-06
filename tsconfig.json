@@ -26,6 +26,10 @@
       "ngx-dhis2-http-client": [
         "dist/ngx-dhis2-http-client/ngx-dhis2-http-client",
         "dist/ngx-dhis2-http-client"
+      ],
+      "ngx-dhis2-org-unit-filter": [
+        "dist/ngx-dhis2-org-unit-filter/ngx-dhis2-org-unit-filter",
+        "dist/ngx-dhis2-org-unit-filter"
       ]
     }
   },
