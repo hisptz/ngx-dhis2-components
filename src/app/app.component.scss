@@ -1,0 +1,34 @@
+.components-container {
+}
+
+.components-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding-right: 15px;
+  padding-left: 15px;
+  z-index: 300;
+  background-color: #ffffff;
+}
+
+.component-content {
+  margin-top: 50px;
+  margin-left: 250px;
+}
+
+.component-list {
+  position: fixed;
+  width: 250px;
+  left: 0;
+  height: 100vh;
+  border-right: solid thin #eeeeee;
+}
+
+.current-component {
+  padding: 5px 15px 5px 15px;
+}
