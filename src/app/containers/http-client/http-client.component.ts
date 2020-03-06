@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  NgxDhis2HttpClientService,
+  Manifest
+} from 'projects/ngx-dhis2-http-client/src/public_api';
 
 @Component({
   selector: 'app-http-client',
@@ -6,10 +10,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./http-client.component.scss']
 })
 export class HttpClientComponent implements OnInit {
-
-  constructor() { }
+  constructor(private httpClient: NgxDhis2HttpClientService) {}
 
   ngOnInit(): void {
+    this.httpClient.manifest().subscribe((manifest: Manifest) => {
+      console.log(manifest);
+    });
+    this.httpClient
+      .get(
+        'organisationUnits.json?fields=id,name,level,parent,path&order=level:asc&order=name:asc&filter=path:ilike:O6uvpzGd5pu&pageSize=100&page=1',
+        {
+          useIndexDb: true
+        }
+      )
+      .subscribe(orgUnits => {
+        console.log(orgUnits);
+      });
   }
-
 }
