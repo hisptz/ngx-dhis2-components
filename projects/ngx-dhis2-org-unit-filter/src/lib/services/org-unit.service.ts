@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgxDhis2HttpClientService } from '@iapps/ngx-dhis2-http-client';
-import { from, Observable, of } from 'rxjs';
+import { from, Observable, of, zip } from 'rxjs';
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 
 import { getOrgUnitUrls } from '../helpers/get-org-unit-urls.helper';
@@ -83,16 +83,36 @@ export class OrgUnitService {
     minLevel: number,
     orgUnitFields
   ) {
-    return this.httpClient.get(
-      'organisationUnits.json?fields=' +
-        orgUnitFields +
-        '&order=level:asc' +
-        '&order=name:asc&filter=path:ilike:' +
-        userOrgUnits.join(';') +
-        '&pageSize=' +
-        pageSize +
-        (minLevel ? '&filter=level:le:' + minLevel : ''),
-      { useIndexDb: true }
+    return zip(
+      ...userOrgUnits.map((orgUnitId: string) =>
+        this.httpClient.get(
+          'organisationUnits.json?fields=' +
+            orgUnitFields +
+            '&order=level:asc' +
+            '&order=name:asc&filter=path:ilike:' +
+            orgUnitId +
+            '&pageSize=' +
+            pageSize +
+            (minLevel ? '&filter=level:le:' + minLevel : ''),
+          { useIndexDb: true }
+        )
+      )
+    ).pipe(
+      map((orgUnitResults: any[]) => {
+        let otherParameters = null;
+        const organisationUnits = _.flatten(
+          orgUnitResults.map((orgUnitResult: any, index: number) => {
+            if (index === 0) {
+              otherParameters = _.omit(orgUnitResult, 'organisationUnits');
+            }
+            return orgUnitResult.organisationUnits;
+          })
+        );
+        return {
+          ...otherParameters,
+          organisationUnits
+        };
+      })
     );
   }
 
