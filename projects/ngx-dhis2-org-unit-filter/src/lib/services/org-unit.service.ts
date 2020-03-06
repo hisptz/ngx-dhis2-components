@@ -8,6 +8,7 @@ import { OrgUnitFilterConfig } from '../models/org-unit-filter-config.model';
 import { OrgUnit } from '../models/org-unit.model';
 import { DEFAULT_ORG_UNIT_FIELDS } from '../constants/default-org-unit-fields.constants';
 import * as _ from 'lodash';
+import { getCombinedOrgUnits } from '../helpers/get-combined-org-units.helper';
 
 @Injectable()
 export class OrgUnitService {
@@ -97,23 +98,7 @@ export class OrgUnitService {
           { useIndexDb: true }
         )
       )
-    ).pipe(
-      map((orgUnitResults: any[]) => {
-        let otherParameters = null;
-        const organisationUnits = _.flatten(
-          orgUnitResults.map((orgUnitResult: any, index: number) => {
-            if (index === 0) {
-              otherParameters = _.omit(orgUnitResult, 'organisationUnits');
-            }
-            return orgUnitResult.organisationUnits;
-          })
-        );
-        return {
-          ...otherParameters,
-          organisationUnits
-        };
-      })
-    );
+    ).pipe(map((orgUnitResults: any[]) => getCombinedOrgUnits(orgUnitResults)));
   }
 
   private _loadOrgUnitsByUrl(orgUnitUrl: string) {
