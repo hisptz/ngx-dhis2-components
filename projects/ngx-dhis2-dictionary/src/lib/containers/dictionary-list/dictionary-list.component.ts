@@ -11,7 +11,7 @@ import { select, Store } from '@ngrx/store';
 import * as _ from 'lodash';
 import { Observable, pipe } from 'rxjs';
 
-import { MetadataDictionary } from '../../models/dictionary';
+import { MetadataDictionary } from '../../models/dictionary.model';
 import { ExportService } from '../../services/export.service';
 import { InitializeDictionaryMetadataAction } from '../../store/actions/dictionary.actions';
 import { DictionaryState } from '../../store/reducers/dictionary.reducer';
@@ -27,6 +27,8 @@ import {
   loadIndicatorsAction,
   LoadIndicatorGroupsAction
 } from '../../store/actions/indicators.actions';
+import { DictionaryConfig } from '../../models/dictionary-config.model';
+import { DICTIONARY_CONFIG } from '../../constants/dictionary-config.constant';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -37,8 +39,10 @@ import {
 })
 export class DictionaryListComponent implements OnInit {
   @Input() metadataIdentifiers: Array<string>;
-  @Output() dictionaryItemId = new EventEmitter<any>();
   @Input() selectedItem: string;
+  @Input() dictionaryConfig: DictionaryConfig;
+
+  @Output() dictionaryItemId = new EventEmitter<any>();
   @Output() metadataInfo = new EventEmitter<any>();
   @Output() metadataGroupsInfo = new EventEmitter<any>();
   dictionaryList$: Observable<MetadataDictionary[]>;
@@ -47,39 +51,48 @@ export class DictionaryListComponent implements OnInit {
   indicators: any[] = [];
   newIndicators$: Observable<any>;
   searchingText: string;
-  currentPage: number = 1;
+  currentPage: number;
   indicatorsList$: Observable<any>;
   allIndicators$: Observable<any>;
-  completedPercent = 0;
+  completedPercent: number;
   selectedIndicator: any = null;
   totalAvailableIndicators: any = null;
   indicatorGroups: any[] = [];
   error: boolean;
   loading: boolean;
-  listAllMetadataInGroup: boolean = false;
+  listAllMetadataInGroup: boolean;
   html: any;
-  isprintSet: boolean = false;
+  isPrintSet: boolean;
 
   constructor(
     private store: Store<DictionaryState>,
     private indicatorsStore: Store<AppState>,
     private exportService: ExportService,
     private sanitizer: DomSanitizer
-  ) {
+  ) {}
+
+  ngOnInit() {
+    this.listAllMetadataInGroup = false;
     this.searchingText = '';
     this.indicators = [];
     this.loading = true;
     this.error = false;
-  }
+    this.currentPage = 1;
+    this.completedPercent = 0;
+    this.isPrintSet = false;
 
-  ngOnInit() {
-    this.listAllMetadataInGroup = false;
-    if (this.selectedItem) {
-      this.selectedIndicator = this.selectedItem;
-    } else {
-      this.selectedIndicator = this.metadataIdentifiers[0];
-    }
+    this.dictionaryConfig = {
+      ...DICTIONARY_CONFIG,
+      ...(this.dictionaryConfig || {})
+    };
+
+    this.selectedIndicator =
+      this.selectedItem || this.metadataIdentifiers
+        ? this.metadataIdentifiers[0]
+        : undefined;
+
     if (
+      this.metadataIdentifiers &&
       this.metadataIdentifiers.length > 0 &&
       this.metadataIdentifiers[0] !== ''
     ) {
@@ -90,9 +103,8 @@ export class DictionaryListComponent implements OnInit {
       this.dictionaryList$ = this.store.select(
         getDictionaryList(this.metadataIdentifiers)
       );
-    } else if (this.selectedIndicator == 'all') {
+    } else if (this.selectedIndicator === 'all') {
       this.loadAllIndicators();
-    } else {
     }
   }
 
@@ -382,8 +394,8 @@ export class DictionaryListComponent implements OnInit {
 
   printPDF() {
     this.listAllMetadataInGroup = true;
-    this.isprintSet = true;
-    if (this.isprintSet) {
+    this.isPrintSet = true;
+    if (this.isPrintSet) {
       setTimeout(function() {
         this.isprintSet = false;
         window.print();

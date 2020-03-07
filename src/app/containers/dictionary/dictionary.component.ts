@@ -13,17 +13,17 @@ export class DictionaryComponent implements OnInit {
   metadataIdentifiers: any;
   systemSettings: any;
   metadataIdentifiersArr: any[] = [
-    'e0Dca8sKCB0',
-    'Bcy5tKA08ar.U6iBxWNlWyx',
-    'W92vvsUDVfx.FmGzPdBtHaJ',
-    'BfMAe6Itzgt',
-    'ulgL07PF8rq',
-    'sB79w2hiLp8',
-    'vDdRoZYybP2',
-    'Kswd1r4qWLh',
-    'O8Kuzjsx2Zm',
-    'fbfJHSPpUD',
-    'xsRrGKBoLCm'
+    // 'e0Dca8sKCB0',
+    // 'Bcy5tKA08ar.U6iBxWNlWyx',
+    // 'W92vvsUDVfx.FmGzPdBtHaJ',
+    // 'BfMAe6Itzgt'
+    'ulgL07PF8rq'
+    // 'sB79w2hiLp8',
+    // 'vDdRoZYybP2',
+    // 'Kswd1r4qWLh',
+    // 'O8Kuzjsx2Zm',
+    // 'fbfJHSPpUD',
+    // 'xsRrGKBoLCm'
   ];
   constructor(
     private router: Router,

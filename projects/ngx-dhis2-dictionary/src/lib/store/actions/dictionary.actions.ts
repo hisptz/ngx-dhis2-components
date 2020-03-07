@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { MetadataDictionary } from '../../models/dictionary';
+import { MetadataDictionary } from '../../models/dictionary.model';
 
 export enum DictionaryActionTypes {
   InitializeDictionaryMetadata = '[Dictionary] initialize incoming metadata',

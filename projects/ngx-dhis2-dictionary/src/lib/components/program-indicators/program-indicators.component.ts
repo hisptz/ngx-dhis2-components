@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { AppState } from '../../../store/reducers/indicators.reducers';
+import { AppState } from '../../store/reducers/indicators.reducers';
 import { Store } from '@ngrx/store';
 import { Observable, pipe } from 'rxjs';
 import * as _ from 'lodash';
@@ -7,12 +7,12 @@ import {
   getListOfProgramIndicators,
   getAllProgramIndicators,
   getProgramIndicatorGroups
-} from '../../../store/selectors/indicators.selectors';
+} from '../../store/selectors/indicators.selectors';
 import { DatePipe } from '@angular/common';
 import {
   LoadProgramIndicatorGroupsAction,
   loadProgramIndicatorsAction
-} from '../../../store/actions/indicators.actions';
+} from '../../store/actions/indicators.actions';
 
 @Component({
   selector: 'app-program-indicators',
@@ -102,7 +102,7 @@ export class ProgramIndicatorsComponent implements OnInit {
   }
 
   inGroupToFilter(id) {
-    return _.find(this.groupToFilter, { id: id });
+    return _.find(this.groupToFilter, { id });
   }
 
   groupNames() {

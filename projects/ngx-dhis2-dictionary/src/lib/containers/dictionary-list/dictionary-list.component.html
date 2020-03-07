@@ -1,127 +1,78 @@
 <div class="dictionary-list-container">
   <div class="dictionary-header">
-    <input
-      id="searching-input"
-      placeholder="Search "
-      [(ngModel)]="searchingText"
-    />
-    <button
-      class="indicator-btn"
-      (click)="setActiveItem($event, 'all')"
-      [ngClass]="selectedIndicator === 'all' ? 'active-item' : ''"
-    >
+    <input id="searching-input" placeholder="Search " [(ngModel)]="searchingText" />
+    <button class="indicator-btn" (click)="setActiveItem($event, 'all')"
+      [ngClass]="selectedIndicator === 'all' ? 'active-item' : ''">
       All
     </button>
-    <ng-template
-      ngFor
-      let-dictionaryItem
-      [ngForOf]="dictionaryList$ | async | filterBySearchInput: searchingText"
-      let-i="index"
-    >
-      <button
-        *ngIf="dictionaryItem.name.indexOf('not found') < 0"
-        class="dictionary-title indicator-btn"
+    <ng-template ngFor let-dictionaryItem [ngForOf]="dictionaryList$ | async | filterBySearchInput: searchingText"
+      let-i="index">
+      <button *ngIf="dictionaryItem.name.indexOf('not found') < 0" class="dictionary-title indicator-btn"
         (click)="setActiveItem($event, dictionaryItem.id)"
-        [ngClass]="dictionaryItem.id === selectedIndicator ? 'active-item' : ''"
-      >
-        <span
-          class="category"
-          *ngIf="dictionaryItem.category && dictionaryItem.category == 'in'"
-          style="color:#FFF; margin-right: 10px; margin-left: -8px; background-color: #e36e40"
-          >{{ dictionaryItem.category }}</span
-        >
-        <span
-          class="category"
-          *ngIf="dictionaryItem.category && dictionaryItem.category == 'pi'"
-          style="color:#FFF; margin-right: 10px; margin-left: -8px; background-color: #5c9d18"
-          >{{ dictionaryItem.category }}</span
-        >
-        <span
-          class="category"
-          *ngIf="dictionaryItem.category && dictionaryItem.category == 'ds'"
-          style="color:#FFF; margin-right: 10px; margin-left: -8px; background-color: #2d2d30"
-          >{{ dictionaryItem.category }}</span
-        >
-        <span
-          class="category"
-          *ngIf="dictionaryItem.category && dictionaryItem.category == 'de'"
-          style="color:#FFF; margin-right: 10px; margin-left: -8px; background-color: #27cec8"
-          >{{ dictionaryItem.category }}</span
-        >
-        <span
-          class="category"
-          *ngIf="dictionaryItem.category && dictionaryItem.category == 'fn'"
-          style="color:#FFF; margin-right: 10px; margin-left: -8px; background-color: #a763d8"
-          >{{ dictionaryItem.category }}</span
-        >
-        <span
-          class="category"
-          *ngIf="dictionaryItem.category && dictionaryItem.category == 'dg'"
-          style="color:#FFF; margin-right: 10px; margin-left: -8px; background-color: #43b59b"
-          >{{ dictionaryItem.category }}</span
-        >
+        [ngClass]="dictionaryItem.id === selectedIndicator ? 'active-item' : ''">
+        <span class="category" *ngIf="dictionaryItem.category && dictionaryItem.category == 'in'"
+          style="color:#FFF; margin-right: 10px; margin-left: -8px; background-color: #e36e40">{{ dictionaryItem.category }}</span>
+        <span class="category" *ngIf="dictionaryItem.category && dictionaryItem.category == 'pi'"
+          style="color:#FFF; margin-right: 10px; margin-left: -8px; background-color: #5c9d18">{{ dictionaryItem.category }}</span>
+        <span class="category" *ngIf="dictionaryItem.category && dictionaryItem.category == 'ds'"
+          style="color:#FFF; margin-right: 10px; margin-left: -8px; background-color: #2d2d30">{{ dictionaryItem.category }}</span>
+        <span class="category" *ngIf="dictionaryItem.category && dictionaryItem.category == 'de'"
+          style="color:#FFF; margin-right: 10px; margin-left: -8px; background-color: #27cec8">{{ dictionaryItem.category }}</span>
+        <span class="category" *ngIf="dictionaryItem.category && dictionaryItem.category == 'fn'"
+          style="color:#FFF; margin-right: 10px; margin-left: -8px; background-color: #a763d8">{{ dictionaryItem.category }}</span>
+        <span class="category" *ngIf="dictionaryItem.category && dictionaryItem.category == 'dg'"
+          style="color:#FFF; margin-right: 10px; margin-left: -8px; background-color: #43b59b">{{ dictionaryItem.category }}</span>
 
         <span title="{{ dictionaryItem.name }}">{{
           dictionaryItem.name | shortenName
         }}</span>
-        <span
-          *ngIf="dictionaryItem.name !== ''"
-          (click)="remove(dictionaryItem, dictionaryList$)"
-          title="remove"
-          style="margin-left: 15px; padding: 2px; border-radius: 4px; color: #FFF; font-size: 1.2em; font-weight: 900;"
-          >&#10005;</span
-        >
+        <span *ngIf="dictionaryItem.name !== ''" (click)="remove(dictionaryItem, dictionaryList$)" title="remove"
+          style="margin-left: 15px; padding: 2px; border-radius: 4px; color: #FFF; font-size: 1.2em; font-weight: 900;">&#10005;</span>
         <span *ngIf="dictionaryItem.name == ''">Loading ...</span>
       </button>
     </ng-template>
   </div>
   <div *ngIf="selectedIndicator == 'all'">
-    <app-metadata-list
-      [metadataIdentifiers]="metadataIdentifiers"
-      (selectedMetadataId)="selectedMetadataId($event)"
-      (loadedMetadataInfo)="loadedMetadataInfo($event)"
-      (metadataGroups)="metadataGroups($event)"
-    ></app-metadata-list>
+    <app-metadata-list [metadataIdentifiers]="metadataIdentifiers" (selectedMetadataId)="selectedMetadataId($event)"
+      (loadedMetadataInfo)="loadedMetadataInfo($event)" (metadataGroups)="metadataGroups($event)"></app-metadata-list>
   </div>
-  <div
-    class="dictionary-item-container"
-    *ngFor="
+  <div class="dictionary-item-container" *ngFor="
       let dictionaryItem of dictionaryList$
         | async
         | filterBySearchInput: searchingText;
       let i = index
-    "
-  >
-    <div
-      id="template-to-export"
-      class="dictionary-body"
-      *ngIf="dictionaryItem.id === selectedIndicator"
-    >
-      <div
-        class="dictionary-description"
-        id="dictionary-description-{{ dictionaryItem.id }}"
-        [innerHtml]="getSafeHtml(dictionaryItem.description)"
-      ></div>
+    ">
+    <div id="template-to-export" class="dictionary-body" *ngIf="dictionaryItem.id === selectedIndicator">
+      <div class="dictionary-description" id="dictionary-description-{{ dictionaryItem.id }}"
+        [innerHtml]="getSafeHtml(dictionaryItem.description)"></div>
       <!-- Indicator -->
       <div *ngIf="dictionaryItem && dictionaryItem.data && dictionaryItem.data.type=='indicator'">
-        <div class="indicator-name"><h3 style="color: #355E7F; margin-bottom: 1.5rem">{{dictionaryItem.data.metadata.name}}
-            <a title="View this indicator in maintanance"  target="_blank" href="../../../dhis-web-maintenance/#/edit/indicatorSection/indicator/{{dictionaryItem.data.metadata.id}}">
-              <svg class="" viewBox="0 0 24 24" 
-              style="display: inline-block; color: rgba(0, 0, 0, 0.87); fill: rgb(117, 117, 117); height: 16px; width: 16px; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms; margin-left: -3px; margin-top: -10px; cursor: pointer;">
-              <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path>
+        <div class="indicator-name">
+          <h3 style="color: #355E7F; margin-bottom: 1.5rem">{{dictionaryItem.data.metadata.name}}
+            <a title="View this indicator in maintanance" target="_blank"
+              href="../../../dhis-web-maintenance/#/edit/indicatorSection/indicator/{{dictionaryItem.data.metadata.id}}">
+              <svg class="" viewBox="0 0 24 24"
+                style="display: inline-block; color: rgba(0, 0, 0, 0.87); fill: rgb(117, 117, 117); height: 16px; width: 16px; user-select: none; transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms; margin-left: -3px; margin-top: -10px; cursor: pointer;">
+                <path
+                  d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z">
+                </path>
               </svg>
             </a>
-          </h3></div>
-        <div class="introduction"><h3 style="color: #464646;">Introduction</h3></div>
-        <div class="description"><p class="indicator">
-          <span style="color: #325E80;">
-            {{dictionaryItem.data.metadata.name}}
-          </span> is a 
-          <span style="color: #325E80;">
+          </h3>
+        </div>
+        <div class="introduction">
+          <h3 style="color: #464646;">Introduction</h3>
+        </div>
+        <div class="description">
+          <p class="indicator">
+            <span style="color: #325E80;">
+              {{dictionaryItem.data.metadata.name}}
+            </span> is a
+            <span style="color: #325E80;">
               {{dictionaryItem.data.metadata.indicatorType.name}}
-          </span> indicator
-          <span *ngIf="dictionaryItem.data.metadata.numeratorDescription">
-            , measured by 
+            </span> indicator
+            <span *ngIf="dictionaryItem.data.metadata.numeratorDescription">
+              , measured by
               <span style="color: #325E80;">
                 {{ dictionaryItem.data.metadata.numeratorDescription }}
               </span>
@@ -141,16 +92,11 @@
         </div>
         <div>
           <p style="color: #464646; font-size: 0.7em; margin-top: -15px;">
-            <i
-              >Identifed by:
-              <a
-                target="_blank"
-                href="../../../api/indicators/{{
+            <i>Identifed by:
+              <a target="_blank" href="../../../api/indicators/{{
                   dictionaryItem.data.metadata.id
-                }}.json"
-                >{{ dictionaryItem.data.metadata.id }}
-              </a></i
-            >
+                }}.json">{{ dictionaryItem.data.metadata.id }}
+              </a></i>
           </p>
         </div>
         <div>
@@ -163,12 +109,10 @@
         <div></div>
 
         <!-- Indicator facts -->
-        <div
-          *ngIf="
+        <div *ngIf="
             dictionaryItem.data.metadata.indicatorGroups &&
             dictionaryItem.data.metadata.indicatorGroups.length > 0
-          "
-        >
+          ">
           <h4 style="color: #464646;">Indicator facts</h4>
           <h6>Belongs to the following groups of indicators :-</h6>
           <div style="overflow-x: auto;">
@@ -182,12 +126,10 @@
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  *ngFor="
+                <tr *ngFor="
                     let indicatorGroup of dictionaryItem.data.metadata
                       .indicatorGroups
-                  "
-                >
+                  ">
                   <td>{{ indicatorGroup.name }}</td>
                   <td>
                     <span *ngIf="indicatorGroup.code">{{
@@ -198,48 +140,34 @@
                   <td>{{ indicatorGroup.indicators.length }}</td>
                   <td>
                     <ol style="max-height: 100px; overflow: auto">
-                      <li
-                        *ngFor="
+                      <li *ngFor="
                           let indicator of getOtherMetadata(
                             indicatorGroup.indicators,
                             listAllMetadataInGroup
                           )
-                        "
-                      >
-                        <span
-                          id="{{ indicator.id }}"
-                          (click)="setActiveItem($event, indicator.id)"
-                          style="color: #325E80; cursor: pointer;text-decoration: underline"
-                        >
+                        ">
+                        <span id="{{ indicator.id }}" (click)="setActiveItem($event, indicator.id)"
+                          style="color: #325E80; cursor: pointer;text-decoration: underline">
                           {{ indicator.name }}
                         </span>
                       </li>
-                      <a
-                        style="text-decoration: underline; color:#007bff; font-size: 0.7em;"
-                        *ngIf="
+                      <a style="text-decoration: underline; color:#007bff; font-size: 0.7em;" *ngIf="
                           indicatorGroup.indicators.length > 3 &&
                           !listAllMetadataInGroup
-                        "
-                        (click)="
+                        " (click)="
                           getOtherMetadata(
                             indicatorGroup.indicators,
                             (listAllMetadataInGroup = true)
                           )
-                        "
-                        >more</a
-                      >
+                        ">more</a>
                     </ol>
-                    <a
-                      style="text-decoration: underline; color:#007bff; font-size: 0.7em;"
-                      *ngIf="listAllMetadataInGroup"
-                      (click)="
+                    <a style="text-decoration: underline; color:#007bff; font-size: 0.7em;"
+                      *ngIf="listAllMetadataInGroup" (click)="
                         getOtherMetadata(
                           indicatorGroup.indicators,
                           (listAllMetadataInGroup = false)
                         )
-                      "
-                      >less</a
-                    >
+                      ">less</a>
                   </td>
                 </tr>
               </tbody>
@@ -247,19 +175,15 @@
           </div>
         </div>
         <!-- Attribute values -->
-        <div
-          *ngIf="
+        <div *ngIf="
             dictionaryItem.data.metadata.attributeValues &&
             dictionaryItem.data.metadata.attributeValues.length > 0
-          "
-        >
+          ">
           <h6>
             Other related details associated with this indicators includes:-
           </h6>
           <ul>
-            <li
-              *ngFor="let attr of dictionaryItem.data.metadata.attributeValues"
-            >
+            <li *ngFor="let attr of dictionaryItem.data.metadata.attributeValues">
               <span>
                 <strong>
                   {{ attr.attribute.name }}
@@ -273,24 +197,19 @@
         <!--Legend sets  -->
         <div class="container-fluid">
           <div class="row">
-            <div
-              [ngClass]="
+            <div [ngClass]="
                 dictionaryItem.data.legendSetsInformation
                   ? 'col-md-12 col-sm-12'
                   : ''
-              "
-              *ngIf="
+              " *ngIf="
                 dictionaryItem.data.legendSetsInformation &&
                 dictionaryItem.data.legendSetsInformation.length > 0
-              "
-            >
+              ">
               <h4 style="color: #464646;">Legend for analysis</h4>
-              <div
-                *ngFor="
+              <div *ngFor="
                   let legendSetInformation of dictionaryItem.data
                     .legendSetsInformation
-                "
-              >
+                ">
                 <h6>
                   Uses
                   <span style="color: #325E80;">
@@ -308,11 +227,9 @@
                     </span>
                     classes for analysis.
                   </li>
-                  <div
-                    *ngIf="
+                  <div *ngIf="
                       legendSetInformation.legendSets[0].legends.length > 0
-                    "
-                  >
+                    ">
                     <div style="width: 100%; overflow: auto;">
                       <table class="table table-bordered">
                         <thead>
@@ -324,13 +241,11 @@
                           </tr>
                         </thead>
                         <tbody class="legends-list">
-                          <tr
-                            *ngFor="
+                          <tr *ngFor="
                               let legend of sortLegends(
                                 legendSetInformation.legendSets[0].legends
                               )
-                            "
-                          >
+                            ">
                             <td style="padding: 0.45em;">{{ legend.name }}</td>
                             <td style="padding: 0.45em;">
                               {{ legend.startValue }}
@@ -338,10 +253,7 @@
                             <td style="padding: 0.45em;">
                               {{ legend.endValue }}
                             </td>
-                            <td
-                              style="padding: 0.45em;"
-                              [ngStyle]="{ 'background-color': legend.color }"
-                            >
+                            <td style="padding: 0.45em;" [ngStyle]="{ 'background-color': legend.color }">
                               <span>{{ legend.color }}</span>
                             </td>
                           </tr>
@@ -352,26 +264,24 @@
                 </div>
               </div>
             </div>
-            <div
-              [ngClass]="
+            <div [ngClass]="
                 dictionaryItem.data.legendSetsInformation
                   ? ''
                   : 'col-md-5 col-sm-12'
-              "
-            >
+              ">
               <!-- <app-visualization></app-visualization> -->
             </div>
           </div>
         </div>
 
         <!-- Calculation details -->
-        <div
-          *ngIf="
+        <div *ngIf="
             dictionaryItem.data.numeratorExpression &&
             dictionaryItem.data.numeratorDatasets
-          "
-        >
-          <div><h4 style="color: #464646;">Calculation details</h4></div>
+          ">
+          <div>
+            <h4 style="color: #464646;">Calculation details</h4>
+          </div>
           <div style="width: 100%; overflow: auto;">
             <table class="table table-bordered">
               <thead>
@@ -388,22 +298,15 @@
                     {{ dictionaryItem.data.numeratorExpression.description }}
                   </td>
                   <td>
-                    <ul
-                      *ngIf="
+                    <ul *ngIf="
                         dictionaryItem.data.numeratorDatasets &&
                         dictionaryItem.data.numeratorDatasets.length > 0
-                      "
-                      style="padding-left: 10px"
-                    >
-                      <li
-                        *ngFor="
+                      " style="padding-left: 10px">
+                      <li *ngFor="
                           let dataSet of dictionaryItem.data.numeratorDatasets
-                        "
-                      >
-                        <strong
-                          style="cursor: pointer;color: #325E80;text-decoration: underline;"
-                          (click)="setActiveItem($event, dataSet.id)"
-                        >
+                        ">
+                        <strong style="cursor: pointer;color: #325E80;text-decoration: underline;"
+                          (click)="setActiveItem($event, dataSet.id)">
                           {{ dataSet.name }}
                         </strong>
                         that is collected
@@ -417,44 +320,32 @@
                         </strong>
                       </li>
                     </ul>
-                    <ul
-                      *ngIf="
+                    <ul *ngIf="
                         dictionaryItem.data.denominatorDatasets &&
                         dictionaryItem.data.denominatorDatasets.length == 0
-                      "
-                      style="padding-left: 10px"
-                    >
+                      " style="padding-left: 10px">
                       <li>None</li>
                     </ul>
                   </td>
                 </tr>
-                <tr
-                  *ngIf="
+                <tr *ngIf="
                     dictionaryItem.data.denominatorExpression &&
                     dictionaryItem.data.denominatorDatasets
-                  "
-                >
+                  ">
                   <td>Denominator</td>
                   <td>
                     {{ dictionaryItem.data.denominatorExpression.description }}
                   </td>
                   <td>
-                    <ul
-                      *ngIf="
+                    <ul *ngIf="
                         dictionaryItem.data.denominatorDatasets &&
                         dictionaryItem.data.denominatorDatasets.length > 0
-                      "
-                      style="padding-left: 10px"
-                    >
-                      <li
-                        *ngFor="
+                      " style="padding-left: 10px">
+                      <li *ngFor="
                           let dataSet of dictionaryItem.data.denominatorDatasets
-                        "
-                      >
-                        <strong
-                          style="cursor: pointer;color: #325E80;text-decoration: underline;"
-                          (click)="setActiveItem($event, dataSet.id)"
-                        >
+                        ">
+                        <strong style="cursor: pointer;color: #325E80;text-decoration: underline;"
+                          (click)="setActiveItem($event, dataSet.id)">
                           {{ dataSet.name }}
                         </strong>
                         that is collected
@@ -468,13 +359,10 @@
                         </strong>
                       </li>
                     </ul>
-                    <ul
-                      *ngIf="
+                    <ul *ngIf="
                         dictionaryItem.data.denominatorDatasets &&
                         dictionaryItem.data.denominatorDatasets.length == 0
-                      "
-                      style="padding-left: 10px"
-                    >
+                      " style="padding-left: 10px">
                       <li>None</li>
                     </ul>
                   </td>
@@ -484,12 +372,10 @@
           </div>
         </div>
         <!-- Data elements in indicators -->
-        <div
-          *ngIf="
+        <div *ngIf="
             dictionaryItem.data.dataElements &&
             dictionaryItem.data.dataElements.length > 0
-          "
-        >
+          ">
           <h4 style="color: #464646;">Data elements in indicator</h4>
           <h6>
             The following is the summary of the data elements used in the
@@ -514,11 +400,8 @@
               <tbody class="dataelements-list">
                 <tr *ngFor="let element of dictionaryItem.data.dataElements">
                   <td>
-                    <span
-                      style="cursor: pointer;color: #325E80;text-decoration: underline;"
-                      (click)="setActiveItem($event, element.id)"
-                      >{{ element.name }}</span
-                    >
+                    <span style="cursor: pointer;color: #325E80;text-decoration: underline;"
+                      (click)="setActiveItem($event, element.id)">{{ element.name }}</span>
                   </td>
                   <td>
                     {{
@@ -532,17 +415,12 @@
                   <td>{{ element.zeroIsSignificant }}</td>
                   <td>
                     <ul style="padding-left: 10px">
-                      <li
-                        id="{{ categoryOption.id }}"
-                        *ngFor="
+                      <li id="{{ categoryOption.id }}" *ngFor="
                           let categoryOption of getCategories(
                             element.categoryCombo.categoryOptionCombos
                           )
-                        "
-                      >
-                        <span *ngIf="categoryOption.name === 'default'"
-                          >None</span
-                        >
+                        ">
+                        <span *ngIf="categoryOption.name === 'default'">None</span>
                         <span *ngIf="categoryOption.name !== 'default'">{{
                           categoryOption.name
                         }}</span>
@@ -551,19 +429,14 @@
                   </td>
                   <td>
                     <ul style="padding-left: 10px">
-                      <li
-                        *ngFor="
+                      <li *ngFor="
                           let dataSetElement of getDataSetFromDataElement(
                             element.dataSetElements
                           )
-                        "
-                      >
-                        <span
-                          (click)="
+                        ">
+                        <span (click)="
                             setActiveItem($event, dataSetElement['dataSet'].id)
-                          "
-                          style="color: #325E80; cursor: pointer;text-decoration: underline"
-                        >
+                          " style="color: #325E80; cursor: pointer;text-decoration: underline">
                           {{ dataSetElement['dataSet'].name }}
                         </span>
                       </li>
@@ -571,17 +444,14 @@
                   </td>
                   <td>
                     <ul style="padding-left: 10px">
-                      <li
-                        *ngFor="
+                      <li *ngFor="
                           let dataElementGroup of getDataElementsGroups(
                             element.dataElementGroups
                           )
-                        "
-                      >
+                        ">
                         {{ dataElementGroup.name }} (with other
                         <strong>
-                          {{ dataElementGroup.dataElements - 1 }} </strong
-                        >) data elements
+                          {{ dataElementGroup.dataElements - 1 }} </strong>) data elements
                       </li>
                     </ul>
                   </td>
@@ -607,16 +477,13 @@
               by
               <strong>{{
                 dictionaryItem.data.metadata.lastUpdatedBy.name
-              }}</strong></span
-            >
+              }}</strong></span>
           </p>
 
-          <div
-            *ngIf="
+          <div *ngIf="
               dictionaryItem.data.metadata.userAccesses.length > 0 ||
               dictionaryItem.data.metadata.userGroupAccesses.length > 0
-            "
-          >
+            ">
             <h6>
               Indicator will be visible for users with the following access:
             </h6>
@@ -629,22 +496,16 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr
-                    *ngIf="dictionaryItem.data.metadata.userAccesses.length > 0"
-                  >
-                    <td
-                      style="padding: 0.45em;background-color: #f5f5f5; color: #555;"
-                    >
+                  <tr *ngIf="dictionaryItem.data.metadata.userAccesses.length > 0">
+                    <td style="padding: 0.45em;background-color: #f5f5f5; color: #555;">
                       User Access
                     </td>
                     <td>
                       <ul>
-                        <li
-                          *ngFor="
+                        <li *ngFor="
                             let userAccess of dictionaryItem.data.metadata
                               .userAccesses
-                          "
-                        >
+                          ">
                           {{
                             formatTextToSentenceFormat(userAccess.displayName)
                           }}({{ userAccess.access }})
@@ -653,24 +514,18 @@
                     </td>
                   </tr>
 
-                  <tr
-                    *ngIf="
+                  <tr *ngIf="
                       dictionaryItem.data.metadata.userGroupAccesses.length > 0
-                    "
-                  >
-                    <td
-                      style="padding: 0.45em;background-color: #f5f5f5; color: #555;"
-                    >
+                    ">
+                    <td style="padding: 0.45em;background-color: #f5f5f5; color: #555;">
                       User Group Access
                     </td>
                     <td>
                       <ul>
-                        <li
-                          *ngFor="
+                        <li *ngFor="
                             let userGroupAccess of dictionaryItem.data.metadata
                               .userGroupAccesses
-                          "
-                        >
+                          ">
                           {{
                             formatTextToSentenceFormat(
                               userGroupAccess.displayName
@@ -693,49 +548,41 @@
 
       <!-- program indicator -->
       <div *ngIf="dictionaryItem && dictionaryItem.data && dictionaryItem.data.type=='programIndicator'">
-        <app-program-indicator [isprintSet]="isprintSet" (selectedMetadataId)="selectedMetadataId($event)" [programIndicatorInfo]="dictionaryItem"></app-program-indicator>
+        <app-program-indicator [isprintSet]="isPrintSet " (selectedMetadataId)="selectedMetadataId($event)"
+          [programIndicatorInfo]="dictionaryItem"></app-program-indicator>
       </div>
       <!-- Data element -->
       <div *ngIf="dictionaryItem && dictionaryItem.data && dictionaryItem.data.type=='dataElement'">
-        <app-data-element [isprintSet]="isprintSet" (selectedMetadataId)="selectedMetadataId($event)" [dataElementInfo]="dictionaryItem"></app-data-element>
+        <app-data-element [isprintSet]="isPrintSet " (selectedMetadataId)="selectedMetadataId($event)"
+          [dataElementInfo]="dictionaryItem"></app-data-element>
       </div>
       <!-- Data element group -->
       <div *ngIf="dictionaryItem && dictionaryItem.data && dictionaryItem.data.type=='dataElementGroup'">
-        <app-data-element-group [isprintSet]="isprintSet" (selectedMetadataId)="selectedMetadataId($event)" [dataElementGroupInfo]="dictionaryItem"></app-data-element-group>
+        <app-data-element-group [isprintSet]="isPrintSet " (selectedMetadataId)="selectedMetadataId($event)"
+          [dataElementGroupInfo]="dictionaryItem"></app-data-element-group>
       </div>
       <!-- Data set -->
       <div *ngIf="dictionaryItem && dictionaryItem.data && dictionaryItem.data.type=='dataSet'">
-        <app-data-set [isprintSet]="isprintSet" (selectedMetadataId)="selectedMetadataId($event)" [dataSetInfo]="dictionaryItem"></app-data-set>
+        <app-data-set [isprintSet]="isPrintSet " (selectedMetadataId)="selectedMetadataId($event)"
+          [dataSetInfo]="dictionaryItem"></app-data-set>
       </div>
       <!-- Functions -->
       <div *ngIf="dictionaryItem && dictionaryItem.data && dictionaryItem.data.type=='functions'">
-        <app-functions [isprintSet]="isprintSet" (selectedMetadataId)="selectedMetadataId($event)" [functionsDetails]="dictionaryItem"></app-functions>
+        <app-functions [isprintSet]="isPrintSet " (selectedMetadataId)="selectedMetadataId($event)"
+          [functionsDetails]="dictionaryItem"></app-functions>
       </div>
       <div *ngIf="dictionaryItem.progress.loading">
         <app-dictionary-progress></app-dictionary-progress>
       </div>
-      
-      <div *ngIf="dictionaryItem.data" class="exports">
-        <button
-          class="export-btn"
-          style="float: left"
-          (click)="exportMetadataInformation(dictionaryItem)"
-        >
-          <img
-            height="30"
-            width="30"
 
-            title="Export to excel"
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAANcSURBVGhD7Zl7SFNRHMdH//Rvf/VP0F/SH9E2N00rIyMhSy1HT42KSjRNDMGSms6R9jCR0mimCeKDHlZsvUTnIzMfSEUa6D9pCSlZkmm4xTS2X+ccz73eu11q89Huxv3Ch3HP75zd7/funnvu7pVJkiRJkiSulHrlCmVW0Fa5Tp2uyFZVKvSKlbQkXim1ylVKnTpanq3KQhiR+U8KnRq4rNUHrabdRSC9bBk6smvQEY5TZKuvos9GZHrM2bQQXgsSkBawfJ1WFSzPUSciwwZkphOZn3I26C7/PQgyq0c77pXrVDPOZhZC5N2oOzHG2DJPiTZqDFGPd4dSe+4LBWgXMrJQdtTughiTZn4YNU3UnvsSY5BoU2w7tee+pCD/wG+C5HcVwM2eEsKR+mPEoLZDx7Y5g2uiDPJlchQYZb46Twy+HG6jLa7CtUUNsvHiZkiqTGGJLz3MM4gJ1Afz+mhu7HXp4/Ug2OTAt0H69QDTv6choiCSZ1JvyqVVAIfDAUfLj/PqmOaPL6BnrJeQ2nKaGKzqr2HbnMG1RQ2CSahIojZnVd1Zw9bWX9gAo5NfaQXA9O4JbyyDaCa7ua+JWgWwTlthy5VtpP2auYi2Akz++gnh+REuYzHJDamQ3ppB2PcsjhhMMJ9k25zBtSUJElkYBbYZG7UMUNp6G8IuhRPzjPKeXnYZx+D1OcKlrLWc7gZg3DIO183FdAugb6QfAnOCBcdhRBUkJHcTz5DFZiWfdodd8GrGZeD7IEzNTBEy2jKJwYahRrbNGVxbsiCYM/cziXmuHrx+KNiXi+hWdu0jHbU/p6b+ZsG+XEQVBF+pJqwTxDw+nbgT/VR1muAYBlGdWs9766htgDdDb+Fedy3dAvg8PkzWFKFxGNFM9uSqVLqLWZ2oSITthTvBhlZ6RviSLDQWI4ogoXlhMPJjhO4CoONDJ1vDqzwjfPsSU6ThjWUQxYJY1TFnFs+N/YZ4tobnjcVmoVWArsFu3lgGr0/2gyWHwG63U5sAde/reQYxhpZbtDqrs7XnXPp4/aYxtngP7xZd6F4Kn3rcPgdK5n4xBlGt7AvBb4L4zV9dv3n4IAVB+E2QeT0yFeNDbEQItee5fP61wl/liy96PJHvvXrzQD75MlSSJEmSllgy2R+XdUjEmrqvyQAAAABJRU5ErkJggg=="
-          />
+      <div *ngIf="dictionaryItem.data" class="exports">
+        <button class="export-btn" style="float: left" (click)="exportMetadataInformation(dictionaryItem)">
+          <img height="30" width="30" title="Export to excel"
+            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAANcSURBVGhD7Zl7SFNRHMdH//Rvf/VP0F/SH9E2N00rIyMhSy1HT42KSjRNDMGSms6R9jCR0mimCeKDHlZsvUTnIzMfSEUa6D9pCSlZkmm4xTS2X+ccz73eu11q89Huxv3Ch3HP75zd7/funnvu7pVJkiRJkiSulHrlCmVW0Fa5Tp2uyFZVKvSKlbQkXim1ylVKnTpanq3KQhiR+U8KnRq4rNUHrabdRSC9bBk6smvQEY5TZKuvos9GZHrM2bQQXgsSkBawfJ1WFSzPUSciwwZkphOZn3I26C7/PQgyq0c77pXrVDPOZhZC5N2oOzHG2DJPiTZqDFGPd4dSe+4LBWgXMrJQdtTughiTZn4YNU3UnvsSY5BoU2w7tee+pCD/wG+C5HcVwM2eEsKR+mPEoLZDx7Y5g2uiDPJlchQYZb46Twy+HG6jLa7CtUUNsvHiZkiqTGGJLz3MM4gJ1Afz+mhu7HXp4/Ug2OTAt0H69QDTv6choiCSZ1JvyqVVAIfDAUfLj/PqmOaPL6BnrJeQ2nKaGKzqr2HbnMG1RQ2CSahIojZnVd1Zw9bWX9gAo5NfaQXA9O4JbyyDaCa7ua+JWgWwTlthy5VtpP2auYi2Akz++gnh+REuYzHJDamQ3ppB2PcsjhhMMJ9k25zBtSUJElkYBbYZG7UMUNp6G8IuhRPzjPKeXnYZx+D1OcKlrLWc7gZg3DIO183FdAugb6QfAnOCBcdhRBUkJHcTz5DFZiWfdodd8GrGZeD7IEzNTBEy2jKJwYahRrbNGVxbsiCYM/cziXmuHrx+KNiXi+hWdu0jHbU/p6b+ZsG+XEQVBF+pJqwTxDw+nbgT/VR1muAYBlGdWs9766htgDdDb+Fedy3dAvg8PkzWFKFxGNFM9uSqVLqLWZ2oSITthTvBhlZ6RviSLDQWI4ogoXlhMPJjhO4CoONDJ1vDqzwjfPsSU6ThjWUQxYJY1TFnFs+N/YZ4tobnjcVmoVWArsFu3lgGr0/2gyWHwG63U5sAde/reQYxhpZbtDqrs7XnXPp4/aYxtngP7xZd6F4Kn3rcPgdK5n4xBlGt7AvBb4L4zV9dv3n4IAVB+E2QeT0yFeNDbEQItee5fP61wl/liy96PJHvvXrzQD75MlSSJEmSllgy2R+XdUjEmrqvyQAAAABJRU5ErkJggg==" />
         </button>
         <button class="export-btn" (click)="printPDF()">
-          <img
-            height="30"
-            width="30"
-            title="Print PDF"
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALWSURBVGhD7ZptT1JhHMbPB+h1n6EP0Qfoc/hCrblMRBvMVvKgmTiVDASUTEpxWibamM5UcqXC3Hwg3Xp6Y23VZrNaW1tr/7z0PnWgP4TiuePoubbr3eG+fr8XZ8AB5cSlJRBd6h6YkFpsivmjS3g4/o4kB5ti/uhiihQRUyRfTJEiYorki+FFyi93nC23tVP3wLg4Xl6wiW0wCJzDx5Ai5TbPmaprXVfqmkJetRZncORio4/qbk5S39QLqcUmtsGgZapq9DWAVWBnptYVcDtvDb/tG3tKg/HUXy3zzJNj9L3UYpNjASNYwSzw93Phaue5G72xDw8TacrVMs8Tao3vSC02ORa1YAa70FCUS87A9P2ZNfZitRWdC+yYnsUmx6IWzNUO/7TQUBSLuyfJXahtKYqg1qaePx/1jSASm1+j1fQcJZLJDC6wCw1jiKymZ4k+Rej7x8EMLsOJJJJLexJbbyYyuAwnkqsnV6SyQ74INjkWbQ8u0j7PjulZbHIs2h5YpG0oRdbwBjuoR7GFTY5F2wOLoO7IEp33LpCld/eN6PamLsXZ2MAWx5DdQ4mgIzPrFBxbJt9oSpfibGxw21wPLVJqNUVKrSdMZG6dPOFxsrf1k8XVTXXNIanFJrbBABaOsSARX3R6/8v/bmucfrobm5VabKr7YOEYCxLpjMR/H+Tw3qONrW2pxaa6DxaOsSCRkccrZPPcoQr7/xPBtt3Tv8fCMRYkom3fgynxtElesMmxaJslElzkLtI2l8jnr99oe+dLUcUZXAoScQUXhYaiVDf6u/pjz35yF6rNJbK4sknxRLKo4gwu/xIBc7XD7xUaeK7VdcraHHoenVxmX4DmEtEz+UTACmawC439VNa2nq5xBcbrr4dfNXREXmc3NPTohzhfWrDJsdS3hF9anIEYmAV+4Tn2v4/oebNLFdHzZpcqomdMkXwxRYqIKZIvx+ZvTqUdRfkF/e6cgF5V4jUAAAAASUVORK5CYII="
-          />
+          <img height="30" width="30" title="Print PDF"
+            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALWSURBVGhD7ZptT1JhHMbPB+h1n6EP0Qfoc/hCrblMRBvMVvKgmTiVDASUTEpxWibamM5UcqXC3Hwg3Xp6Y23VZrNaW1tr/7z0PnWgP4TiuePoubbr3eG+fr8XZ8AB5cSlJRBd6h6YkFpsivmjS3g4/o4kB5ti/uhiihQRUyRfTJEiYorki+FFyi93nC23tVP3wLg4Xl6wiW0wCJzDx5Ai5TbPmaprXVfqmkJetRZncORio4/qbk5S39QLqcUmtsGgZapq9DWAVWBnptYVcDtvDb/tG3tKg/HUXy3zzJNj9L3UYpNjASNYwSzw93Phaue5G72xDw8TacrVMs8Tao3vSC02ORa1YAa70FCUS87A9P2ZNfZitRWdC+yYnsUmx6IWzNUO/7TQUBSLuyfJXahtKYqg1qaePx/1jSASm1+j1fQcJZLJDC6wCw1jiKymZ4k+Rej7x8EMLsOJJJJLexJbbyYyuAwnkqsnV6SyQ74INjkWbQ8u0j7PjulZbHIs2h5YpG0oRdbwBjuoR7GFTY5F2wOLoO7IEp33LpCld/eN6PamLsXZ2MAWx5DdQ4mgIzPrFBxbJt9oSpfibGxw21wPLVJqNUVKrSdMZG6dPOFxsrf1k8XVTXXNIanFJrbBABaOsSARX3R6/8v/bmucfrobm5VabKr7YOEYCxLpjMR/H+Tw3qONrW2pxaa6DxaOsSCRkccrZPPcoQr7/xPBtt3Tv8fCMRYkom3fgynxtElesMmxaJslElzkLtI2l8jnr99oe+dLUcUZXAoScQUXhYaiVDf6u/pjz35yF6rNJbK4sknxRLKo4gwu/xIBc7XD7xUaeK7VdcraHHoenVxmX4DmEtEz+UTACmawC439VNa2nq5xBcbrr4dfNXREXmc3NPTohzhfWrDJsdS3hF9anIEYmAV+4Tn2v4/oebNLFdHzZpcqomdMkXwxRYqIKZIvx+ZvTqUdRfkF/e6cgF5V4jUAAAAASUVORK5CYII=" />
         </button>
       </div>
     </div>

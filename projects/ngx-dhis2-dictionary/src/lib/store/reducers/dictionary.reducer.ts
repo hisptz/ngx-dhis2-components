@@ -1,7 +1,7 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import { createFeatureSelector } from '@ngrx/store';
 
-import { MetadataDictionary } from '../../models/dictionary';
+import { MetadataDictionary } from '../../models/dictionary.model';
 import {
   DictionaryActions,
   DictionaryActionTypes
