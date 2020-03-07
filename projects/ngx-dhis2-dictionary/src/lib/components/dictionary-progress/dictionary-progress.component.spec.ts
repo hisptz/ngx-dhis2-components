@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NgxDhis2DictionaryComponent } from './ngx-dhis2-dictionary.component';
+import { DictionaryProgressComponent } from './dictionary-progress.component';
 
-describe('NgxDhis2DictionaryComponent', () => {
-  let component: NgxDhis2DictionaryComponent;
-  let fixture: ComponentFixture<NgxDhis2DictionaryComponent>;
+describe('DictionaryProgressComponent', () => {
+  let component: DictionaryProgressComponent;
+  let fixture: ComponentFixture<DictionaryProgressComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NgxDhis2DictionaryComponent ]
+      declarations: [ DictionaryProgressComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NgxDhis2DictionaryComponent);
+    fixture = TestBed.createComponent(DictionaryProgressComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
