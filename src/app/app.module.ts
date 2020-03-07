@@ -12,6 +12,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { NgxDhis2HttpClientModule } from '@iapps/ngx-dhis2-http-client';
+import { NgxDhis2DictionaryModule } from 'projects/ngx-dhis2-dictionary/src/public-api';
 
 @NgModule({
   declarations: [AppComponent, ...containers],
@@ -29,10 +30,11 @@ import { NgxDhis2HttpClientModule } from '@iapps/ngx-dhis2-http-client';
         dataStore_scorecards: 'id'
       }
     }),
+    NgxDhis2OrgUnitFilterModule,
+    NgxDhis2DictionaryModule,
     StoreModule.forRoot({}),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([]),
-    NgxDhis2OrgUnitFilterModule,
     AppRoutingModule,
     MaterialModule
   ],
