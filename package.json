@@ -12,8 +12,10 @@
     "e2e:headless": "npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js",
     "build-http-client": "ng build ngx-dhis2-http-client --prod",
     "build-org-unit-filter": "ng build ngx-dhis2-org-unit-filter --prod",
+    "build-dictionary": "ng build ngx-dhis2-org-unit-filter --prod",
     "publish-http-client": "npm run build-http-client && cd dist/ngx-dhis2-http-client && npm publish --access public && cd ../../",
     "publish-org-unit": "npm run build-org-unit-filter && cd dist/ngx-dhis2-org-unit-filter && npm publish --access public && cd ../../",
+    "publish-dictionary": "npm run build-dictionary && cd dist/ngx-dhis2-dictionary && npm publish --access public && cd ../../",
     "pack-http-client": "npm run build-lib && cd dist/ngx-dhis2-http-client && npm pack"
   },
   "private": true,
