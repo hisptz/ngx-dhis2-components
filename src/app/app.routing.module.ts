@@ -15,6 +15,8 @@ const routes: Routes = [
     component: HttpClientComponent
   },
   { path: 'dictionary', component: DictionaryComponent },
+  { path: 'dictionary/:selected', component: DictionaryComponent },
+  { path: 'dictionary/:ids/:option/:selected', component: DictionaryComponent },
   { path: 'org-unit-filter', component: OrgUnitFilterComponent },
   { path: 'period-filter', component: PeriodFilterComponent },
   { path: 'data-filter', component: DataFilterComponent },
