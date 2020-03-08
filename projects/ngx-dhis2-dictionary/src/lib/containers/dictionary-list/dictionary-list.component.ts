@@ -135,16 +135,18 @@ export class DictionaryListComponent implements OnInit {
     this.dictionaryItemId.emit(objToEmit);
   }
 
-  setActiveItem(e?, dictionaryItemId?) {
-    this.listAllMetadataInGroup = false;
+  setActiveItem(dictionaryItemId, e?) {
     if (e) {
       e.stopPropagation();
     }
+
+    this.listAllMetadataInGroup = false;
+
     this.selectedMetadataId(dictionaryItemId);
     this.selectedIndicator = dictionaryItemId;
     this.metadataIdentifiers.push(dictionaryItemId);
     this.metadataIdentifiers = _.uniq(this.metadataIdentifiers);
-    if (this.selectedIndicator == 'all') {
+    if (this.selectedIndicator === 'all') {
       this.loadAllIndicators();
       let objToEmit = {
         selected: 'all',
@@ -166,14 +168,14 @@ export class DictionaryListComponent implements OnInit {
     return safeHtml;
   }
 
-  remove(item, allIdentifiers) {
+  remove(itemId, allIdentifiers) {
     this.listAllMetadataInGroup = false;
     let identifiers = [];
     allIdentifiers.subscribe(identifiersInfo => {
       if (identifiersInfo.length > 0) {
         identifiersInfo.forEach(identifier => {
           if (
-            item.id !== identifier.id &&
+            itemId !== identifier.id &&
             identifier.name.indexOf('not found') < 0
           ) {
             identifiers.push(identifier.id);

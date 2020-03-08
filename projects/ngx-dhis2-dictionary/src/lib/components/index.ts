@@ -10,6 +10,7 @@ import { IndicatorPropertiesComponent } from './indicator-properties/indicator-p
 import { ProgramIndicatorsComponent } from './program-indicators/program-indicators.component';
 import { SwitchingBtnsComponent } from './switching-btns/switching-btns.component';
 import { ProgramIndicatorPropertiesComponent } from './program-indicator-properties/program-indicator-properties.component';
+import { DictionaryMenuComponent } from './dictionary-menu/dictionary-menu.component';
 
 export const components: any[] = [
   DataElementComponent,
@@ -24,5 +25,6 @@ export const components: any[] = [
   ProgramIndicatorPropertiesComponent,
   ProgramIndicatorComponent,
   ProgramIndicatorsComponent,
-  SwitchingBtnsComponent
+  SwitchingBtnsComponent,
+  DictionaryMenuComponent
 ];

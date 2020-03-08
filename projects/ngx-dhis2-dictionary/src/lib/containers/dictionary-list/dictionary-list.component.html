@@ -1,36 +1,10 @@
 <div class="dictionary-list-container">
   <div class="dictionary-header">
-    <input id="searching-input" placeholder="Search " [(ngModel)]="searchingText" />
-    <button class="indicator-btn" (click)="setActiveItem($event, 'all')"
-      [ngClass]="selectedIndicator === 'all' ? 'active-item' : ''">
-      All
-    </button>
-    <ng-template ngFor let-dictionaryItem [ngForOf]="dictionaryList$ | async | filterBySearchInput: searchingText"
-      let-i="index">
-      <button *ngIf="dictionaryItem.name.indexOf('not found') < 0" class="dictionary-title indicator-btn"
-        (click)="setActiveItem($event, dictionaryItem.id)"
-        [ngClass]="dictionaryItem.id === selectedIndicator ? 'active-item' : ''">
-        <span class="category" *ngIf="dictionaryItem.category && dictionaryItem.category == 'in'"
-          style="color:#FFF; margin-right: 10px; margin-left: -8px; background-color: #e36e40">{{ dictionaryItem.category }}</span>
-        <span class="category" *ngIf="dictionaryItem.category && dictionaryItem.category == 'pi'"
-          style="color:#FFF; margin-right: 10px; margin-left: -8px; background-color: #5c9d18">{{ dictionaryItem.category }}</span>
-        <span class="category" *ngIf="dictionaryItem.category && dictionaryItem.category == 'ds'"
-          style="color:#FFF; margin-right: 10px; margin-left: -8px; background-color: #2d2d30">{{ dictionaryItem.category }}</span>
-        <span class="category" *ngIf="dictionaryItem.category && dictionaryItem.category == 'de'"
-          style="color:#FFF; margin-right: 10px; margin-left: -8px; background-color: #27cec8">{{ dictionaryItem.category }}</span>
-        <span class="category" *ngIf="dictionaryItem.category && dictionaryItem.category == 'fn'"
-          style="color:#FFF; margin-right: 10px; margin-left: -8px; background-color: #a763d8">{{ dictionaryItem.category }}</span>
-        <span class="category" *ngIf="dictionaryItem.category && dictionaryItem.category == 'dg'"
-          style="color:#FFF; margin-right: 10px; margin-left: -8px; background-color: #43b59b">{{ dictionaryItem.category }}</span>
-
-        <span title="{{ dictionaryItem.name }}">{{
-          dictionaryItem.name | shortenName
-        }}</span>
-        <span *ngIf="dictionaryItem.name !== ''" (click)="remove(dictionaryItem, dictionaryList$)" title="remove"
-          style="margin-left: 15px; padding: 2px; border-radius: 4px; color: #FFF; font-size: 1.2em; font-weight: 900;">&#10005;</span>
-        <span *ngIf="dictionaryItem.name == ''">Loading ...</span>
-      </button>
-    </ng-template>
+    <!-- dictionary menu list -->
+    <lib-dictionary-menu [selectedItem]="selectedIndicator" [dictionaryList]="dictionaryList$ | async"
+      (setActiveItem)="setActiveItem($event)" (removeItem)="remove($event, dictionaryList$ )">
+    </lib-dictionary-menu>
+    <!-- end of dictionary menu list -->
   </div>
   <div *ngIf="selectedIndicator == 'all'">
     <app-metadata-list [metadataIdentifiers]="metadataIdentifiers" (selectedMetadataId)="selectedMetadataId($event)"
@@ -146,7 +120,7 @@
                             listAllMetadataInGroup
                           )
                         ">
-                        <span id="{{ indicator.id }}" (click)="setActiveItem($event, indicator.id)"
+                        <span id="{{ indicator.id }}" (click)="setActiveItem(indicator.id, $event)"
                           style="color: #325E80; cursor: pointer;text-decoration: underline">
                           {{ indicator.name }}
                         </span>
@@ -306,7 +280,7 @@
                           let dataSet of dictionaryItem.data.numeratorDatasets
                         ">
                         <strong style="cursor: pointer;color: #325E80;text-decoration: underline;"
-                          (click)="setActiveItem($event, dataSet.id)">
+                          (click)="setActiveItem(dataSet.id, $event)">
                           {{ dataSet.name }}
                         </strong>
                         that is collected
@@ -345,7 +319,7 @@
                           let dataSet of dictionaryItem.data.denominatorDatasets
                         ">
                         <strong style="cursor: pointer;color: #325E80;text-decoration: underline;"
-                          (click)="setActiveItem($event, dataSet.id)">
+                          (click)="setActiveItem(dataSet.id, $event)">
                           {{ dataSet.name }}
                         </strong>
                         that is collected
@@ -401,7 +375,7 @@
                 <tr *ngFor="let element of dictionaryItem.data.dataElements">
                   <td>
                     <span style="cursor: pointer;color: #325E80;text-decoration: underline;"
-                      (click)="setActiveItem($event, element.id)">{{ element.name }}</span>
+                      (click)="setActiveItem(element.id, $event)">{{ element.name }}</span>
                   </td>
                   <td>
                     {{
@@ -435,7 +409,7 @@
                           )
                         ">
                         <span (click)="
-                            setActiveItem($event, dataSetElement['dataSet'].id)
+                            setActiveItem(dataSetElement['dataSet'].id, $event)
                           " style="color: #325E80; cursor: pointer;text-decoration: underline">
                           {{ dataSetElement['dataSet'].name }}
                         </span>
