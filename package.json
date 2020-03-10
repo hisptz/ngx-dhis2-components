@@ -34,7 +34,7 @@
     "@ngrx/effects": "^8.6.0",
     "@ngrx/entity": "^8.6.0",
     "@ngrx/schematics": "^8.6.0",
-    "@ngrx/store": "^8.6.0",
+    "@ngrx/store": "^9.0.0",
     "@ngrx/store-devtools": "^8.6.0",
     "bootstrap": "^4.4.1",
     "dexie": "^2.0.4",
