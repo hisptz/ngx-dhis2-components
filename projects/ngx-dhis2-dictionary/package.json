@@ -6,7 +6,7 @@
     "@angular/core": "^8.0.0 || ^9.0.0",
     "@ngrx/effects": "^8.0.0",
     "@ngrx/entity": "^8.0.0",
-    "@ngrx/store": "^8.0.0",
+    "@ngrx/store": "^9.0.0",
     "ngx-pagination": "^3.2.1",
     "fuse.js": "^3.4.6"
   },
