@@ -33,7 +33,7 @@
     "@iapps/ngx-dhis2-http-client": "^2.0.8-rc.2",
     "@ngrx/effects": "^9.0.0",
     "@ngrx/entity": "^9.0.0",
-    "@ngrx/schematics": "^8.6.0",
+    "@ngrx/schematics": "^9.0.0",
     "@ngrx/store": "^9.0.0",
     "@ngrx/store-devtools": "^8.6.0",
     "bootstrap": "^4.4.1",
