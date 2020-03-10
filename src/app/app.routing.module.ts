@@ -8,6 +8,7 @@ import { PeriodFilterComponent } from './containers/period-filter/period-filter.
 import { DataFilterComponent } from './containers/data-filter/data-filter.component';
 import { DimensionFilterComponent } from './containers/dimension-filter/dimension-filter.component';
 import { SelectionFiltersComponent } from './containers/selection-filters/selection-filters.component';
+import { MenuComponent } from './containers/menu/menu.component';
 
 const routes: Routes = [
   {
@@ -24,7 +25,8 @@ const routes: Routes = [
   {
     path: 'selection-filters',
     component: SelectionFiltersComponent
-  }
+  },
+  { path: 'menu', component: MenuComponent }
 ];
 
 @NgModule({
