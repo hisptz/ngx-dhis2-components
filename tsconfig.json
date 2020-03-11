@@ -30,6 +30,10 @@
       "ngx-dhis2-org-unit-filter": [
         "dist/ngx-dhis2-org-unit-filter/ngx-dhis2-org-unit-filter",
         "dist/ngx-dhis2-org-unit-filter"
+      ],
+      "ngx-dhis2-menu": [
+        "dist/ngx-dhis2-menu/ngx-dhis2-menu",
+        "dist/ngx-dhis2-menu"
       ]
     }
   },

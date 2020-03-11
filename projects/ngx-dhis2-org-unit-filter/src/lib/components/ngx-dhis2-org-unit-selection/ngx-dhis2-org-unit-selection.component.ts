@@ -39,18 +39,14 @@ export class NgxDhis2OrgUnitSelectionComponent implements OnInit {
 
   onActivateOrgUnit(orgUnit: OrgUnit) {
     this.activateOrgUnit.emit({
-      id: orgUnit.id,
-      name: orgUnit.name,
-      level: orgUnit.level,
+      ...orgUnit,
       type: OrgUnitTypes.ORGANISATION_UNIT
     });
   }
 
   onDeactivateOrgUnit(orgUnit: OrgUnit) {
     this.deactivateOrgUnit.emit({
-      id: orgUnit.id,
-      name: orgUnit.name,
-      level: orgUnit.level,
+      ...orgUnit,
       type: OrgUnitTypes.ORGANISATION_UNIT
     });
   }
