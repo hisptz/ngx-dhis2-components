@@ -24,6 +24,8 @@ import {
   programIndicatorGroupsReducer,
   programIndicatorsListReducer
 } from './store/reducers/indicators.reducers';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
@@ -34,6 +36,8 @@ import {
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
+    MatButtonModule,
+    MatTooltipModule,
     StoreModule.forFeature('dictionary', dictionaryReducer),
     StoreModule.forFeature('indicatorsList', indicatorsListReducer),
     StoreModule.forFeature(
