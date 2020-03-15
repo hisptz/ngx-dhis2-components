@@ -7,8 +7,8 @@
     </mat-form-field>
     <div class="dictionary-menu-list">
         <mat-chip-list>
-            <mat-chip class="dictionary-chip" (click)="onSetActiveItem($event, 'all')"
-                [ngClass]="selectedItem === 'all' ? 'active-item' : ''">
+            <mat-chip *ngIf="dictionaryConfig?.showAllBlock" class="dictionary-chip"
+                (click)="onSetActiveItem($event, 'all')" [ngClass]="selectedItem === 'all' ? 'active-item' : ''">
                 All
             </mat-chip>
             <ng-template ngFor let-dictionaryItem [ngForOf]="dictionaryList | filterBySearchInput: searchingText"

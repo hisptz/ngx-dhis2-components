@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { DictionaryConfig } from '../../models/dictionary-config.model';
 
 @Component({
   selector: 'lib-dictionary-menu',
@@ -8,6 +9,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class DictionaryMenuComponent implements OnInit {
   @Input() selectedItem: string;
   @Input() dictionaryList: any;
+  @Input() dictionaryConfig: DictionaryConfig;
   searchingText: string;
 
   @Output() setActiveItem: EventEmitter<string> = new EventEmitter<string>();
