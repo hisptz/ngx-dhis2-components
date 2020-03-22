@@ -4,7 +4,7 @@ import { NgxDhis2HttpClientService } from '@iapps/ngx-dhis2-http-client';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import * as _ from 'lodash';
-import { forkJoin, from, Observable, of } from 'rxjs';
+import { forkJoin, from, Observable, of, zip } from 'rxjs';
 import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 
 import {
@@ -506,7 +506,7 @@ export class DictionaryEffects {
       /**
        * Get numerator expression
        */
-      forkJoin(
+      zip(
         this.httpClient.get(
           'expressions/description?expression=' +
             encodeURIComponent(indicator.numerator)
@@ -526,10 +526,54 @@ export class DictionaryEffects {
         }
 
         if (numeratorResults[1] && numeratorResults[1].dataSets) {
+          const dataSets = numeratorResults[1].dataSets;
           metadataInfoLoaded = {
             ...metadataInfoLoaded,
-            numeratorDatasets: numeratorResults[1].dataSets
+            numeratorDatasets: dataSets
           };
+
+          this.httpClient
+            .get(
+              `analytics.json?dimension=dx:${dataSets
+                .map((dataSet: any) => `${dataSet.id}.REPORTING_RATE`)
+                .join(';')}&dimension=ou:USER_ORGUNIT&dimension=pe:LAST_YEAR`
+            )
+            .subscribe((analyticsResponse: any) => {
+              const analyticsHeaders = analyticsResponse
+                ? analyticsResponse.headers
+                : [];
+              const analyticsRows = analyticsResponse
+                ? analyticsResponse.rows
+                : [];
+              const dxIndex = analyticsHeaders.indexOf(
+                analyticsHeaders.find((header: any) => header.name === 'dx')
+              );
+              const valueIndex = analyticsHeaders.indexOf(
+                analyticsHeaders.find((header: any) => header.name === 'value')
+              );
+
+              const dataSetsWithReportingRate = (dataSets || []).map(
+                (dataSet: any) => {
+                  const reportingRate = analyticsRows
+                    .filter(
+                      (row: any[]) =>
+                        row[dxIndex] === `${dataSet.id}.REPORTING_RATE`
+                    )
+                    .map((row: string[]) => row[valueIndex])
+                    .reduce((sum, value) => sum + parseFloat(value), 0);
+
+                  return {
+                    ...dataSet,
+                    reportingRate
+                  };
+                }
+              );
+
+              metadataInfoLoaded = {
+                ...metadataInfoLoaded,
+                numeratorDatasets: dataSetsWithReportingRate
+              };
+            });
         }
 
         this.store.dispatch(
@@ -547,7 +591,7 @@ export class DictionaryEffects {
         /**
          * Get denominator expression
          */
-        forkJoin(
+        zip(
           this.httpClient.get(
             'expressions/description?expression=' +
               encodeURIComponent(indicator.denominator)
@@ -592,66 +636,67 @@ export class DictionaryEffects {
           indicator.legendSets.forEach(legendSet => {
             legendSetsIds.push(legendSet.id);
           });
-          forkJoin(
-            this.httpClient.get(
+
+          this.httpClient
+            .get(
               'legendSets.json?fields=id,name,legends[id,name,startValue,endValue,color]&paging=false&filter=id:in:[' +
                 legendSetsIds.join(';') +
                 ']'
             )
-          ).subscribe(legendSetsInformation => {
-            if (
-              legendSetsInformation &&
-              legendSetsInformation[0].legendSets[0]
-            ) {
-              metadataInfoLoaded = {
-                ...metadataInfoLoaded,
-                legendSetsInformation: legendSetsInformation
-              };
-            }
-
-            this.store.dispatch(
-              new UpdateDictionaryMetadataAction(indicatorId, {
-                description: indicatorDescription,
-                data: metadataInfoLoaded,
-                progress: {
-                  loading: true,
-                  loadingSucceeded: true,
-                  loadingFailed: false
-                }
-              })
-            );
-
-            /**
-             * Data elements in the indicators
-             */
-
-            this.httpClient
-              .get(
-                'dataElements.json?filter=id:in:[' +
-                  this.getAvailableDataElements(
-                    indicator.numerator + ' + ' + indicator.denominator
-                  ) +
-                  ']&paging=false&fields=id,name,zeroIsSignificant,aggregationType,domainType,valueType,categoryCombo[id,name,categoryOptionCombos[id,name,categoryOptions[id,name,categories[id,name]]]],dataSetElements[dataSet[id,name,periodType]],dataElementGroups[id,name,dataElements~size]'
-              )
-              .subscribe((dataElementResponse: any) => {
+            .subscribe(legendSetsInformation => {
+              if (
+                legendSetsInformation &&
+                legendSetsInformation.legendSets[0]
+              ) {
                 metadataInfoLoaded = {
                   ...metadataInfoLoaded,
-                  dataElements: dataElementResponse.dataElements
+                  legendSetsInformation
                 };
+              }
 
-                this.store.dispatch(
-                  new UpdateDictionaryMetadataAction(indicatorId, {
-                    description: indicatorDescription,
-                    data: metadataInfoLoaded,
-                    progress: {
-                      loading: false,
-                      loadingSucceeded: true,
-                      loadingFailed: false
-                    }
-                  })
-                );
-              });
-          });
+              this.store.dispatch(
+                new UpdateDictionaryMetadataAction(indicatorId, {
+                  description: indicatorDescription,
+                  data: metadataInfoLoaded,
+                  progress: {
+                    loading: true,
+                    loadingSucceeded: true,
+                    loadingFailed: false
+                  }
+                })
+              );
+
+              /**
+               * Data elements in the indicators
+               */
+
+              this.httpClient
+                .get(
+                  'dataElements.json?filter=id:in:[' +
+                    this.getAvailableDataElements(
+                      indicator.numerator + ' + ' + indicator.denominator
+                    ) +
+                    ']&paging=false&fields=id,name,zeroIsSignificant,aggregationType,domainType,valueType,categoryCombo[id,name,categoryOptionCombos[id,name,categoryOptions[id,name,categories[id,name]]]],dataSetElements[dataSet[id,name,periodType]],dataElementGroups[id,name,dataElements~size]'
+                )
+                .subscribe((dataElementResponse: any) => {
+                  metadataInfoLoaded = {
+                    ...metadataInfoLoaded,
+                    dataElements: dataElementResponse.dataElements
+                  };
+
+                  this.store.dispatch(
+                    new UpdateDictionaryMetadataAction(indicatorId, {
+                      description: indicatorDescription,
+                      data: metadataInfoLoaded,
+                      progress: {
+                        loading: false,
+                        loadingSucceeded: true,
+                        loadingFailed: false
+                      }
+                    })
+                  );
+                });
+            });
         });
       });
     });

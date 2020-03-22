@@ -9,120 +9,91 @@
     </div>
     <!-- end of indicator name -->
 
-    <div class="introduction">
-        <h3 style="color: #464646;">Introduction</h3>
-    </div>
-    <div class="description">
-        <p class="indicator">
-            <span style="color: #325E80;">
-                {{dictionaryItem.data.metadata.name}}
-            </span> is a
-            <span style="color: #325E80;">
-                {{dictionaryItem.data.metadata.indicatorType.name}}
-            </span> indicator
-            <span *ngIf="dictionaryItem.data.metadata.numeratorDescription">
-                , measured by
-                <span style="color: #325E80;">
-                    {{ dictionaryItem.data.metadata.numeratorDescription }}
+    <!-- indicator introduction -->
+    <div class="indicator-introduction">
+        <h2>Introduction</h2>
+        <div>
+            <p>
+                <b>{{dictionaryItem.data.metadata.name}}</b> is a
+                <b>{{dictionaryItem.data.metadata.indicatorType.name}}</b> indicator
+                <span *ngIf="dictionaryItem.data.metadata.numeratorDescription">
+                    , measured by
+                    <b>
+                        {{ dictionaryItem.data.metadata.numeratorDescription }}
+                    </b>
                 </span>
-            </span>
-            <span *ngIf="dictionaryItem.data.metadata.denominatorDescription">
-                to
-                <span style="color: #325E80;">
-                    {{ dictionaryItem.data.metadata.denominatorDescription }}
+                <span *ngIf="dictionaryItem.data.metadata.denominatorDescription">
+                    to
+                    <b>
+                        {{ dictionaryItem.data.metadata.denominatorDescription }}
+                    </b>
                 </span>
-            </span>
-        </p>
-    </div>
-    <div>
-        <p *ngIf="dictionaryItem.data.metadata.description">
-            Its described as {{ dictionaryItem.data.metadata.description }}
-        </p>
-    </div>
-    <div>
-        <p style="color: #464646; font-size: 0.7em; margin-top: -15px;">
-            <i>Identifed by:
-                <a target="_blank" href="../../../api/indicators/{{
+            </p>
+
+            <p *ngIf="dictionaryItem.data.metadata.description">
+                Its described as {{ dictionaryItem.data.metadata.description }}
+            </p>
+
+            <p *ngIf="dictionaryItem.data.metadata.annualized">
+                It’s figure is annualized to support analysis in less than year
+                period (monthly,quarterly,semi-annually)
+            </p>
+
+            <p>
+                <small> <i>Identified by:
+                        <a target="_blank" href="../../../api/indicators/{{
               dictionaryItem.data.metadata.id
             }}.json">{{ dictionaryItem.data.metadata.id }}
-                </a></i>
-        </p>
+                        </a></i></small>
+            </p>
+        </div>
     </div>
-    <div>
-        <p *ngIf="dictionaryItem.data.metadata.annualized">
-            It’s figure is annualized to support analysis in less than year
-            period (monthly,quarterly,semi-annually)
-        </p>
-    </div>
-    <!-- Data sources (Datasets/Programs) -->
-    <div></div>
+    <!-- end of indicator introduction -->
 
     <!-- Indicator facts -->
     <div *ngIf="
         dictionaryItem.data.metadata.indicatorGroups &&
         dictionaryItem.data.metadata.indicatorGroups.length > 0
       ">
-        <h4 style="color: #464646;">Indicator facts</h4>
-        <h6>Belongs to the following groups of indicators :-</h6>
-        <div style="overflow-x: auto;">
-            <table class="table table-bordered">
-                <thead>
-                    <tr style="background-color: #f5f5f5; color: #555;">
-                        <th style="padding: 0.35rem;">Name</th>
-                        <th style="padding: 0.35rem;">Code</th>
-                        <th style="padding: 0.35rem;">Indicators</th>
-                        <th style="padding: 0.35rem;">Indicators List</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="
-                let indicatorGroup of dictionaryItem.data.metadata
-                  .indicatorGroups
-              ">
-                        <td>{{ indicatorGroup.name }}</td>
-                        <td>
-                            <span *ngIf="indicatorGroup.code">{{
-                  indicatorGroup.code
-                }}</span>
-                            <span *ngIf="!indicatorGroup.code">None</span>
-                        </td>
-                        <td>{{ indicatorGroup.indicators.length }}</td>
-                        <td>
-                            <ol style="max-height: 100px; overflow: auto">
-                                <li *ngFor="
-                      let indicator of getOtherMetadata(
-                        indicatorGroup.indicators,
-                        listAllMetadataInGroup
-                      )
-                    ">
-                                    <span id="{{ indicator.id }}" (click)="onSetActive(indicator.id, $event)"
-                                        style="color: #325E80; cursor: pointer;text-decoration: underline">
-                                        {{ indicator.name }}
-                                    </span>
-                                </li>
-                                <a style="text-decoration: underline; color:#007bff; font-size: 0.7em;" *ngIf="
-                      indicatorGroup.indicators.length > 3 &&
-                      !listAllMetadataInGroup
-                    " (click)="
-                      getOtherMetadata(
-                        indicatorGroup.indicators,
-                        (listAllMetadataInGroup = true)
-                      )
-                    ">more</a>
-                            </ol>
-                            <a style="text-decoration: underline; color:#007bff; font-size: 0.7em;"
-                                *ngIf="listAllMetadataInGroup" (click)="
-                    getOtherMetadata(
-                      indicatorGroup.indicators,
-                      (listAllMetadataInGroup = false)
-                    )
-                  ">less</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <h2>Indicator facts</h2>
+        <p>Belongs to the following groups of indicators;</p>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Indicators</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let indicatorGroup of dictionaryItem.data.metadata.indicatorGroups; let i = index">
+                    <td>{{i + 1}}</td>
+                    <td>{{ indicatorGroup.name }}</td>
+                    <td>{{ indicatorGroup.code || 'None' }}</td>
+                    <td>
+                        <ol>
+                            <li class="indicator-inline-list"
+                                *ngFor="let indicator of getOtherMetadata(indicatorGroup.indicators,listAllMetadataInGroup)"
+                                matTooltip="{{indicator.name}}">
+                                <a (click)="onSetActive(indicator.id, $event)">{{indicator.name}}</a></li>
+                        </ol>
+                        <a class="show-more-less-btn" color="primary" selected
+                            *ngIf="indicatorGroup.indicators.length > 3 && !listAllMetadataInGroup"
+                            (click)="getOtherMetadata(indicatorGroup.indicators,(listAllMetadataInGroup = true))">
+                            Show more
+                        </a>
+                        <a class="show-more-less-btn" color="primary" selected *ngIf="listAllMetadataInGroup"
+                            (click)="getOtherMetadata(indicatorGroup.indicators,(listAllMetadataInGroup = false))">
+                            Show less
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
+    <!-- end of indicator facts -->
+
     <!-- Attribute values -->
     <div *ngIf="
         dictionaryItem.data.metadata.attributeValues &&
@@ -225,102 +196,51 @@
     </div>
 
     <!-- Calculation details -->
-    <div *ngIf="
-        dictionaryItem.data.numeratorExpression &&
-        dictionaryItem.data.numeratorDatasets
-      ">
-        <div>
-            <h4 style="color: #464646;">Calculation details</h4>
-        </div>
-        <div style="width: 100%; overflow: auto;">
-            <table class="table table-bordered">
-                <thead>
-                    <tr style="background-color: #f5f5f5; color: #555;">
-                        <th style="padding: 0.35rem;">Expression</th>
-                        <th style="padding: 0.35rem;">Formula</th>
-                        <th style="padding: 0.35rem;">Sources</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Numerator</td>
+    <div *ngIf="dictionaryItem.data.numeratorExpression && dictionaryItem.data.denominatorExpression">
+        <p>Calculation details;</p>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Expression</th>
+                    <th>Formula</th>
+                    <th>Sources</th>
+                    <th>Reporting Period</th>
+                    <th>Reporting Rate</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngIf="dictionaryItem.data.numeratorDatasets">
+                    <td>Numerator</td>
+                    <td [attr.rowspan]="dictionaryItem.data.numeratorDatasets.length || 1">
+                        <code>{{dictionaryItem.data.numeratorExpression.description}}</code></td>
+                    <ng-container *ngFor="let dataSet of dictionaryItem.data.numeratorDatasets; let i = index">
+                        <td>{{ dataSet.name }}</td>
                         <td>
-                            {{ dictionaryItem.data.numeratorExpression.description }}
+                            <b>{{ dataSet.periodType }}</b> with deadline for submission after
+                            <b>{{ dataSet.timelyDays }}</b>
+                            days
                         </td>
+                        <td>{{dataSet.reportingRate}}</td>
+                    </ng-container>
+                </tr>
+                <tr *ngIf="dictionaryItem.data.denominatorDatasets">
+                    <td>Denominator</td>
+                    <td [attr.rowspan]="dictionaryItem.data.denominatorDatasets.length || 1">
+                        <code>{{dictionaryItem.data.denominatorExpression.description}}</code></td>
+                    <ng-container *ngFor="let dataSet of dictionaryItem.data.denominatorDatasets; let i = index">
+                        <td>{{ dataSet.name }}</td>
                         <td>
-                            <ul *ngIf="
-                    dictionaryItem.data.numeratorDatasets &&
-                    dictionaryItem.data.numeratorDatasets.length > 0
-                  " style="padding-left: 10px">
-                                <li *ngFor="
-                      let dataSet of dictionaryItem.data.numeratorDatasets
-                    ">
-                                    <strong style="cursor: pointer;color: #325E80;text-decoration: underline;"
-                                        (click)="onSetActive(dataSet.id, $event)">
-                                        {{ dataSet.name }}
-                                    </strong>
-                                    that is collected
-                                    <strong>
-                                        {{ dataSet.periodType }}
-                                    </strong>
-                                    with deadline for submission after
-                                    <strong>
-                                        {{ dataSet.timelyDays }}
-                                        days
-                                    </strong>
-                                </li>
-                            </ul>
-                            <ul *ngIf="
-                    dictionaryItem.data.denominatorDatasets &&
-                    dictionaryItem.data.denominatorDatasets.length == 0
-                  " style="padding-left: 10px">
-                                <li>None</li>
-                            </ul>
+                            <b>{{ dataSet.periodType }}</b> with deadline for submission after
+                            <b>{{ dataSet.timelyDays }}</b>
+                            days
                         </td>
-                    </tr>
-                    <tr *ngIf="
-                dictionaryItem.data.denominatorExpression &&
-                dictionaryItem.data.denominatorDatasets
-              ">
-                        <td>Denominator</td>
-                        <td>
-                            {{ dictionaryItem.data.denominatorExpression.description }}
-                        </td>
-                        <td>
-                            <ul *ngIf="
-                    dictionaryItem.data.denominatorDatasets &&
-                    dictionaryItem.data.denominatorDatasets.length > 0
-                  " style="padding-left: 10px">
-                                <li *ngFor="
-                      let dataSet of dictionaryItem.data.denominatorDatasets
-                    ">
-                                    <strong style="cursor: pointer;color: #325E80;text-decoration: underline;"
-                                        (click)="onSetActive(dataSet.id, $event)">
-                                        {{ dataSet.name }}
-                                    </strong>
-                                    that is collected
-                                    <strong>
-                                        {{ dataSet.periodType }}
-                                    </strong>
-                                    with deadline for submission after
-                                    <strong>
-                                        {{ dataSet.timelyDays }}
-                                        days
-                                    </strong>
-                                </li>
-                            </ul>
-                            <ul *ngIf="
-                    dictionaryItem.data.denominatorDatasets &&
-                    dictionaryItem.data.denominatorDatasets.length == 0
-                  " style="padding-left: 10px">
-                                <li>None</li>
-                            </ul>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                        <td></td>
+                    </ng-container>
+                </tr>
+            </tbody>
+        </table>
     </div>
+
     <!-- Data elements in indicators -->
     <div *ngIf="
         dictionaryItem.data.dataElements &&
@@ -491,6 +411,7 @@
             </div>
         </div>
     </div>
+
     <p style="float: right;">
         Dictionary generated on <strong>{{ todayDate | date }}</strong>
     </p>
