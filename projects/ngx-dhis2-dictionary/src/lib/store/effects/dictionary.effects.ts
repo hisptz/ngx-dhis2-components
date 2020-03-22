@@ -573,20 +573,20 @@ export class DictionaryEffects {
                 ...metadataInfoLoaded,
                 numeratorDatasets: dataSetsWithReportingRate
               };
+
+              this.store.dispatch(
+                new UpdateDictionaryMetadataAction(indicatorId, {
+                  description: indicatorDescription,
+                  data: metadataInfoLoaded,
+                  progress: {
+                    loading: true,
+                    loadingSucceeded: true,
+                    loadingFailed: false
+                  }
+                })
+              );
             });
         }
-
-        this.store.dispatch(
-          new UpdateDictionaryMetadataAction(indicatorId, {
-            description: indicatorDescription,
-            data: metadataInfoLoaded,
-            progress: {
-              loading: true,
-              loadingSucceeded: true,
-              loadingFailed: false
-            }
-          })
-        );
 
         /**
          * Get denominator expression
@@ -611,23 +611,69 @@ export class DictionaryEffects {
           }
 
           if (denominatorResults[1] && denominatorResults[1].dataSets) {
+            const dataSets = denominatorResults[1].dataSets;
             metadataInfoLoaded = {
               ...metadataInfoLoaded,
-              denominatorDatasets: denominatorResults[1].dataSets
+              denominatorDatasets: dataSets
             };
-          }
 
-          this.store.dispatch(
-            new UpdateDictionaryMetadataAction(indicatorId, {
-              description: indicatorDescription,
-              data: metadataInfoLoaded,
-              progress: {
-                loading: true,
-                loadingSucceeded: true,
-                loadingFailed: false
-              }
-            })
-          );
+            this.httpClient
+              .get(
+                `analytics.json?dimension=dx:${dataSets
+                  .map((dataSet: any) => `${dataSet.id}.REPORTING_RATE`)
+                  .join(';')}&dimension=ou:USER_ORGUNIT&dimension=pe:LAST_YEAR`
+              )
+              .subscribe((analyticsResponse: any) => {
+                const analyticsHeaders = analyticsResponse
+                  ? analyticsResponse.headers
+                  : [];
+                const analyticsRows = analyticsResponse
+                  ? analyticsResponse.rows
+                  : [];
+                const dxIndex = analyticsHeaders.indexOf(
+                  analyticsHeaders.find((header: any) => header.name === 'dx')
+                );
+                const valueIndex = analyticsHeaders.indexOf(
+                  analyticsHeaders.find(
+                    (header: any) => header.name === 'value'
+                  )
+                );
+
+                const dataSetsWithReportingRate = (dataSets || []).map(
+                  (dataSet: any) => {
+                    const reportingRate = analyticsRows
+                      .filter(
+                        (row: any[]) =>
+                          row[dxIndex] === `${dataSet.id}.REPORTING_RATE`
+                      )
+                      .map((row: string[]) => row[valueIndex])
+                      .reduce((sum, value) => sum + parseFloat(value), 0);
+
+                    return {
+                      ...dataSet,
+                      reportingRate
+                    };
+                  }
+                );
+
+                metadataInfoLoaded = {
+                  ...metadataInfoLoaded,
+                  denominatorDatasets: dataSetsWithReportingRate
+                };
+
+                this.store.dispatch(
+                  new UpdateDictionaryMetadataAction(indicatorId, {
+                    description: indicatorDescription,
+                    data: metadataInfoLoaded,
+                    progress: {
+                      loading: true,
+                      loadingSucceeded: true,
+                      loadingFailed: false
+                    }
+                  })
+                );
+              });
+          }
 
           /**
            * Legend set
