@@ -197,7 +197,7 @@
 
     <!-- Calculation details -->
     <div *ngIf="dictionaryItem.data.numeratorExpression && dictionaryItem.data.denominatorExpression">
-        <p>Calculation details;</p>
+        <p>Calculation details</p>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -246,89 +246,66 @@
         dictionaryItem.data.dataElements &&
         dictionaryItem.data.dataElements.length > 0
       ">
-        <h4 style="color: #464646;">Data elements in indicator</h4>
-        <h6>
+        <p>Data elements in indicator</p>
+        <small>
             The following is the summary of the data elements used in the
             calculations
-        </h6>
-        <div style="width: 100%; overflow: auto;">
-            <table class="table table-bordered">
-                <thead>
-                    <tr style="background-color: #f5f5f5; color: #555;">
-                        <th style="padding: 0.45em;">Data element</th>
-                        <th style="padding: 0.45em;">
-                            Expression part (Numerator/ Denominator)
-                        </th>
-                        <th style="padding: 0.45em;">Aggregation</th>
-                        <th style="padding: 0.45em;">Value Type</th>
-                        <th style="padding: 0.45em;">Zero Signifcance</th>
-                        <th style="padding: 0.45em;">Categories</th>
-                        <th style="padding: 0.45em;">Data Sets/ Programs</th>
-                        <th style="padding: 0.45em;">Groups</th>
-                    </tr>
-                </thead>
-                <tbody class="dataelements-list">
-                    <tr *ngFor="let element of dictionaryItem.data.dataElements">
-                        <td>
-                            <span style="cursor: pointer;color: #325E80;text-decoration: underline;"
-                                (click)="onSetActive(element.id, $event)">{{ element.name }}</span>
-                        </td>
-                        <td>
-                            {{
-                  getExpressionPart(element, dictionaryItem.data.metadata)
-                }}
-                        </td>
-                        <td>
-                            {{ formatTextToSentenceFormat(element.aggregationType) }}
-                        </td>
-                        <td>{{ formatTextToSentenceFormat(element.valueType) }}</td>
-                        <td>{{ element.zeroIsSignificant }}</td>
-                        <td>
-                            <ul style="padding-left: 10px">
-                                <li id="{{ categoryOption.id }}" *ngFor="
-                      let categoryOption of getCategories(
-                        element.categoryCombo.categoryOptionCombos
-                      )
-                    ">
-                                    <span *ngIf="categoryOption.name === 'default'">None</span>
-                                    <span *ngIf="categoryOption.name !== 'default'">{{
-                      categoryOption.name
-                    }}</span>
-                                </li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul style="padding-left: 10px">
-                                <li *ngFor="
-                      let dataSetElement of getDataSetFromDataElement(
-                        element.dataSetElements
-                      )
-                    ">
-                                    <span (click)="
-                        onSetActive(dataSetElement['dataSet'].id, $event)
-                      " style="color: #325E80; cursor: pointer;text-decoration: underline">
-                                        {{ dataSetElement['dataSet'].name }}
-                                    </span>
-                                </li>
-                            </ul>
-                        </td>
-                        <td>
-                            <ul style="padding-left: 10px">
-                                <li *ngFor="
-                      let dataElementGroup of getDataElementsGroups(
-                        element.dataElementGroups
-                      )
-                    ">
-                                    {{ dataElementGroup.name }} (with other
-                                    <strong>
-                                        {{ dataElementGroup.dataElements - 1 }} </strong>) data elements
-                                </li>
-                            </ul>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        </small>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Expression part (Numerator/ Denominator)</th>
+                    <th>Aggregation</th>
+                    <th>Value Type</th>
+                    <th>Zero Significance</th>
+                    <th>Categories</th>
+                    <th>Data Sets/ Programs</th>
+                    <th>Groups</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let element of dictionaryItem.data.dataElements; let i = index">
+                    <td>{{ i + 1}}</td>
+                    <td><a class="indicator-link-color" (click)="onSetActive(element.id, $event)">{{ element.name }}</a>
+                    </td>
+                    <td>{{getExpressionPart(element, dictionaryItem.data.metadata)}}</td>
+                    <td>{{ formatTextToSentenceFormat(element.aggregationType) }}</td>
+                    <td>{{ formatTextToSentenceFormat(element.valueType) }}</td>
+                    <td>{{ element.zeroIsSignificant }}</td>
+                    <td>
+                        <ol>
+                            <li class="indicator-inline-non-link-list"
+                                *ngFor="let categoryOption of getCategories(element.categoryCombo.categoryOptionCombos)">
+                                {{categoryOption.name || 'None'}}
+                            </li>
+                        </ol>
+                    </td>
+                    <td>
+                        <ol>
+                            <li class="indicator-inline-list"
+                                *ngFor="let dataSetElement of getDataSetFromDataElement(element.dataSetElements)">
+                                <a (click)="onSetActive(dataSetElement['dataSet'].id, $event)">
+                                    {{ dataSetElement['dataSet'] ? dataSetElement['dataSet'].name : '' }}
+                                </a>
+                            </li>
+                        </ol>
+                    </td>
+                    <td>
+                        <ol>
+                            <li class="indicator-inline-non-link-list"
+                                *ngFor="let dataElementGroup of getDataElementsGroups(element.dataElementGroups)">
+                                <a>
+                                    {{ dataElementGroup.name }} (with other <b>{{ dataElementGroup.dataElements - 1 }}
+                                    </b>) data elements
+                                </a>
+                            </li>
+                        </ol>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     <!-- Accessibility & Sharing settings -->
     <div>
