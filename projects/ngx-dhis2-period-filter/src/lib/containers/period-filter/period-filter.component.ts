@@ -35,6 +35,11 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   @Output() close = new EventEmitter();
   @Output() change = new EventEmitter();
 
+  /* For data range picker */
+  minDate: Date;
+  maxDate: Date;
+  /** End for data range picker */
+
   availablePeriods: any[];
   selectedYear: number;
   currentYear: number;
@@ -42,11 +47,25 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   periodInstance: any;
   showPeriodTypeSelection: boolean;
 
+  periodFilterTypes: any = {
+    fixedPeriods: true,
+    relativePeriods: true,
+    dateRangePeriods: true
+  };
+
+  currentPeriodFilterType: string = 'fixed-periods';
+
   constructor(private httpClient: NgxDhis2HttpClientService) {
     const periodTypeInstance = new Fn.PeriodType();
     this.periodInstance = new Fn.Period();
 
     this.periodTypes = periodTypeInstance.get();
+
+    /* For data range picker */
+    const currentYear = new Date().getFullYear();
+    this.minDate = new Date(currentYear - 20, 0, 1);
+    this.maxDate = new Date(currentYear + 1, 11, 31);
+    /** End for data range picker */
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -74,6 +93,10 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this._setPeriodProperties(this.selectedPeriodType);
+  }
+
+  onSetPeriodFilterType(type) {
+    this.currentPeriodFilterType = type;
   }
 
   private _setPeriodProperties(selectedPeriodType) {
