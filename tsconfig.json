@@ -34,6 +34,10 @@
       "ngx-dhis2-menu": [
         "dist/ngx-dhis2-menu/ngx-dhis2-menu",
         "dist/ngx-dhis2-menu"
+      ],
+      "ngx-dhis2-period-filter": [
+        "dist/ngx-dhis2-period-filter/ngx-dhis2-period-filter",
+        "dist/ngx-dhis2-period-filter"
       ]
     }
   },
