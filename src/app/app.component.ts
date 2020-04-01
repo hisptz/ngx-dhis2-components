@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
       },
       { id: 'dictionary', name: 'Metadata Dictionary' },
       { id: 'org-unit-filter', name: 'Organisation Unit filter' },
-      { id: 'org-unit-filter', name: 'Period filter' },
+      { id: 'period-filter', name: 'Period filter' },
       { id: 'org-unit-filter', name: 'Data filter' },
       { id: 'org-unit-filter', name: 'Dimension filter' },
       { id: 'selection-filters', name: 'Selection Filters' },
