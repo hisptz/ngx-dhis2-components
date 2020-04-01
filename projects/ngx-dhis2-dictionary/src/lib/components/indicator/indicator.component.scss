@@ -15,6 +15,10 @@
  * along with ngx-dhis2-components. If not, see <http://www.gnu.org/licenses/>.
  */
 
+.indicator-container ol {
+  padding-left: 20px;
+}
+
 .indicator-name-block {
   display: flex;
   align-items: center;
@@ -46,11 +50,4 @@
   cursor: pointer;
   margin-bottom: 10px;
   color: #3f51b5;
-}
-
-.show-more-less-btn {
-  font-size: 13px;
-  color: #3f51b5;
-  margin-left: 20px;
-  cursor: pointer;
 }

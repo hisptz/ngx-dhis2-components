@@ -4,7 +4,7 @@ import { NgxDhis2HttpClientService } from '@iapps/ngx-dhis2-http-client';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import * as _ from 'lodash';
-import { forkJoin, from, Observable, of, zip } from 'rxjs';
+import { from, Observable, of, zip } from 'rxjs';
 import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 
 import {
@@ -263,64 +263,70 @@ export class DictionaryEffects {
       dataSet['dataSetElements'].forEach(element => {
         dataElementsArr.push(element.dataElement.id);
       });
-      forkJoin(
-        this.httpClient.get(
+
+      this.httpClient
+        .get(
           'dataElements.json?fields=id,name,code,zeroIsSignificant,user[id,name],dataSetElements[dataSet[id,name]],categoryCombo[id,name,dataDimensionType,categories[id,name]],shortName,valueType,aggregationType,dataElementGroups[id,name]&filter=id:in:[' +
             dataElementsArr.join(',') +
             ']'
         )
-      ).subscribe(dataElements => {
-        metadataInfoLoaded = {
-          ...metadataInfoLoaded,
-          dataElements: dataElements[0]['dataElements']
-        };
-        this.store.dispatch(
-          new UpdateDictionaryMetadataAction(dataSetId, {
-            description: dataSetDescription,
-            data: metadataInfoLoaded,
-            progress: {
-              loading: true,
-              loadingSucceeded: true,
-              loadingFailed: false
-            }
-          })
-        );
-
-        /**
-         * Legend set
-         */
-        const legendSetsIds = [];
-        if (dataSet.legendSets) {
-          dataSet.legendSets.forEach(legendSet => {
-            legendSetsIds.push(legendSet.id);
-          });
-        }
-        forkJoin(
-          this.httpClient.get(
-            'legendSets.json?fields=id,name,legends[id,name,startValue,endValue,color]&paging=false&filter=id:in:[' +
-              legendSetsIds.join(',') +
-              ']'
-          )
-        ).subscribe(legendSetsInformation => {
-          if (legendSetsInformation && legendSetsInformation[0].legendSets[0]) {
-            metadataInfoLoaded = {
-              ...metadataInfoLoaded,
-              legendSetsInformation: legendSetsInformation
-            };
-          }
+        .subscribe((dataElementResponse: any) => {
+          metadataInfoLoaded = {
+            ...metadataInfoLoaded,
+            dataElements: dataElementResponse.dataElements
+          };
           this.store.dispatch(
             new UpdateDictionaryMetadataAction(dataSetId, {
               description: dataSetDescription,
               data: metadataInfoLoaded,
               progress: {
-                loading: false,
+                loading: true,
                 loadingSucceeded: true,
                 loadingFailed: false
               }
             })
           );
+
+          /**
+           * Legend set
+           */
+          const legendSetsIds = [];
+          if (dataSet.legendSets) {
+            dataSet.legendSets.forEach(legendSet => {
+              legendSetsIds.push(legendSet.id);
+            });
+          }
+
+          this.httpClient
+            .get(
+              'legendSets.json?fields=id,name,legends[id,name,startValue,endValue,color]&paging=false&filter=id:in:[' +
+                legendSetsIds.join(',') +
+                ']'
+            )
+            .subscribe((legendSetsInformationResponse: any) => {
+              if (
+                legendSetsInformationResponse &&
+                legendSetsInformationResponse.legendSets[0]
+              ) {
+                metadataInfoLoaded = {
+                  ...metadataInfoLoaded,
+                  legendSetsInformation:
+                    legendSetsInformationResponse.legendSets[0]
+                };
+              }
+              this.store.dispatch(
+                new UpdateDictionaryMetadataAction(dataSetId, {
+                  description: dataSetDescription,
+                  data: metadataInfoLoaded,
+                  progress: {
+                    loading: false,
+                    loadingSucceeded: true,
+                    loadingFailed: false
+                  }
+                })
+              );
+            });
         });
-      });
     });
   }
 
@@ -357,29 +363,30 @@ export class DictionaryEffects {
         dataElementGroup['dataElements'].forEach(element => {
           dataElementsArr.push(element.id);
         });
-        forkJoin(
-          this.httpClient.get(
+
+        this.httpClient
+          .get(
             'dataElements.json?fields=id,name,code,zeroIsSignificant,user[id,name],dataSetElements[dataSet[id,name]],categoryCombo[id,name,dataDimensionType,categories[id,name]],shortName,valueType,aggregationType,dataElementGroups[id,name]&filter=id:in:[' +
               dataElementsArr.join(',') +
               ']'
           )
-        ).subscribe(dataElements => {
-          metadataInfoLoaded = {
-            ...metadataInfoLoaded,
-            dataElements: dataElements[0]['dataElements']
-          };
-          this.store.dispatch(
-            new UpdateDictionaryMetadataAction(groupId, {
-              description: dataElementDescription,
-              data: metadataInfoLoaded,
-              progress: {
-                loading: false,
-                loadingSucceeded: true,
-                loadingFailed: false
-              }
-            })
-          );
-        });
+          .subscribe((dataElementResponse: any) => {
+            metadataInfoLoaded = {
+              ...metadataInfoLoaded,
+              dataElements: dataElementResponse.dataElements
+            };
+            this.store.dispatch(
+              new UpdateDictionaryMetadataAction(groupId, {
+                description: dataElementDescription,
+                data: metadataInfoLoaded,
+                progress: {
+                  loading: false,
+                  loadingSucceeded: true,
+                  loadingFailed: false
+                }
+              })
+            );
+          });
       });
   }
 
@@ -413,64 +420,70 @@ export class DictionaryEffects {
       dataElement.dataElementGroups.forEach(group => {
         dataElementGroupsArr.push(group.id);
       });
-      forkJoin(
-        this.httpClient.get(
+
+      this.httpClient
+        .get(
           'dataElementGroups.json?paging=false&fields=id,name,dataElements[id,name]&filter=id:in:[' +
             dataElementGroupsArr.join(',') +
             ']'
         )
-      ).subscribe(dataElementGroups => {
-        metadataInfoLoaded = {
-          ...metadataInfoLoaded,
-          dataElementGroups: dataElementGroups[0]['dataElementGroups']
-        };
-        this.store.dispatch(
-          new UpdateDictionaryMetadataAction(dataElementId, {
-            description: dataElementDescription,
-            data: metadataInfoLoaded,
-            progress: {
-              loading: true,
-              loadingSucceeded: true,
-              loadingFailed: false
-            }
-          })
-        );
-        /**
-         * Legend set
-         */
-        const legendSetsIds = [];
-        if (dataElement.legendSets) {
-          dataElement.legendSets.forEach(legendSet => {
-            legendSetsIds.push(legendSet.id);
-          });
-        }
-        forkJoin(
-          this.httpClient.get(
-            'legendSets.json?fields=id,name,legends[id,name,startValue,endValue,color]&paging=false&filter=id:in:[' +
-              legendSetsIds.join(',') +
-              ']'
-          )
-        ).subscribe(legendSetsInformation => {
-          if (legendSetsInformation && legendSetsInformation[0].legendSets[0]) {
-            metadataInfoLoaded = {
-              ...metadataInfoLoaded,
-              legendSetsInformation: legendSetsInformation
-            };
-          }
-
+        .subscribe((dataElementGroupResponse: any) => {
+          metadataInfoLoaded = {
+            ...metadataInfoLoaded,
+            dataElementGroups: dataElementGroupResponse.dataElementGroups
+          };
           this.store.dispatch(
             new UpdateDictionaryMetadataAction(dataElementId, {
               description: dataElementDescription,
               data: metadataInfoLoaded,
               progress: {
-                loading: false,
+                loading: true,
                 loadingSucceeded: true,
                 loadingFailed: false
               }
             })
           );
+          /**
+           * Legend set
+           */
+          const legendSetsIds = [];
+          if (dataElement.legendSets) {
+            dataElement.legendSets.forEach(legendSet => {
+              legendSetsIds.push(legendSet.id);
+            });
+          }
+
+          this.httpClient
+            .get(
+              'legendSets.json?fields=id,name,legends[id,name,startValue,endValue,color]&paging=false&filter=id:in:[' +
+                legendSetsIds.join(',') +
+                ']'
+            )
+            .subscribe((legendSetsInformationResponse: any) => {
+              if (
+                legendSetsInformationResponse &&
+                legendSetsInformationResponse.legendSets[0]
+              ) {
+                metadataInfoLoaded = {
+                  ...metadataInfoLoaded,
+                  legendSetsInformation:
+                    legendSetsInformationResponse.legendSets[0]
+                };
+              }
+
+              this.store.dispatch(
+                new UpdateDictionaryMetadataAction(dataElementId, {
+                  description: dataElementDescription,
+                  data: metadataInfoLoaded,
+                  progress: {
+                    loading: false,
+                    loadingSucceeded: true,
+                    loadingFailed: false
+                  }
+                })
+              );
+            });
         });
-      });
     });
   }
 
@@ -942,7 +955,7 @@ export class DictionaryEffects {
               }
             });
         });
-        forkJoin(
+        zip(
           this.httpClient.get(
             'programStages.json?filter=id:in:[' +
               programStages.join(',') +
@@ -1012,35 +1025,36 @@ export class DictionaryEffects {
               legendSetsIds.push(legendSet.id);
             });
           }
-          forkJoin(
-            this.httpClient.get(
+
+          this.httpClient
+            .get(
               'legendSets.json?fields=id,name,legends[id,name,startValue,endValue,color]&paging=false&filter=id:in:[' +
                 legendSetsIds.join(';') +
                 ']'
             )
-          ).subscribe(legendSetsInformation => {
-            if (
-              legendSetsInformation &&
-              legendSetsInformation[0].legendSets[0]
-            ) {
-              metadataInfoLoaded = {
-                ...metadataInfoLoaded,
-                legendSetsInformation: legendSetsInformation
-              };
-            }
+            .subscribe(legendSetsInformation => {
+              if (
+                legendSetsInformation &&
+                legendSetsInformation.legendSets[0]
+              ) {
+                metadataInfoLoaded = {
+                  ...metadataInfoLoaded,
+                  legendSetsInformation
+                };
+              }
 
-            this.store.dispatch(
-              new UpdateDictionaryMetadataAction(programIndicatorId, {
-                description: indicatorDescription,
-                data: metadataInfoLoaded,
-                progress: {
-                  loading: false,
-                  loadingSucceeded: true,
-                  loadingFailed: false
-                }
-              })
-            );
-          });
+              this.store.dispatch(
+                new UpdateDictionaryMetadataAction(programIndicatorId, {
+                  description: indicatorDescription,
+                  data: metadataInfoLoaded,
+                  progress: {
+                    loading: false,
+                    loadingSucceeded: true,
+                    loadingFailed: false
+                  }
+                })
+              );
+            });
         });
       });
   }

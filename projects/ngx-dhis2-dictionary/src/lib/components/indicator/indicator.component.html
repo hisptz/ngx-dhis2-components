@@ -1,4 +1,4 @@
-<div class="indicator-container">
+<div class="indicator-container" *ngIf="dictionaryItem && dictionaryItem.data">
     <!-- indicator name -->
     <div class="indicator-name-block">
         <div class="indicator-title">{{dictionaryItem.data.metadata.name}}</div>
@@ -78,12 +78,11 @@
                                 matTooltip="{{indicator.name}}">
                                 <a (click)="onSetActive(indicator.id, $event)">{{indicator.name}}</a></li>
                         </ol>
-                        <a class="show-more-less-btn" color="primary" selected
-                            *ngIf="indicatorGroup.indicators.length > 3 && !listAllMetadataInGroup"
+                        <a mat-flat-button *ngIf="indicatorGroup.indicators.length > 3 && !listAllMetadataInGroup"
                             (click)="getOtherMetadata(indicatorGroup.indicators,(listAllMetadataInGroup = true))">
                             Show more
                         </a>
-                        <a class="show-more-less-btn" color="primary" selected *ngIf="listAllMetadataInGroup"
+                        <a mat-flat-button *ngIf="listAllMetadataInGroup"
                             (click)="getOtherMetadata(indicatorGroup.indicators,(listAllMetadataInGroup = false))">
                             Show less
                         </a>
@@ -309,22 +308,13 @@
     </div>
     <!-- Accessibility & Sharing settings -->
     <div>
-        <h4 style="color: #464646;">Accessibility & Sharing settings</h4>
+        <h2>Accessibility & Sharing settings</h2>
         <p>
-            This indicator was first created on
-            <strong>{{ dictionaryItem.data.metadata.created | date }} </strong>
-            by <strong>{{ dictionaryItem.data.metadata.user.name }} </strong>
-            <span *ngIf="dictionaryItem.data.metadata.lastUpdated">
-                and last updated on
-                <strong>{{
-            dictionaryItem.data.metadata.lastUpdated | date
-          }}</strong>
-            </span>
-            <span *ngIf="dictionaryItem.data.metadata.lastUpdatedBy">
-                by
-                <strong>{{
-            dictionaryItem.data.metadata.lastUpdatedBy.name
-          }}</strong></span>
+            This indicator was first created on <b>{{ dictionaryItem.data.metadata.created | date }}</b> by
+            <b>{{ dictionaryItem.data.metadata.user.name }}</b> <span
+                *ngIf="dictionaryItem.data.metadata.lastUpdated">and last updated
+                on <b>{{dictionaryItem.data.metadata.lastUpdated | date}}</b></span> <span
+                *ngIf="dictionaryItem.data.metadata.lastUpdatedBy">by<b>{{dictionaryItem.data.metadata.lastUpdatedBy.name}}</b></span>
         </p>
 
         <div *ngIf="
