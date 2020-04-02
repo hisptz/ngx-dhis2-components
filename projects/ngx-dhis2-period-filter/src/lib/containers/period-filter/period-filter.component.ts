@@ -71,7 +71,6 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
       this.storedPeriodTypes,
       this.currentPeriodFilterType
     );
-    console.log(this.periodTypes);
 
     /* For data range picker */
     const currentMonth = new Date().getMonth();
