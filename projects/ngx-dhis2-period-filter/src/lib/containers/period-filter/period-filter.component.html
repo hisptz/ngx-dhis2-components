@@ -181,32 +181,48 @@
       </tr>
     </table>
   </div>
+  <!-- For date range picker -->
   <div *ngIf="currentPeriodFilterType == 'dates-range'">
     <div style="width: 100%; display: flex">
-      <div style="float: left">
+      <div style="width: 50%;">
         <mat-form-field>
           <mat-label>Start date</mat-label>
-          <input matInput [matDatepicker]="picker" />
+          <input
+            matInput
+            [matDatepicker]="start_date"
+            [min]="minStartDate"
+            [max]="maxStartDate"
+            [(ngModel)]="startDate"
+            (dateInput)="getDate($event.value, 'start_date')"
+          />
           <mat-datepicker-toggle
             matSuffix
-            [for]="picker"
+            [for]="start_date"
           ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <mat-datepicker #start_date></mat-datepicker>
         </mat-form-field>
       </div>
-      <div style="float: right; margin-left: 20px">
-        <mat-form-field>
+      <div style="width: 50%;">
+        <mat-form-field style="float: right !important">
           <mat-label>End date</mat-label>
-          <input matInput [matDatepicker]="picker" />
+          <input
+            matInput
+            [matDatepicker]="end_date"
+            [min]="minEndDate"
+            [max]="maxEndDate"
+            [(ngModel)]="endDate"
+            (dateInput)="getDate($event.value, 'end_date')"
+          />
           <mat-datepicker-toggle
             matSuffix
-            [for]="picker"
+            [for]="end_date"
           ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <mat-datepicker #end_date></mat-datepicker>
         </mat-form-field>
       </div>
     </div>
   </div>
+  <!-- End for date range picker -->
   <!--end of period body-->
 
   <!--period footer-->

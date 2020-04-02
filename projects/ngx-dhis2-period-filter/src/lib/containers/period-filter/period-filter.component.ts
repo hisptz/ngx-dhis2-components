@@ -20,6 +20,8 @@ import { getAvailablePeriods } from '../../helpers/get-available-periods.helper'
 import { getSanitizedPeriods } from '../../helpers/get-sanitized-periods.helper';
 import { removePeriodFromList } from '../../helpers/remove-period-from-list.helper';
 import { PeriodFilterConfig } from '../../models/period-filter-config.model';
+import { formatDateToYYMMDD } from '../../helpers/dates-range-picker.helper';
+import { filterPeriodTypesByFilterType } from '../../helpers/get-period-types-by-filter-type.helper';
 
 @Component({
   selector: 'ngx-dhis2-period-filter',
@@ -36,8 +38,12 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   @Output() change = new EventEmitter();
 
   /* For data range picker */
-  minDate: Date;
-  maxDate: Date;
+  minStartDate: Date;
+  maxStartDate: Date;
+  minEndDate: Date;
+  maxEndDate: Date;
+  startDate: any;
+  endDate: any;
   /** End for data range picker */
 
   availablePeriods: any[];
@@ -54,17 +60,27 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   };
 
   currentPeriodFilterType: string = 'fixed-periods';
+  private storedPeriodTypes: any[];
 
   constructor(private httpClient: NgxDhis2HttpClientService) {
     const periodTypeInstance = new Fn.PeriodType();
     this.periodInstance = new Fn.Period();
+    this.storedPeriodTypes = periodTypeInstance.get();
 
-    this.periodTypes = periodTypeInstance.get();
+    this.periodTypes = filterPeriodTypesByFilterType(
+      this.storedPeriodTypes,
+      this.currentPeriodFilterType
+    );
+    console.log(this.periodTypes);
 
     /* For data range picker */
+    const currentMonth = new Date().getMonth();
+    const currentDate = new Date().getDate();
     const currentYear = new Date().getFullYear();
-    this.minDate = new Date(currentYear - 20, 0, 1);
-    this.maxDate = new Date(currentYear + 1, 11, 31);
+    this.minStartDate = new Date(currentYear - 20, 0, 1);
+    this.maxStartDate = new Date(currentYear, currentMonth, currentDate);
+    this.minEndDate = new Date(currentYear - 20, 0, 1);
+    this.maxEndDate = new Date(currentYear, currentMonth, currentDate);
     /** End for data range picker */
   }
 
@@ -97,6 +113,48 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
 
   onSetPeriodFilterType(type) {
     this.currentPeriodFilterType = type;
+    this.periodTypes = filterPeriodTypesByFilterType(
+      this.storedPeriodTypes,
+      type
+    );
+    if (this.periodTypes.length > 0) {
+      this.selectedPeriodType = this.periodTypes[0].id;
+      this._setPeriodProperties(this.selectedPeriodType);
+    }
+    this.startDate = null;
+    this.endDate = null;
+    this.selectedPeriods = [];
+  }
+
+  getDate(dateValue, type) {
+    this.selectedPeriods = [];
+    if (type == 'start_date') {
+      this.startDate = formatDateToYYMMDD(dateValue);
+      this.minEndDate = new Date(
+        Number(this.startDate.split('-')[0]),
+        Number(this.startDate.split('-')[1]) - 1,
+        Number(this.startDate.split('-')[2]) + 1
+      );
+    } else {
+      this.endDate = formatDateToYYMMDD(dateValue);
+    }
+    if (this.startDate && this.endDate) {
+      this.selectedPeriods.push({
+        id: 'dates-range',
+        name: 'Date range',
+        dimension: 'ou',
+        items: [
+          {
+            id: this.startDate,
+            name: this.startDate
+          },
+          {
+            id: this.endDate,
+            name: this.endDate
+          }
+        ]
+      });
+    }
   }
 
   private _setPeriodProperties(selectedPeriodType) {
