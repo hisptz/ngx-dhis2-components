@@ -140,18 +140,17 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
     if (this.startDate && this.endDate) {
       this.selectedPeriods.push({
         id: 'dates-range',
-        name: 'Date range',
+        type: 'dates-range',
+        name: this.startDate + ' to ' + this.endDate,
         dimension: 'ou',
-        items: [
-          {
-            id: this.startDate,
-            name: this.startDate
-          },
-          {
-            id: this.endDate,
-            name: this.endDate
-          }
-        ]
+        startDate: {
+          id: this.startDate,
+          name: this.startDate
+        },
+        endDate: {
+          id: this.endDate,
+          name: this.endDate
+        }
       });
     }
   }
