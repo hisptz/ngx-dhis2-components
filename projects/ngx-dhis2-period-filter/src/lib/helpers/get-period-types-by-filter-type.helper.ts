@@ -1,20 +1,15 @@
 import * as _ from 'lodash';
+import { PeriodFilterTypes } from '../constants/period-filter-types.constant';
 
-export function filterPeriodTypesByFilterType(periodTypes, filterType) {
-  let relativePeriodTypes = [];
-  let fixedPeriodTypes = [];
-  periodTypes.map(periodType => {
-    if (periodType.name.indexOf('Relative') > -1) {
-      relativePeriodTypes.push(periodType);
-    } else {
-      fixedPeriodTypes.push(periodType);
+export function getPeriodTypesByFilterType(periodTypes, filterType) {
+  return (periodTypes || []).filter((periodType: any) => {
+    switch (filterType) {
+      case PeriodFilterTypes.FIXED:
+        return (periodType ? periodType.name : '').indexOf('Relative') === -1;
+      case PeriodFilterTypes.RELATIVE:
+        return (periodType ? periodType.name : '').indexOf('Relative') !== -1;
+      default:
+        return false;
     }
   });
-  if (filterType == 'fixed-periods') {
-    return fixedPeriodTypes;
-  } else if (filterType == 'relative-periods') {
-    return relativePeriodTypes;
-  } else {
-    return [];
-  }
 }
