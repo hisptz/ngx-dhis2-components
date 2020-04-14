@@ -3,7 +3,8 @@
 
   <mat-button-toggle-group #filterType="matButtonToggleGroup">
     <mat-button-toggle *ngFor="let periodFilterType of periodFilterTypes" [value]="periodFilterType.id"
-      (click)="onSetPeriodFilterType($event, filterType)">
+      (click)="onSetPeriodFilterType($event, filterType)" [disabled]="periodFilterType.id === currentPeriodFilterType"
+      [checked]="periodFilterType.id === currentPeriodFilterType">
       {{periodFilterType.name}}
     </mat-button-toggle>
   </mat-button-toggle-group>
@@ -96,26 +97,20 @@
   </div>
   <!-- For date range picker -->
   <div *ngIf="currentPeriodFilterType === periodFilterTypeEnum.DATE_RANGE">
-    <div style="width: 100%; display: flex">
-      <div style="width: 50%;">
-        <mat-form-field>
-          <mat-label>Start date</mat-label>
-          <input matInput [matDatepicker]="start_date" [min]="minStartDate" [max]="maxStartDate" [(ngModel)]="startDate"
-            (dateInput)="getDate($event.value, 'start_date')" />
-          <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
-          <mat-datepicker #start_date></mat-datepicker>
-        </mat-form-field>
-      </div>
-      <div style="width: 50%;">
-        <mat-form-field style="float: right !important">
-          <mat-label>End date</mat-label>
-          <input matInput [matDatepicker]="end_date" [min]="minEndDate" [max]="maxEndDate" [(ngModel)]="endDate"
-            (dateInput)="getDate($event.value, 'end_date')" />
-          <mat-datepicker-toggle matSuffix [for]="end_date"></mat-datepicker-toggle>
-          <mat-datepicker #end_date></mat-datepicker>
-        </mat-form-field>
-      </div>
-    </div>
+    <mat-form-field>
+      <mat-label>Start date</mat-label>
+      <input matInput [matDatepicker]="start_date" [min]="minStartDate" [max]="maxStartDate" [(ngModel)]="startDate"
+        (dateInput)="getDate($event.value, 'start_date')" />
+      <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
+      <mat-datepicker #start_date></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field style="float: right !important">
+      <mat-label>End date</mat-label>
+      <input matInput [matDatepicker]="end_date" [min]="minEndDate" [max]="maxEndDate" [(ngModel)]="endDate"
+        (dateInput)="getDate($event.value, 'end_date')" />
+      <mat-datepicker-toggle matSuffix [for]="end_date"></mat-datepicker-toggle>
+      <mat-datepicker #end_date></mat-datepicker>
+    </mat-form-field>
   </div>
   <!-- End for date range picker -->
   <!--end of period body-->

@@ -203,3 +203,8 @@
   background-color: #96969654 !important;
   color: #080606 !important;
 }
+
+.mat-button-toggle-disabled.mat-button-toggle-checked {
+  background-color: #00796b;
+  color: #ffffff;
+}
