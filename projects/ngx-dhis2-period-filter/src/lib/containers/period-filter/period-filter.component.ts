@@ -15,7 +15,7 @@ import {
 } from '@iapps/ngx-dhis2-http-client';
 import { find } from 'lodash';
 
-import { periodFilterConfig } from '../../constants/period-filter-config.constant';
+import { PERIOD_FILTER_CONFIG } from '../../constants/period-filter-config.constant';
 import { getAvailablePeriods } from '../../helpers/get-available-periods.helper';
 import { getSanitizedPeriods } from '../../helpers/get-sanitized-periods.helper';
 import { removePeriodFromList } from '../../helpers/remove-period-from-list.helper';
@@ -27,6 +27,7 @@ import {
   PERIOD_FILTER_TYPES,
   PeriodFilterTypes,
 } from '../../constants/period-filter-types.constant';
+import { getPeriodFilterTypesByConfig } from '../../helpers/get-period-filter-types-by-config.helper';
 
 @Component({
   selector: 'ngx-dhis2-period-filter',
@@ -91,18 +92,25 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
-    this.periodFilterTypes = PERIOD_FILTER_TYPES;
+    this.periodFilterConfig = {
+      ...PERIOD_FILTER_CONFIG,
+      ...(this.periodFilterConfig || {}),
+    };
+
+    this.periodFilterTypes = getPeriodFilterTypesByConfig(
+      PERIOD_FILTER_TYPES,
+      this.periodFilterConfig
+    );
     this.periodFilterTypeEnum = PeriodFilterTypes;
-    if (this.periodFilterConfig && this.periodFilterConfig.lowestPeriodType) {
-      const lowestPeriodType = find(this.periodTypes, [
-        'id',
-        this.periodFilterConfig.lowestPeriodType,
-      ]);
-      if (lowestPeriodType) {
-        this.periodTypes = this.periodTypes.filter(
-          (periodType: any) => periodType.rank >= lowestPeriodType.rank
-        );
-      }
+
+    const lowestPeriodType = find(this.periodTypes, [
+      'id',
+      this.periodFilterConfig.lowestPeriodType,
+    ]);
+    if (lowestPeriodType) {
+      this.periodTypes = this.periodTypes.filter(
+        (periodType: any) => periodType.rank >= lowestPeriodType.rank
+      );
     }
 
     // Initialize selected periods if not defined
@@ -174,11 +182,6 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
         this.periodFilterConfig,
         systemInfo.keyCalendar
       );
-
-      this.periodFilterConfig = {
-        ...periodFilterConfig,
-        ...(this.periodFilterConfig || {}),
-      };
 
       // Get selected period type if not supplied
       if (!selectedPeriodType) {
