@@ -23,6 +23,7 @@ export class PeriodFilterComponent {
     childrenPeriodSortOrder: 'ASC',
     allowDateRangeSelection: false,
     allowRelativePeriodSelection: false,
+    allowFixedPeriodSelection: false,
   };
   selectedPeriodItems: any[] = [
     {

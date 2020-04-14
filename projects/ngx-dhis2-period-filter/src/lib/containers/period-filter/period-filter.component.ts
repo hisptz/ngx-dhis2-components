@@ -61,9 +61,7 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   showPeriodTypeSelection: boolean;
   periodFilterTypes: PeriodFilterType[];
   periodFilterTypeEnum: any;
-
-  currentPeriodFilterType = PeriodFilterTypes.FIXED;
-  private storedPeriodTypes: any[];
+  currentPeriodFilterType: string;
 
   constructor(private httpClient: NgxDhis2HttpClientService) {
     this.periodTypeInstance = new Fn.PeriodType();
@@ -101,6 +99,9 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
       PERIOD_FILTER_TYPES,
       this.periodFilterConfig
     );
+    this.currentPeriodFilterType =
+      this.periodFilterTypes.length > 0 ? this.periodFilterTypes[0].id : '';
+
     this.periodFilterTypeEnum = PeriodFilterTypes;
 
     const lowestPeriodType = find(this.periodTypes, [
@@ -124,7 +125,10 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   onSetPeriodFilterType(e, periodFilterType) {
     e.stopPropagation();
 
-    if (periodFilterType) {
+    if (
+      periodFilterType &&
+      this.currentPeriodFilterType !== periodFilterType.value
+    ) {
       this.currentPeriodFilterType = periodFilterType.value;
       this.periodTypes = getPeriodTypesByFilterType(
         this.periodTypeInstance.get(),
