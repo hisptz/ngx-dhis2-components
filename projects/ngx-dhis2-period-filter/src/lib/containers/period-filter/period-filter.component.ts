@@ -100,7 +100,13 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
       this.periodFilterConfig
     );
     this.currentPeriodFilterType =
-      this.periodFilterTypes.length > 0 ? this.periodFilterTypes[0].id : '';
+      this.periodFilterTypes.length > 0
+        ? this.periodFilterTypes[0].id
+        : this.selectedPeriodType
+        ? this.selectedPeriodType.indexOf('Relative') !== -1
+          ? PeriodFilterTypes.RELATIVE
+          : PeriodFilterTypes.FIXED
+        : '';
 
     this.periodFilterTypeEnum = PeriodFilterTypes;
 
@@ -254,10 +260,12 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     this.showPeriodTypeSelection = false;
-
     this.selectedPeriodType = selectedPeriodType;
-
     this.periodInstance.setType(this.selectedPeriodType).get();
+    this.currentPeriodFilterType =
+      this.selectedPeriodType.indexOf('Relative') !== -1
+        ? PeriodFilterTypes.RELATIVE
+        : PeriodFilterTypes.FIXED;
 
     this._setAvailablePeriods();
   }
