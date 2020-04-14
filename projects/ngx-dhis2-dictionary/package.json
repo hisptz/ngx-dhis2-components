@@ -1,9 +1,14 @@
 {
-  "name": "ngx-dhis2-dictionary",
-  "version": "0.0.1",
+  "name": "@iapps/ngx-dhis2-dictionary",
+  "version": "1.4.1",
   "peerDependencies": {
-    "@angular/common": "^9.0.3",
-    "@angular/core": "^9.0.3",
-    "tslib": "^1.10.0"
-  }
+    "@angular/common": "^8.0.0 || ^9.0.0",
+    "@angular/core": "^8.0.0 || ^9.0.0",
+    "@ngrx/effects": "^9.0.0",
+    "@ngrx/entity": "^9.0.0",
+    "@ngrx/store": "^9.0.0",
+    "ngx-pagination": "^3.2.1",
+    "fuse.js": "^3.4.6"
+  },
+  "dependencies": {}
 }

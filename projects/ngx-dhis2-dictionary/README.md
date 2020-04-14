@@ -1,24 +1,50 @@
-# NgxDhis2Dictionary
+# NGX DHIS2 Dictionary
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.3.
+Angular based DHIS2 library for telling a story of metadata eg indicator
 
-## Code scaffolding
+## Using the library
 
-Run `ng generate component component-name --project ngx-dhis2-dictionary` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ngx-dhis2-dictionary`.
-> Note: Don't forget to add `--project ngx-dhis2-dictionary` or else it will be added to the default project in your `angular.json` file. 
+To use the library, put this in your component
 
-## Build
+```
+<div class="dictionary-block">
+        <ngx-dhis2-dictionary-list
+          [metadataIdentifiers]="metadataIdentifiers"
+          [selectedItem]="selectedItem"
+          (dictionaryItemId)="dictionaryItemId($event)"
+          (metadataInfo)="metadataInfo($event)"
+          (metadataGroupsInfo)="metadataGroupsInfo($event)"
+        ></ngx-dhis2-dictionary-list>
+</div>
+```
 
-Run `ng build ngx-dhis2-dictionary` to build the project. The build artifacts will be stored in the `dist/` directory.
+Where metadataIdentifiers are DHIS2 metadata ids you want to ge.
 
-## Publishing
+Selected item can be passed or not, if passed should be one of the metadata ids you want to be selected by default
 
-After building your library with `ng build ngx-dhis2-dictionary`, go to the dist folder `cd dist/ngx-dhis2-dictionary` and run `npm publish`.
+dictionaryItem outputs the url with format "ids/selected/selectedId"
 
-## Running unit tests
+metadataInfo is an output object with the format below
 
-Run `ng test ngx-dhis2-dictionary` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```{
+        type: "indicator",
+        data: [array of loaded metadata]
+   }
+```
 
-## Further help
+      for type 'indicator' you get indicator and for type 'programIndicator' you get program indicators
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+metadataGroupsInfo is an out put for indicator or programIndicator groups.
+
+````[
+        {
+                id: "groupIdentifier",
+                name: "Name",
+                metadataTypeKey: "[{"id": "indentifier"}]"
+        }
+
+  ]```
+  metadataTypeKey can be "indicators" or "programIndicators"
+
+Currently supported ones are indicators, program indicators, data sets, data elements and functions
+````

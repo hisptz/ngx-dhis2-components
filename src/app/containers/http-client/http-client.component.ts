@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {
   NgxDhis2HttpClientService,
   Manifest
-} from 'projects/ngx-dhis2-http-client/src/public_api';
+} from '@iapps/ngx-dhis2-http-client';
 
 @Component({
   selector: 'app-http-client',
