@@ -63,6 +63,7 @@
 .period-body {
   display: flex;
   width: 100%;
+  margin-top: 10px;
 }
 
 .period-available {
@@ -196,4 +197,19 @@
   height: 7px;
   width: 7px;
   background-color: #9e9e9e;
+}
+
+.selected-period-filter-type {
+  background-color: #96969654 !important;
+  color: #080606 !important;
+}
+
+.mat-button-toggle-disabled.mat-button-toggle-checked {
+  background-color: #00796b;
+  color: #ffffff;
+}
+
+.period-range-container {
+  margin-top: 10px;
+  position: relative;
 }

@@ -6,4 +6,7 @@ export interface PeriodFilterConfig {
   childrenPeriodSortOrder?: string;
   disablePeriodTypeSelection?: boolean;
   lowestPeriodType?: string;
+  allowFixedPeriodSelection?: boolean;
+  allowRelativePeriodSelection?: boolean;
+  allowDateRangeSelection?: boolean;
 }

@@ -6,25 +6,33 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges
+  SimpleChanges,
 } from '@angular/core';
 import { Fn } from '@iapps/function-analytics';
 import {
   NgxDhis2HttpClientService,
-  SystemInfo
+  SystemInfo,
 } from '@iapps/ngx-dhis2-http-client';
 import { find } from 'lodash';
 
-import { periodFilterConfig } from '../../constants/period-filter-config.constant';
+import { PERIOD_FILTER_CONFIG } from '../../constants/period-filter-config.constant';
 import { getAvailablePeriods } from '../../helpers/get-available-periods.helper';
 import { getSanitizedPeriods } from '../../helpers/get-sanitized-periods.helper';
 import { removePeriodFromList } from '../../helpers/remove-period-from-list.helper';
 import { PeriodFilterConfig } from '../../models/period-filter-config.model';
+import { formatDateToYYMMDD } from '../../helpers/dates-range-picker.helper';
+import { getPeriodTypesByFilterType } from '../../helpers/get-period-types-by-filter-type.helper';
+import { PeriodFilterType } from '../../models/period-filter-type.model';
+import {
+  PERIOD_FILTER_TYPES,
+  PeriodFilterTypes,
+} from '../../constants/period-filter-types.constant';
+import { getPeriodFilterTypesByConfig } from '../../helpers/get-period-filter-types-by-config.helper';
 
 @Component({
   selector: 'ngx-dhis2-period-filter',
   templateUrl: './period-filter.component.html',
-  styleUrls: ['./period-filter.component.css']
+  styleUrls: ['./period-filter.component.css'],
 })
 export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   @Input() selectedPeriodType: string;
@@ -35,18 +43,46 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   @Output() close = new EventEmitter();
   @Output() change = new EventEmitter();
 
+  /* For data range picker */
+  minStartDate: Date;
+  maxStartDate: Date;
+  minEndDate: Date;
+  maxEndDate: Date;
+  startDate: any;
+  endDate: any;
+  /** End for data range picker */
+
   availablePeriods: any[];
   selectedYear: number;
   currentYear: number;
   periodTypes: any[];
   periodInstance: any;
+  periodTypeInstance: Fn.PeriodType;
   showPeriodTypeSelection: boolean;
+  periodFilterTypes: PeriodFilterType[];
+  periodFilterTypeEnum: any;
+
+  currentPeriodFilterType = PeriodFilterTypes.FIXED;
+  private storedPeriodTypes: any[];
 
   constructor(private httpClient: NgxDhis2HttpClientService) {
-    const periodTypeInstance = new Fn.PeriodType();
+    this.periodTypeInstance = new Fn.PeriodType();
     this.periodInstance = new Fn.Period();
 
-    this.periodTypes = periodTypeInstance.get();
+    this.periodTypes = getPeriodTypesByFilterType(
+      this.periodTypeInstance.get(),
+      this.currentPeriodFilterType
+    );
+
+    /* For data range picker */
+    const currentMonth = new Date().getMonth();
+    const currentDate = new Date().getDate();
+    const currentYear = new Date().getFullYear();
+    this.minStartDate = new Date(currentYear - 20, 0, 1);
+    this.maxStartDate = new Date(currentYear, currentMonth, currentDate);
+    this.minEndDate = new Date(currentYear - 20, 0, 1);
+    this.maxEndDate = new Date(currentYear, currentMonth, currentDate);
+    /** End for data range picker */
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -56,16 +92,25 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.periodFilterConfig && this.periodFilterConfig.lowestPeriodType) {
-      const lowestPeriodType = find(this.periodTypes, [
-        'id',
-        this.periodFilterConfig.lowestPeriodType
-      ]);
-      if (lowestPeriodType) {
-        this.periodTypes = this.periodTypes.filter(
-          (periodType: any) => periodType.rank >= lowestPeriodType.rank
-        );
-      }
+    this.periodFilterConfig = {
+      ...PERIOD_FILTER_CONFIG,
+      ...(this.periodFilterConfig || {}),
+    };
+
+    this.periodFilterTypes = getPeriodFilterTypesByConfig(
+      PERIOD_FILTER_TYPES,
+      this.periodFilterConfig
+    );
+    this.periodFilterTypeEnum = PeriodFilterTypes;
+
+    const lowestPeriodType = find(this.periodTypes, [
+      'id',
+      this.periodFilterConfig.lowestPeriodType,
+    ]);
+    if (lowestPeriodType) {
+      this.periodTypes = this.periodTypes.filter(
+        (periodType: any) => periodType.rank >= lowestPeriodType.rank
+      );
     }
 
     // Initialize selected periods if not defined
@@ -76,6 +121,60 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
     this._setPeriodProperties(this.selectedPeriodType);
   }
 
+  onSetPeriodFilterType(e, periodFilterType) {
+    e.stopPropagation();
+
+    if (periodFilterType) {
+      this.currentPeriodFilterType = periodFilterType.value;
+      this.periodTypes = getPeriodTypesByFilterType(
+        this.periodTypeInstance.get(),
+        this.currentPeriodFilterType
+      );
+
+      if (this.periodTypes.length > 0) {
+        this.selectedPeriodType = this.periodTypes[0].id;
+        this._setPeriodProperties(this.selectedPeriodType);
+      }
+
+      if (periodFilterType === PeriodFilterTypes.DATE_RANGE) {
+        this.selectedPeriods = [];
+      }
+
+      this.startDate = null;
+      this.endDate = null;
+    }
+  }
+
+  getDate(dateValue, type) {
+    this.selectedPeriods = [];
+    if (type == 'start_date') {
+      this.startDate = formatDateToYYMMDD(dateValue);
+      this.minEndDate = new Date(
+        Number(this.startDate.split('-')[0]),
+        Number(this.startDate.split('-')[1]) - 1,
+        Number(this.startDate.split('-')[2]) + 1
+      );
+    } else {
+      this.endDate = formatDateToYYMMDD(dateValue);
+    }
+    if (this.startDate && this.endDate) {
+      this.selectedPeriods.push({
+        id: 'dates-range',
+        type: 'dates-range',
+        name: this.startDate + ' to ' + this.endDate,
+        dimension: 'ou',
+        startDate: {
+          id: this.startDate,
+          name: this.startDate,
+        },
+        endDate: {
+          id: this.endDate,
+          name: this.endDate,
+        },
+      });
+    }
+  }
+
   private _setPeriodProperties(selectedPeriodType) {
     this.httpClient.systemInfo().subscribe((systemInfo: SystemInfo) => {
       this.selectedPeriods = getSanitizedPeriods(
@@ -83,11 +182,6 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
         this.periodFilterConfig,
         systemInfo.keyCalendar
       );
-
-      this.periodFilterConfig = {
-        ...periodFilterConfig,
-        ...(this.periodFilterConfig || {})
-      };
 
       // Get selected period type if not supplied
       if (!selectedPeriodType) {
@@ -104,7 +198,7 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
         .setPreferences({
           childrenPeriodSortOrder:
             this.periodFilterConfig.childrenPeriodSortOrder || 'DESC',
-          allowFuturePeriods: true
+          allowFuturePeriods: true,
         })
         .get();
 
@@ -230,7 +324,7 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
       items: this.selectedPeriods,
       dimension: 'pe',
       lowestPeriodType: this.periodFilterConfig.lowestPeriodType,
-      changed: true
+      changed: true,
     };
   }
 

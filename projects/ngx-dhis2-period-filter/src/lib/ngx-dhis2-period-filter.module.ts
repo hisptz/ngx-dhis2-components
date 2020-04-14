@@ -9,7 +9,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 @NgModule({
   declarations: [PeriodFilterComponent],
   imports: [
@@ -21,8 +24,12 @@ import { MatChipsModule } from '@angular/material/chips';
     MatTooltipModule,
     MatIconModule,
     MatCardModule,
-    MatChipsModule
+    MatChipsModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatNativeDateModule,
+    MatButtonToggleModule,
   ],
-  exports: [PeriodFilterComponent]
+  exports: [PeriodFilterComponent],
 })
 export class NgxDhis2PeriodFilterModule {}
