@@ -1,10 +1,8 @@
 <div class="period-filter-container">
   <!--period body-->
-
-  <mat-button-toggle-group #filterType="matButtonToggleGroup">
+  <mat-button-toggle-group #filterType="matButtonToggleGroup" *ngIf="periodFilterTypes && periodFilterTypes.length > 0">
     <mat-button-toggle *ngFor="let periodFilterType of periodFilterTypes" [value]="periodFilterType.id"
-      (click)="onSetPeriodFilterType($event, filterType)" [disabled]="periodFilterType.id === currentPeriodFilterType"
-      [checked]="periodFilterType.id === currentPeriodFilterType">
+      (click)="onSetPeriodFilterType($event, filterType)" [checked]="periodFilterType.id === currentPeriodFilterType">
       {{periodFilterType.name}}
     </mat-button-toggle>
   </mat-button-toggle-group>

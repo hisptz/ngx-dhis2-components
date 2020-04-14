@@ -204,8 +204,8 @@
   color: #080606 !important;
 }
 
-.mat-button-toggle-disabled.mat-button-toggle-checked {
-  background-color: #00796b;
+.mat-button-toggle-checked {
+  background-color: #00796b !important;
   color: #ffffff;
 }
 

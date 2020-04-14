@@ -2,6 +2,9 @@ import * as _ from 'lodash';
 import { PeriodFilterTypes } from '../constants/period-filter-types.constant';
 
 export function getPeriodTypesByFilterType(periodTypes, filterType) {
+  if (!filterType) {
+    return periodTypes;
+  }
   return (periodTypes || []).filter((periodType: any) => {
     switch (filterType) {
       case PeriodFilterTypes.FIXED:
@@ -9,7 +12,7 @@ export function getPeriodTypesByFilterType(periodTypes, filterType) {
       case PeriodFilterTypes.RELATIVE:
         return (periodType ? periodType.name : '').indexOf('Relative') !== -1;
       default:
-        return false;
+        return true;
     }
   });
 }
