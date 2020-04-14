@@ -96,15 +96,15 @@
     </table>
   </div>
   <!-- For date range picker -->
-  <div *ngIf="currentPeriodFilterType === periodFilterTypeEnum.DATE_RANGE">
-    <mat-form-field>
+  <div *ngIf="currentPeriodFilterType === periodFilterTypeEnum.DATE_RANGE" class="period-range-container">
+    <mat-form-field style="width: 100%;" appearance="outline">
       <mat-label>Start date</mat-label>
       <input matInput [matDatepicker]="start_date" [min]="minStartDate" [max]="maxStartDate" [(ngModel)]="startDate"
         (dateInput)="getDate($event.value, 'start_date')" />
       <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
       <mat-datepicker #start_date></mat-datepicker>
     </mat-form-field>
-    <mat-form-field style="float: right !important">
+    <mat-form-field style="width: 100%;" appearance="outline">
       <mat-label>End date</mat-label>
       <input matInput [matDatepicker]="end_date" [min]="minEndDate" [max]="maxEndDate" [(ngModel)]="endDate"
         (dateInput)="getDate($event.value, 'end_date')" />

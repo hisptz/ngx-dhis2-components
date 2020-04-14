@@ -208,3 +208,8 @@
   background-color: #00796b;
   color: #ffffff;
 }
+
+.period-range-container {
+  margin-top: 10px;
+  position: relative;
+}
