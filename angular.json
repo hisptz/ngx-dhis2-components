@@ -23,15 +23,24 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              {
+                "input": "node_modules/angular-tree-component/dist/angular-tree-component.css"
+              },
+              {
+                "input": "node_modules/bootstrap/dist/css/bootstrap.css"
+              },
+              {
+                "input": "node_modules/leaflet/dist/leaflet.css"
+              },
+              {
+                "input": "node_modules/@swimlane/ngx-dnd/release/index.css"
+              }
             ],
-            "scripts": []
+            "scripts": ["src/ee_api_js.js"]
           },
           "configurations": {
             "production": {
@@ -90,10 +99,7 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "codeCoverage": true,
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
@@ -109,9 +115,7 @@
               "tsconfig.spec.json",
               "e2e/tsconfig.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
@@ -161,9 +165,7 @@
               "projects/ngx-dhis2-dictionary/tsconfig.lib.json",
               "projects/ngx-dhis2-dictionary/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -201,9 +203,7 @@
               "projects/ngx-dhis2-http-client/tsconfig.lib.json",
               "projects/ngx-dhis2-http-client/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -241,9 +241,7 @@
               "projects/ngx-dhis2-org-unit-filter/tsconfig.lib.json",
               "projects/ngx-dhis2-org-unit-filter/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -281,9 +279,7 @@
               "projects/ngx-dhis2-menu/tsconfig.lib.json",
               "projects/ngx-dhis2-menu/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -321,9 +317,45 @@
               "projects/ngx-dhis2-period-filter/tsconfig.lib.json",
               "projects/ngx-dhis2-period-filter/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
+    "ngx-maps": {
+      "projectType": "library",
+      "root": "projects/ngx-maps",
+      "sourceRoot": "projects/ngx-maps/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ngx-maps/tsconfig.lib.json",
+            "project": "projects/ngx-maps/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-maps/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-maps/src/test.ts",
+            "tsConfig": "projects/ngx-maps/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-maps/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-maps/tsconfig.lib.json",
+              "projects/ngx-maps/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -331,6 +363,7 @@
   },
   "defaultProject": "ngx-dhis2-components",
   "cli": {
-    "defaultCollection": "@ngrx/schematics"
+    "defaultCollection": "@ngrx/schematics",
+    "analytics": "c628e898-7511-4a1e-95c2-f5b3ce512cf1"
   }
 }

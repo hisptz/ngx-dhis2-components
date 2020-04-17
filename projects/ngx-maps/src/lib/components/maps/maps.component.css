@@ -1,0 +1,14 @@
+.container_holder {
+  flex: 1;
+  position: absolute;
+  top: 10px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+
+:host {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}

@@ -19,7 +19,8 @@ export class AppComponent implements OnInit {
       { id: 'org-unit-filter', name: 'Data filter' },
       { id: 'org-unit-filter', name: 'Dimension filter' },
       { id: 'selection-filters', name: 'Selection Filters' },
-      { id: 'menu', name: 'Menu' }
+      { id: 'menu', name: 'Menu' },
+      { id: 'maps', name: 'Maps' }
     ];
   }
 }

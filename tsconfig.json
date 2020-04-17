@@ -11,13 +11,8 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2018",
-      "dom"
-    ],
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2018", "dom"],
     "paths": {
       "ngx-dhis2-dictionary": [
         "dist/ngx-dhis2-dictionary/ngx-dhis2-dictionary",
@@ -38,7 +33,8 @@
       "ngx-dhis2-period-filter": [
         "dist/ngx-dhis2-period-filter/ngx-dhis2-period-filter",
         "dist/ngx-dhis2-period-filter"
-      ]
+      ],
+      "ngx-maps": ["dist/ngx-maps/ngx-maps", "dist/ngx-maps"]
     }
   },
   "angularCompilerOptions": {

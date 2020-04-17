@@ -15,6 +15,7 @@ import { NgxDhis2HttpClientModule } from '@iapps/ngx-dhis2-http-client';
 import { NgxDhis2DictionaryModule } from 'projects/ngx-dhis2-dictionary/src/public-api';
 import { NgxDhis2MenuModule } from 'projects/ngx-dhis2-menu/src/public-api';
 import { NgxDhis2PeriodFilterModule } from 'projects/ngx-dhis2-period-filter/src/public-api';
+import { MapModule } from 'projects/ngx-maps/src/public-api';
 
 @NgModule({
   declarations: [AppComponent, ...containers],
@@ -36,6 +37,7 @@ import { NgxDhis2PeriodFilterModule } from 'projects/ngx-dhis2-period-filter/src
     NgxDhis2DictionaryModule,
     NgxDhis2MenuModule,
     NgxDhis2PeriodFilterModule,
+    MapModule,
     StoreModule.forRoot({}),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([]),

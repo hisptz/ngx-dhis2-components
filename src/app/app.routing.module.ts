@@ -9,6 +9,7 @@ import { DataFilterComponent } from './containers/data-filter/data-filter.compon
 import { DimensionFilterComponent } from './containers/dimension-filter/dimension-filter.component';
 import { SelectionFiltersComponent } from './containers/selection-filters/selection-filters.component';
 import { MenuComponent } from './containers/menu/menu.component';
+import { Dhis2MapsComponent } from './containers/dhis2-maps/dhis2-maps.component';
 
 const routes: Routes = [
   {
@@ -26,7 +27,8 @@ const routes: Routes = [
     path: 'selection-filters',
     component: SelectionFiltersComponent
   },
-  { path: 'menu', component: MenuComponent }
+  { path: 'menu', component: MenuComponent },
+  { path: 'maps', component: Dhis2MapsComponent }
 ];
 
 @NgModule({

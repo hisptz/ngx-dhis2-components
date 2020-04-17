@@ -1,27 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
 @import '~@angular/material/theming';
+@import '~leaflet/dist/leaflet.css';
 
 $primary: mat-palette($mat-indigo);
 
 .primary-color {
   color: mat-color($primary);
 }
-
+/* You can add global styles to this file, and also import other style files */
 html,
 body {
-  height: 100%;
-}
-body {
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  height: 100%;
 }
 
-html,
-body {
-  height: 100%;
+.leaflet-cluster-icon {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.65);
+  color: #fff;
+  border-radius: 50%;
+  text-align: center !important;
+  display: flex !important;
+  justify-content: center;
+  background-clip: padding-box;
 }
-body {
-  margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+
+.leaflet-cluster-icon span {
+  align-self: center;
+}
+
+.height-20 {
+  height: 20px;
+}
+
+@media print {
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
+  body {
+    -webkit-print-color-adjust: exact;
+    width: 100% !important;
+  }
+
+  @page {
+    size: A4 landscape !important;
+  }
 }
