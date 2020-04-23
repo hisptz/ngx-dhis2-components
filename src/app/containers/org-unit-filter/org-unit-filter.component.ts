@@ -4,7 +4,7 @@ import { OrgUnitFilterConfig } from 'projects/ngx-dhis2-org-unit-filter/src/publ
 @Component({
   selector: 'app-org-unit-filter',
   templateUrl: './org-unit-filter.component.html',
-  styleUrls: ['./org-unit-filter.component.scss']
+  styleUrls: ['./org-unit-filter.component.scss'],
 })
 export class OrgUnitFilterComponent implements OnInit {
   title = 'app';
@@ -18,20 +18,20 @@ export class OrgUnitFilterComponent implements OnInit {
     showOrgUnitLevelSection: false,
     reportUse: false,
     additionalQueryFields: ['dataSets'],
-    batchSize: 400
+    batchSize: 400,
   };
   selectedOrgUnitItems: any[] = [
     { id: 'O6uvpzGd5pu', name: 'Bo', level: 3 },
     {
       id: 'OU_GROUP.AQQCxQqDxLe',
       name: 'Konta CHP',
-      level: 4
+      level: 4,
     },
     {
       id: 'LEVEL-1',
       name: 'Kukuna CHP',
-      level: 4
-    }
+      level: 4,
+    },
   ];
 
   constructor() {}

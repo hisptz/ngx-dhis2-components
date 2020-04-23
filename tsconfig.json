@@ -38,6 +38,10 @@
       "ngx-dhis2-period-filter": [
         "dist/ngx-dhis2-period-filter/ngx-dhis2-period-filter",
         "dist/ngx-dhis2-period-filter"
+      ],
+      "ngx-dhis2-data-filter": [
+        "dist/ngx-dhis2-data-filter/ngx-dhis2-data-filter",
+        "dist/ngx-dhis2-data-filter"
       ]
     }
   },
