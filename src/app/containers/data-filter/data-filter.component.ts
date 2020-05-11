@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { DataFilterConfig } from 'projects/ngx-dhis2-data-filter/src/public-api';
 
 @Component({
@@ -15,7 +16,7 @@ export class DataFilterComponent implements OnInit {
     enabledSelections: ['in', 'fn', 'de'],
     showGroupingButton: false,
   };
-  constructor() {}
+  constructor(private store: Store<any>) {}
 
   ngOnInit(): void {}
 
