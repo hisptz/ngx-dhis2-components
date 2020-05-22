@@ -6,12 +6,12 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges,
+  SimpleChanges
 } from '@angular/core';
 import { Fn } from '@iapps/function-analytics';
 import {
   NgxDhis2HttpClientService,
-  SystemInfo,
+  SystemInfo
 } from '@iapps/ngx-dhis2-http-client';
 import { find } from 'lodash';
 
@@ -25,14 +25,14 @@ import { getPeriodTypesByFilterType } from '../../helpers/get-period-types-by-fi
 import { PeriodFilterType } from '../../models/period-filter-type.model';
 import {
   PERIOD_FILTER_TYPES,
-  PeriodFilterTypes,
+  PeriodFilterTypes
 } from '../../constants/period-filter-types.constant';
 import { getPeriodFilterTypesByConfig } from '../../helpers/get-period-filter-types-by-config.helper';
 
 @Component({
   selector: 'ngx-dhis2-period-filter',
   templateUrl: './period-filter.component.html',
-  styleUrls: ['./period-filter.component.css'],
+  styleUrls: ['./period-filter.component.css']
 })
 export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   @Input() selectedPeriodType: string;
@@ -92,27 +92,33 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit() {
     this.periodFilterConfig = {
       ...PERIOD_FILTER_CONFIG,
-      ...(this.periodFilterConfig || {}),
+      ...(this.periodFilterConfig || {})
     };
 
     this.periodFilterTypes = getPeriodFilterTypesByConfig(
       PERIOD_FILTER_TYPES,
       this.periodFilterConfig
     );
+    console.log('selectedPeriodType', this.selectedPeriodType);
     this.currentPeriodFilterType =
-      this.periodFilterTypes.length > 0
+      this.periodFilterTypes.length > 0 &&
+      this.selectedPeriodType.indexOf('Relative') == -1 &&
+      this.selectedPeriodType.indexOf('Range') == -1
         ? this.periodFilterTypes[0].id
         : this.selectedPeriodType
-        ? this.selectedPeriodType.indexOf('Relative') !== -1
+        ? this.selectedPeriodType.indexOf('Range') > -1
+          ? PeriodFilterTypes.DATE_RANGE
+          : this.selectedPeriodType.indexOf('Relative') !== -1
           ? PeriodFilterTypes.RELATIVE
           : PeriodFilterTypes.FIXED
         : '';
 
+    console.log('currentPeriodFilterType', this.currentPeriodFilterType);
     this.periodFilterTypeEnum = PeriodFilterTypes;
 
     const lowestPeriodType = find(this.periodTypes, [
       'id',
-      this.periodFilterConfig.lowestPeriodType,
+      this.periodFilterConfig.lowestPeriodType
     ]);
     if (lowestPeriodType) {
       this.periodTypes = this.periodTypes.filter(
@@ -175,12 +181,12 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
         dimension: 'ou',
         startDate: {
           id: this.startDate,
-          name: this.startDate,
+          name: this.startDate
         },
         endDate: {
           id: this.endDate,
-          name: this.endDate,
-        },
+          name: this.endDate
+        }
       });
     }
   }
@@ -208,7 +214,7 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
         .setPreferences({
           childrenPeriodSortOrder:
             this.periodFilterConfig.childrenPeriodSortOrder || 'DESC',
-          allowFuturePeriods: true,
+          allowFuturePeriods: true
         })
         .get();
 
@@ -336,7 +342,7 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
       items: this.selectedPeriods,
       dimension: 'pe',
       lowestPeriodType: this.periodFilterConfig.lowestPeriodType,
-      changed: true,
+      changed: true
     };
   }
 
