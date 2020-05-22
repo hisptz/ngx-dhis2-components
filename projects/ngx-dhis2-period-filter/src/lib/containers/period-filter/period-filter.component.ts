@@ -99,7 +99,6 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
       PERIOD_FILTER_TYPES,
       this.periodFilterConfig
     );
-    console.log('selectedPeriodType', this.selectedPeriodType);
     this.currentPeriodFilterType =
       this.periodFilterTypes.length > 0 &&
       this.selectedPeriodType.indexOf('Relative') == -1 &&
@@ -113,7 +112,6 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
           : PeriodFilterTypes.FIXED
         : '';
 
-    console.log('currentPeriodFilterType', this.currentPeriodFilterType);
     this.periodFilterTypeEnum = PeriodFilterTypes;
 
     const lowestPeriodType = find(this.periodTypes, [
