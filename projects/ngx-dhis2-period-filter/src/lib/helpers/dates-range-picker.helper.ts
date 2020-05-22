@@ -2,7 +2,7 @@ export function formatDateToYYMMDD(dateValue) {
   return (
     dateValue.getFullYear() +
     '-' +
-    formatMonthOrDate(dateValue.getMonth(), 'm') +
+    formatMonthOrDate(dateValue.getMonth() + 1, 'm') +
     '-' +
     formatMonthOrDate(dateValue.getDate(), 'd')
   );
