@@ -4,13 +4,13 @@ import { PeriodFilterConfig } from 'projects/ngx-dhis2-period-filter/src/public-
 @Component({
   selector: 'app-period-filter',
   templateUrl: './period-filter.component.html',
-  styleUrls: ['./period-filter.component.scss'],
+  styleUrls: ['./period-filter.component.scss']
 })
 export class PeriodFilterComponent {
   constructor() {
     if (Fn) {
       Fn.init({
-        baseUrl: '../../../api/',
+        baseUrl: '../../../api/'
       });
     }
   }
@@ -21,31 +21,31 @@ export class PeriodFilterComponent {
     singleSelection: true,
     emitOnSelection: false,
     childrenPeriodSortOrder: 'ASC',
-    allowDateRangeSelection: false,
-    allowRelativePeriodSelection: false,
-    allowFixedPeriodSelection: false,
+    allowDateRangeSelection: true,
+    allowRelativePeriodSelection: true,
+    allowFixedPeriodSelection: true
   };
   selectedPeriodItems: any[] = [
     {
       id: '201109',
       type: 'Monthly',
-      name: 'Genbot 2011',
+      name: 'Genbot 2011'
     },
     {
       id: '201108',
       type: 'Monthly',
-      name: 'Miazia 2011',
+      name: 'Miazia 2011'
     },
     {
       id: '201107',
       type: 'Monthly',
-      name: 'Megabit 2011',
+      name: 'Megabit 2011'
     },
     {
       id: '201106',
       type: 'Monthly',
-      name: 'Yekatit 2011',
-    },
+      name: 'Yekatit 2011'
+    }
   ];
 
   onPeriodUpdate(periodObject, action) {
