@@ -1,36 +1,33 @@
-import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as _ from 'lodash';
 import { Observable, pipe } from 'rxjs';
-
 import * as indicators from '../../store/actions/indicators.actions';
 import { AppState } from '../../store/reducers/indicators.reducers';
 import {
   getAllIndicators,
   getIndicatorGroups,
-  getListOfIndicators
+  getListOfIndicators,
 } from '../../store/selectors/indicators.selectors';
 import { IndicatorGroupsState } from '../../store/state/indicators.state';
-import { DictionaryState } from '../../store/reducers/dictionary.reducer';
 
 @Component({
   selector: 'app-indicators-list',
   templateUrl: './indicators-list.component.html',
-  styleUrls: ['./indicators-list.component.css']
+  styleUrls: ['./indicators-list.component.css'],
 })
 export class IndicatorsListComponent implements OnInit {
   @Input() metadataIdentifiers: any;
   @Output() selectedMetadataIdentifier = new EventEmitter<string>();
   @Output() loadedMetadata = new EventEmitter<any>();
   @Output() selectedMetadataGroups = new EventEmitter<any>();
-  error: boolean = false;
-  loading: boolean = true;
+  error = false;
+  loading = true;
   hoverState = 'notHovered';
   itemsPerPageCount = 10;
   selectedIndicator: any = null;
   searchText: string;
-  currentPage: number = 1;
+  currentPage = 1;
   searchingTextForIndicatorGroup: string;
   indicatorGroupsForSearching = [];
   showIndicatorGroups = false;
@@ -45,7 +42,7 @@ export class IndicatorsListComponent implements OnInit {
   completedPercent = 0;
   totalAvailableIndicators = 0;
   indicatorGroups: any[] = [];
-  activeMetadataType: string = 'indicator';
+  activeMetadataType = 'indicator';
   dataToDownload: any = [];
   pageItemsConfiguration = [
     { value: 10, symbol: '10' },
@@ -53,13 +50,9 @@ export class IndicatorsListComponent implements OnInit {
     { value: 50, symbol: '50' },
     { value: 100, symbol: '100' },
     { value: 200, symbol: '200' },
-    { value: 'all', symbol: 'all' }
+    { value: 'all', symbol: 'all' },
   ];
-  constructor(
-    private store: Store<DictionaryState>,
-    private indicatorsStore: Store<AppState>,
-    private datePipe: DatePipe
-  ) {
+  constructor(private indicatorsStore: Store<AppState>) {
     this.searchText = '';
     this.searchingTextForIndicatorGroup = '';
     this.listingIsSet = true;
@@ -100,18 +93,18 @@ export class IndicatorsListComponent implements OnInit {
   }
 
   inGroupToFilter(id) {
-    return _.find(this.groupToFilter, { id: id });
+    return _.find(this.groupToFilter, { id });
   }
 
   groupNames() {
     if (this.indicatorGroupsForSearching.length < 5) {
-      return this.indicatorGroupsForSearching.map(g => g.name).join(', ');
+      return this.indicatorGroupsForSearching.map((g) => g.name).join(', ');
     } else {
       const diff = this.indicatorGroupsForSearching.length - 4;
       return (
         this.indicatorGroupsForSearching
           .slice(0, 4)
-          .map(g => g.name)
+          .map((g) => g.name)
           .join(', ') +
         ' and ' +
         diff +
@@ -124,7 +117,7 @@ export class IndicatorsListComponent implements OnInit {
     if (event) {
       this.indicatorGroupsForSearching.push(group);
     } else {
-      let index = this.indicatorGroupsForSearching.indexOf(group);
+      const index = this.indicatorGroupsForSearching.indexOf(group);
       this.indicatorGroupsForSearching.splice(index, 1);
     }
     this.indicatorGroups = this.indicatorGroupsForSearching;
@@ -139,13 +132,15 @@ export class IndicatorsListComponent implements OnInit {
     this.indicatorGroups$ = this.indicatorsStore.pipe(
       select(getIndicatorGroups)
     );
-    this.indicatorsList$.subscribe(indicatorList => {
+    this.indicatorsList$.subscribe((indicatorList) => {
       if (indicatorList) {
-        this.totalAvailableIndicators = indicatorList['pager']['total'];
-        this.allIndicators$.subscribe(indicatorsLoaded => {
+        this.totalAvailableIndicators = indicatorList.pager
+          ? indicatorList.pager.total
+          : 0;
+        this.allIndicators$.subscribe((indicatorsLoaded) => {
           if (indicatorsLoaded) {
             this.indicators = [];
-            _.map(indicatorsLoaded, indicatorsByPage => {
+            _.map(indicatorsLoaded, (indicatorsByPage) => {
               this.indicators = [...this.indicators, ...indicatorsByPage];
               this.completedPercent =
                 100 * (this.indicators.length / this.totalAvailableIndicators);
@@ -168,17 +163,19 @@ export class IndicatorsListComponent implements OnInit {
           pipe(getAllIndicators)
         );
         if (this.indicatorsList$) {
-          this.indicatorsList$.subscribe(indicatorList => {
-            if (indicatorList) {
-              this.totalAvailableIndicators = indicatorList['pager']['total'];
-              this.allIndicators$.subscribe(indicatorsLoaded => {
+          this.indicatorsList$.subscribe((indicatorListResult) => {
+            if (indicatorListResult) {
+              this.totalAvailableIndicators = indicatorListResult.pager
+                ? indicatorListResult.pager.total
+                : 0;
+              this.allIndicators$.subscribe((indicatorsLoaded) => {
                 if (indicatorsLoaded) {
                   this.indicators = [];
-                  _.map(indicatorsLoaded, indicatorsByPage => {
+                  _.map(indicatorsLoaded, (indicatorsByPage) => {
                     this.indicators = [...this.indicators, ...indicatorsByPage];
                     this.loadedMetadata.emit({
                       type: 'indicator',
-                      data: this.indicators
+                      data: this.indicators,
                     });
                     this.completedPercent =
                       100 *
@@ -198,9 +195,9 @@ export class IndicatorsListComponent implements OnInit {
         );
       }
     });
-    this.indicatorGroups$.subscribe(groups => {
+    this.indicatorGroups$.subscribe((groups) => {
       if (groups) {
-        this.indicatorGroups = groups['indicatorGroups'];
+        this.indicatorGroups = groups.indicatorGroups;
         this.selectedMetadataGroups.emit(this.indicatorGroups);
       }
     });
@@ -212,7 +209,7 @@ export class IndicatorsListComponent implements OnInit {
 
   combineIndicatorGroups(groups) {
     let groupsString = '';
-    _.map(groups, group => {
+    _.map(groups, (group) => {
       groupsString += group.name + ' ,';
     });
     return groupsString;
@@ -233,8 +230,8 @@ export class IndicatorsListComponent implements OnInit {
   }
 
   dwndToCSV(metadataObject$, indicatorGroups$?) {
-    metadataObject$.subscribe(metadataArr => {
-      let arr = [];
+    metadataObject$.subscribe((metadataArr) => {
+      const arr = [];
       arr.push('Group ID');
       arr.push('Indicator group');
       arr.push('UID');
@@ -248,18 +245,18 @@ export class IndicatorsListComponent implements OnInit {
       arr.push('Created by');
       this.dataToDownload.push(arr);
       let newIndicatorGroups = [];
-      indicatorGroups$.subscribe(indicatorGroups => {
+      indicatorGroups$.subscribe((indicatorGroups) => {
         newIndicatorGroups =
           this.indicatorGroupsForSearching.length > 0
             ? this.indicatorGroupsForSearching
-            : indicatorGroups['indicatorGroups'];
-        _.map(newIndicatorGroups, indicatorGroup => {
-          _.map(metadataArr, metadata => {
+            : indicatorGroups.indicatorGroups;
+        _.map(newIndicatorGroups, (indicatorGroup) => {
+          _.map(metadataArr, (metadata) => {
             if (
               _.filter(metadata.indicatorGroups, { id: indicatorGroup.id })
                 .length > 0
             ) {
-              let indicatorsByGroups = [];
+              const indicatorsByGroups = [];
               indicatorsByGroups.push(indicatorGroup.id);
               indicatorsByGroups.push(indicatorGroup.name);
               indicatorsByGroups.push(metadata.id);
@@ -295,16 +292,24 @@ export class IndicatorsListComponent implements OnInit {
             '',
             '',
             '',
-            ''
+            '',
           ]);
         });
       });
-      (function() {
-        let asUtf16, downloadExcelCsv, makeExcelCsvBlob, toTsv;
+      (function () {
+        let asUtf16;
+        let downloadExcelCsv;
+        let makeExcelCsvBlob;
+        let toTsv;
         let rows = this.dataToDownload;
 
-        asUtf16 = function(str) {
-          var buffer, bufferView, i, val, _i, _ref;
+        asUtf16 = (str) => {
+          let buffer;
+          let bufferView;
+          let i;
+          let val;
+          let _i;
+          let _ref;
           buffer = new ArrayBuffer(str.length * 2);
           bufferView = new Uint16Array(buffer);
           bufferView[0] = 0xfeff;
@@ -319,15 +324,15 @@ export class IndicatorsListComponent implements OnInit {
           return bufferView;
         };
 
-        makeExcelCsvBlob = function(rows) {
-          return new Blob([asUtf16(toTsv(rows)).buffer], {
-            type: 'text/csv;charset=UTF-16'
+        makeExcelCsvBlob = (rowsRes) => {
+          return new Blob([asUtf16(toTsv(rowsRes)).buffer], {
+            type: 'text/csv;charset=UTF-16',
           });
         };
 
-        toTsv = function(rows) {
-          var escapeValue;
-          escapeValue = function(val) {
+        toTsv = (rowsRes) => {
+          let escapeValue;
+          escapeValue = (val) => {
             if (typeof val === 'string') {
               return '"' + val.replace(/"/g, '""') + '"';
             } else if (val != null) {
@@ -337,17 +342,18 @@ export class IndicatorsListComponent implements OnInit {
             }
           };
           return (
-            rows
-              .map(function(row) {
+            rowsRes
+              .map((row) => {
                 return row.map(escapeValue).join(',');
               })
               .join('\n') + '\n'
           );
         };
 
-        downloadExcelCsv = function(rows, attachmentFilename) {
-          var a, blob;
-          blob = makeExcelCsvBlob(rows);
+        downloadExcelCsv = (rowsRes, attachmentFilename) => {
+          let a;
+          let blob;
+          blob = makeExcelCsvBlob(rowsRes);
           a = document.createElement('a');
           a.style.display = 'none';
           a.download = attachmentFilename;

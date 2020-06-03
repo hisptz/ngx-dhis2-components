@@ -23,10 +23,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
@@ -90,10 +87,7 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "codeCoverage": true,
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
@@ -109,9 +103,7 @@
               "tsconfig.spec.json",
               "e2e/tsconfig.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
@@ -124,6 +116,196 @@
             "production": {
               "devServerTarget": "ngx-dhis2-components:serve:production"
             }
+          }
+        }
+      }
+    },
+    "ngx-dhis2-http-client": {
+      "projectType": "library",
+      "root": "projects/ngx-dhis2-http-client",
+      "sourceRoot": "projects/ngx-dhis2-http-client/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ngx-dhis2-http-client/tsconfig.lib.json",
+            "project": "projects/ngx-dhis2-http-client/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-dhis2-http-client/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-dhis2-http-client/src/test.ts",
+            "tsConfig": "projects/ngx-dhis2-http-client/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-dhis2-http-client/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-dhis2-http-client/tsconfig.lib.json",
+              "projects/ngx-dhis2-http-client/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
+    "ngx-dhis2-org-unit-filter": {
+      "projectType": "library",
+      "root": "projects/ngx-dhis2-org-unit-filter",
+      "sourceRoot": "projects/ngx-dhis2-org-unit-filter/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ngx-dhis2-org-unit-filter/tsconfig.lib.json",
+            "project": "projects/ngx-dhis2-org-unit-filter/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-dhis2-org-unit-filter/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-dhis2-org-unit-filter/src/test.ts",
+            "tsConfig": "projects/ngx-dhis2-org-unit-filter/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-dhis2-org-unit-filter/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-dhis2-org-unit-filter/tsconfig.lib.json",
+              "projects/ngx-dhis2-org-unit-filter/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
+    "ngx-dhis2-menu": {
+      "projectType": "library",
+      "root": "projects/ngx-dhis2-menu",
+      "sourceRoot": "projects/ngx-dhis2-menu/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ngx-dhis2-menu/tsconfig.lib.json",
+            "project": "projects/ngx-dhis2-menu/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-dhis2-menu/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-dhis2-menu/src/test.ts",
+            "tsConfig": "projects/ngx-dhis2-menu/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-dhis2-menu/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-dhis2-menu/tsconfig.lib.json",
+              "projects/ngx-dhis2-menu/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
+    "ngx-dhis2-period-filter": {
+      "projectType": "library",
+      "root": "projects/ngx-dhis2-period-filter",
+      "sourceRoot": "projects/ngx-dhis2-period-filter/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ngx-dhis2-period-filter/tsconfig.lib.json",
+            "project": "projects/ngx-dhis2-period-filter/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-dhis2-period-filter/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-dhis2-period-filter/src/test.ts",
+            "tsConfig": "projects/ngx-dhis2-period-filter/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-dhis2-period-filter/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-dhis2-period-filter/tsconfig.lib.json",
+              "projects/ngx-dhis2-period-filter/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
+    "ngx-dhis2-data-filter": {
+      "projectType": "library",
+      "root": "projects/ngx-dhis2-data-filter",
+      "sourceRoot": "projects/ngx-dhis2-data-filter/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ngx-dhis2-data-filter/tsconfig.lib.json",
+            "project": "projects/ngx-dhis2-data-filter/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-dhis2-data-filter/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-dhis2-data-filter/src/test.ts",
+            "tsConfig": "projects/ngx-dhis2-data-filter/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-dhis2-data-filter/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-dhis2-data-filter/tsconfig.lib.json",
+              "projects/ngx-dhis2-data-filter/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -168,198 +350,38 @@
         }
       }
     },
-    "ngx-dhis2-http-client": {
+    "ngx-dhis2-selection-filters": {
       "projectType": "library",
-      "root": "projects/ngx-dhis2-http-client",
-      "sourceRoot": "projects/ngx-dhis2-http-client/src",
+      "root": "projects/ngx-dhis2-selection-filters",
+      "sourceRoot": "projects/ngx-dhis2-selection-filters/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/ngx-dhis2-http-client/tsconfig.lib.json",
-            "project": "projects/ngx-dhis2-http-client/ng-package.json"
+            "tsConfig": "projects/ngx-dhis2-selection-filters/tsconfig.lib.json",
+            "project": "projects/ngx-dhis2-selection-filters/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/ngx-dhis2-http-client/tsconfig.lib.prod.json"
+              "tsConfig": "projects/ngx-dhis2-selection-filters/tsconfig.lib.prod.json"
             }
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/ngx-dhis2-http-client/src/test.ts",
-            "tsConfig": "projects/ngx-dhis2-http-client/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-dhis2-http-client/karma.conf.js"
+            "main": "projects/ngx-dhis2-selection-filters/src/test.ts",
+            "tsConfig": "projects/ngx-dhis2-selection-filters/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-dhis2-selection-filters/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/ngx-dhis2-http-client/tsconfig.lib.json",
-              "projects/ngx-dhis2-http-client/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "ngx-dhis2-org-unit-filter": {
-      "projectType": "library",
-      "root": "projects/ngx-dhis2-org-unit-filter",
-      "sourceRoot": "projects/ngx-dhis2-org-unit-filter/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/ngx-dhis2-org-unit-filter/tsconfig.lib.json",
-            "project": "projects/ngx-dhis2-org-unit-filter/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/ngx-dhis2-org-unit-filter/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/ngx-dhis2-org-unit-filter/src/test.ts",
-            "tsConfig": "projects/ngx-dhis2-org-unit-filter/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-dhis2-org-unit-filter/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/ngx-dhis2-org-unit-filter/tsconfig.lib.json",
-              "projects/ngx-dhis2-org-unit-filter/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "ngx-dhis2-menu": {
-      "projectType": "library",
-      "root": "projects/ngx-dhis2-menu",
-      "sourceRoot": "projects/ngx-dhis2-menu/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/ngx-dhis2-menu/tsconfig.lib.json",
-            "project": "projects/ngx-dhis2-menu/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/ngx-dhis2-menu/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/ngx-dhis2-menu/src/test.ts",
-            "tsConfig": "projects/ngx-dhis2-menu/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-dhis2-menu/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/ngx-dhis2-menu/tsconfig.lib.json",
-              "projects/ngx-dhis2-menu/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "ngx-dhis2-period-filter": {
-      "projectType": "library",
-      "root": "projects/ngx-dhis2-period-filter",
-      "sourceRoot": "projects/ngx-dhis2-period-filter/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/ngx-dhis2-period-filter/tsconfig.lib.json",
-            "project": "projects/ngx-dhis2-period-filter/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/ngx-dhis2-period-filter/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/ngx-dhis2-period-filter/src/test.ts",
-            "tsConfig": "projects/ngx-dhis2-period-filter/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-dhis2-period-filter/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/ngx-dhis2-period-filter/tsconfig.lib.json",
-              "projects/ngx-dhis2-period-filter/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "ngx-dhis2-data-filter": {
-      "projectType": "library",
-      "root": "projects/ngx-dhis2-data-filter",
-      "sourceRoot": "projects/ngx-dhis2-data-filter/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/ngx-dhis2-data-filter/tsconfig.lib.json",
-            "project": "projects/ngx-dhis2-data-filter/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/ngx-dhis2-data-filter/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/ngx-dhis2-data-filter/src/test.ts",
-            "tsConfig": "projects/ngx-dhis2-data-filter/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-dhis2-data-filter/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/ngx-dhis2-data-filter/tsconfig.lib.json",
-              "projects/ngx-dhis2-data-filter/tsconfig.spec.json"
+              "projects/ngx-dhis2-selection-filters/tsconfig.lib.json",
+              "projects/ngx-dhis2-selection-filters/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

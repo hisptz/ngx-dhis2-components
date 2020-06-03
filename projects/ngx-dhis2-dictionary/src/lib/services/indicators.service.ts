@@ -4,9 +4,7 @@ import * as _ from 'lodash';
 import { from, Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class IndicatorsService {
   indicators: any[] = [];
   constructor(private httpClient: NgxDhis2HttpClientService) {}
@@ -50,7 +48,7 @@ export class IndicatorsService {
     return from(
       _.map(
         _.range(1, pageCount + 1),
-        pageNumber =>
+        (pageNumber) =>
           'indicators.json?fields=:all,lastUpdatedBy[id,name],displayName,id,name,' +
           'numeratorDescription,denominatorDescription,denominator,numerator,annualized,decimals,' +
           'indicatorType[name],user[name],attributeValues[value,attribute[name]],indicatorGroups[id,name,indicators~size],' +
@@ -88,7 +86,7 @@ export class IndicatorsService {
     return from(
       _.map(
         _.range(1, pageCount + 1),
-        pageNumber =>
+        (pageNumber) =>
           'programIndicators.json?fields=:all&pageSize=' +
           pageSize +
           '&page=' +
@@ -110,7 +108,7 @@ export class IndicatorsService {
     return from(
       _.map(
         this.indicators,
-        indicator =>
+        (indicator) =>
           'indicators/' +
           indicator.id +
           '.json?fields=:all,lastUpdatedBy[id,name],displayName,id,name,' +

@@ -1,0 +1,111 @@
+<div class="selection-filter-container">
+  <!--selection filter header-->
+  <div class="selection-filter-header">
+    <button mat-stroked-button class="selection-filter-btn" (click)="onToggleFilter($event)"
+      [title]="'Filter by different dimensions' | translate">
+      <i class="fa fa-filter mr-2"></i>
+      <span>Filter</span>
+      <i class="fa {{ showFilters ? 'fa-caret-left' : 'fa-caret-right' }} ml-2"></i>
+    </button>
+    <div class="selection-filter-btn-list" *ngIf="showFilters">
+      <!--data filter button-->
+      <button mat-stroked-button class="selection-filter-btn" *ngIf="selectionFilterConfig?.showDataFilter"
+        color="{{ selectedFilter === 'DATA' ? 'primary' : '' }}" [disabled]="selectionFilterConfig?.disableDataFilter"
+        [title]="'Filter by data' | translate" (click)="toggleCurrentFilter($event, 'DATA')">
+        <i class="fa fa-database mr-2"></i>
+        <span>{{ 'Data' | translate }}</span>
+        <span class="badge badge-secondary summary-selection" *ngIf="selectedData.length > 0">{{
+          selectedData | summarizeSelection:'dx'
+        }}</span>
+        <i class="fa {{
+            selectedFilter === 'DATA' ? 'fa-caret-up' : 'fa-caret-down'
+          }} ml-2"></i>
+      </button>
+      <!--end of data filter button-->
+
+      <!--Validation Rule Group filter button-->
+      <button mat-stroked-button class="selection-filter-btn"
+        *ngIf="selectionFilterConfig?.showValidationRuleGroupFilter"
+        color="{{ selectedFilter === 'VALIDATIONRULEGROUP' ? 'primary' : '' }}"
+        [disabled]="selectionFilterConfig?.disableValidationRuleGroupFilter"
+        [title]="'Filter by Validation Rule Group' | translate"
+        (click)="toggleCurrentFilter($event, 'VALIDATIONRULEGROUP')">
+        <i class="fa fa-object-group mr-2"></i>
+        <span>{{ 'Validation' | translate }}</span>
+        <span class="badge badge-secondary summary-selection" *ngIf="selectedValidationRuleGroups.length > 0">{{
+          selectedValidationRuleGroups | summarizeSelection:'vrg'
+        }}</span>
+        <i class="fa {{
+            selectedFilter === 'VALIDATIONRULEGROUP'
+              ? 'fa-caret-up'
+              : 'fa-caret-down'
+          }} ml-2"></i>
+      </button>
+      <!--end of Validation Rule Group filter button-->
+
+      <!--period filter button-->
+      <button mat-stroked-button class="selection-filter-btn" *ngIf="selectionFilterConfig?.showPeriodFilter"
+        color="{{ selectedFilter === 'PERIOD' ? 'primary' : '' }}"
+        [disabled]="selectionFilterConfig?.disablePeriodFilter" [title]="'Filter by period' | translate"
+        (click)="toggleCurrentFilter($event, 'PERIOD')">
+        <i class="fa fa-clock-o mr-2"></i>
+        <span>{{ 'Period' | translate }}</span>
+        <span class="badge badge-secondary summary-selection" *ngIf="selectedPeriods.length > 0">{{
+          selectedPeriods | summarizeSelection:'pe'
+        }}</span>
+        <i class="fa {{
+            selectedFilter === 'PERIOD' ? 'fa-caret-up' : 'fa-caret-down'
+          }} ml-2"></i>
+      </button>
+      <!--end of period filter button-->
+
+      <!--org unit filter button-->
+      <button mat-stroked-button class="selection-filter-btn" *ngIf="selectionFilterConfig?.showOrgUnitFilter"
+        color="{{ selectedFilter === 'ORG_UNIT' ? 'primary' : '' }}"
+        [disabled]="selectionFilterConfig?.disableOrgUnitFilter" [title]="'Filter by organisation unit' | translate"
+        (click)="toggleCurrentFilter($event, 'ORG_UNIT')">
+        <i class="fa fa-sitemap mr-2"></i>
+        <span>{{ 'Org-Unit' | translate }}</span>
+        <span class="badge badge-secondary summary-selection" *ngIf="selectedOrgUnits.length > 0">{{
+          selectedOrgUnits | summarizeSelection:'ou'
+        }}</span>
+        <i class="fa {{
+            selectedFilter === 'ORG_UNIT' ? 'fa-caret-up' : 'fa-caret-down'
+          }} ml-2"></i>
+      </button>
+      <!--end of org unit filter button-->
+    </div>
+  </div>
+  <!--end of selection filter header-->
+
+  <!--selection filter body-->
+  <mat-card class="selection-filter-body" *ngIf="selectedFilter !== '' && showFilterBody">
+    <!--data filter-->
+    <ngx-dhis2-data-filter *ngIf="selectedFilter === 'DATA'" [selectedItems]="selectedData"
+      [dataFilterConfig]="selectionFilterConfig?.dataFilterConfig" (close)="onFilterClose($event, 'DATA')"
+      (update)="onFilterUpdate($event, 'DATA')"></ngx-dhis2-data-filter>
+    <!--end of data filter-->
+
+    <!--period filter-->
+    <ngx-dhis2-period-filter *ngIf="selectedFilter === 'PERIOD'" [selectedPeriods]="selectedPeriods"
+      [selectedPeriodType]="selectionFilterConfig.selectedPeriodType"
+      [periodFilterConfig]="selectionFilterConfig.periodFilterConfig" (close)="onFilterClose($event, 'PERIOD')"
+      (update)="onFilterUpdate($event, 'PERIOD')"></ngx-dhis2-period-filter>
+    <!--end of period filter-->
+
+    <!--org unit filter-->
+    <ngx-dhis2-org-unit-filter *ngIf="selectedFilter === 'ORG_UNIT'"
+      [orgUnitFilterConfig]="selectionFilterConfig?.orgUnitFilterConfig" [selectedOrgUnitItems]="selectedOrgUnits"
+      (orgUnitUpdate)="onFilterUpdate($event, 'ORG_UNIT')" (orgUnitClose)="onFilterClose($event, 'ORG_UNIT')">
+    </ngx-dhis2-org-unit-filter>
+    <!--end of org unit filter-->
+
+    <!-- validation rule group -->
+    <lib-ngx-dhis2-validation-rule-filter *ngIf="selectedFilter === 'VALIDATIONRULEGROUP'"
+      [dataSelection]="selectedValidationDataElements" [selectedVRGs]='selectedValidationRuleGroups'
+      (update)="onFilterUpdate($event, 'VALIDATIONRULEGROUP')" (close)="onFilterClose($event, 'VALIDATIONRULEGROUP')">
+    </lib-ngx-dhis2-validation-rule-filter>
+    <!-- end of validation rule group -->
+  </mat-card>
+  <!--end of selection filter body-->
+</div>

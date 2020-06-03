@@ -21,7 +21,7 @@ import * as _ from 'lodash';
 @Component({
   selector: 'lib-indicator',
   templateUrl: './indicator.component.html',
-  styleUrls: ['./indicator.component.scss']
+  styleUrls: ['./indicator.component.scss'],
 })
 export class IndicatorComponent implements OnInit {
   @Input() dictionaryItem: any;
@@ -41,7 +41,7 @@ export class IndicatorComponent implements OnInit {
   formatTextToSentenceFormat(text) {
     text
       .split('_')
-      .map(function(stringSection) {
+      .map((stringSection) => {
         return (
           stringSection.slice(0, 1).toUpperCase() +
           stringSection.slice(1).toLowerCase()
@@ -49,16 +49,8 @@ export class IndicatorComponent implements OnInit {
       })
       .join(' ');
     return (
-      text
-        .split('_')
-        .join(' ')
-        .slice(0, 1)
-        .toUpperCase() +
-      text
-        .split('_')
-        .join(' ')
-        .slice(1)
-        .toLowerCase()
+      text.split('_').join(' ').slice(0, 1).toUpperCase() +
+      text.split('_').join(' ').slice(1).toLowerCase()
     );
   }
 
@@ -71,10 +63,10 @@ export class IndicatorComponent implements OnInit {
   }
 
   getCategories(categoryOptionCombos) {
-    let categories = [];
-    categoryOptionCombos.forEach(categoryCombo => {
-      categoryCombo['categoryOptions'].forEach(option => {
-        _.map(option['categories'], (category: any) => {
+    const categories = [];
+    categoryOptionCombos.forEach((categoryCombo) => {
+      categoryCombo.categoryOptions.forEach((option) => {
+        _.map(option.categories, (category: any) => {
           categories.push(category);
         });
       });
@@ -83,7 +75,7 @@ export class IndicatorComponent implements OnInit {
   }
 
   getExpressionPart(element, indicator) {
-    let expressionPartAvailability = [];
+    const expressionPartAvailability = [];
     if (indicator.numerator.indexOf(element.id) > -1) {
       expressionPartAvailability.push('Numerator');
     } else if (indicator.denominator.indexOf(element.id) > -1) {
@@ -105,7 +97,7 @@ export class IndicatorComponent implements OnInit {
   }
 
   getOtherMetadata(allMedatada, listAllMetadataInGroup) {
-    let newSlicedList = [];
+    const newSlicedList = [];
     // _.map(allMedatada, (metadata) => {
     //   if (metadata.id !== this.selectedIndicator) {
     //     newSlicedList.push(metadata);

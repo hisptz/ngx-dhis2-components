@@ -39,5 +39,5 @@ export const getAllProgramIndicators = createSelector(
 
 export const getProgramIndicatorGroups = createSelector(
   programIndicatorGroups,
-  (programIndicatorGroups: any) => programIndicatorGroups
+  (programIndicatorGroupList: any) => programIndicatorGroupList
 );

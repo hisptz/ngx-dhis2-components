@@ -1,15 +1,28 @@
 import { Component, OnInit } from '@angular/core';
+import { SelectionFilterConfig } from 'projects/ngx-dhis2-selection-filters/src/public-api';
 
 @Component({
   selector: 'app-selection-filters',
   templateUrl: './selection-filters.component.html',
-  styleUrls: ['./selection-filters.component.scss']
+  styleUrls: ['./selection-filters.component.scss'],
 })
 export class SelectionFiltersComponent implements OnInit {
-
-  constructor() { }
+  selectionFilterConfig: SelectionFilterConfig;
+  constructor() {}
 
   ngOnInit(): void {
+    this.selectionFilterConfig = {
+      orgUnitFilterConfig: {
+        singleSelection: false,
+        reportUse: false,
+      },
+      periodFilterConfig: {
+        singleSelection: false,
+      },
+    };
   }
 
+  onFilterUpdate(dataSelections: any[]) {
+    console.log(dataSelections);
+  }
 }

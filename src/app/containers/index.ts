@@ -5,6 +5,7 @@ import { PeriodFilterComponent } from './period-filter/period-filter.component';
 import { DataFilterComponent } from './data-filter/data-filter.component';
 import { MenuComponent } from './menu/menu.component';
 import { DimensionFilterComponent } from './dimension-filter/dimension-filter.component';
+import { SelectionFiltersComponent } from './selection-filters/selection-filters.component';
 
 export const containers: any[] = [
   HttpClientComponent,
@@ -13,5 +14,6 @@ export const containers: any[] = [
   PeriodFilterComponent,
   DataFilterComponent,
   MenuComponent,
-  DimensionFilterComponent
+  DimensionFilterComponent,
+  SelectionFiltersComponent,
 ];

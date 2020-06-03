@@ -21,6 +21,8 @@
     "paths": {
       "ngx-dhis2-dictionary": [
         "dist/ngx-dhis2-dictionary/ngx-dhis2-dictionary",
+        "dist/ngx-dhis2-dictionary",
+        "dist/ngx-dhis2-dictionary/ngx-dhis2-dictionary",
         "dist/ngx-dhis2-dictionary"
       ],
       "ngx-dhis2-http-client": [
@@ -42,6 +44,10 @@
       "ngx-dhis2-data-filter": [
         "dist/ngx-dhis2-data-filter/ngx-dhis2-data-filter",
         "dist/ngx-dhis2-data-filter"
+      ],
+      "ngx-dhis2-selection-filters": [
+        "dist/ngx-dhis2-selection-filters/ngx-dhis2-selection-filters",
+        "dist/ngx-dhis2-selection-filters"
       ]
     }
   },
