@@ -234,7 +234,7 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
     // Also update organisation units
     this._setOrUpdateOrgUnitProperties();
 
-    if (this.orgUnitFilterConfig.updateOnSelect) {
+    if (this.orgUnitFilterConfig.emitOnSelection) {
       this.onOrgUnitUpdate();
     }
   }
@@ -245,7 +245,7 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
     // Also update organisation units
     this._setOrUpdateOrgUnitProperties();
 
-    if (this.orgUnitFilterConfig.updateOnSelect) {
+    if (this.orgUnitFilterConfig.emitOnSelection) {
       this.onOrgUnitUpdate();
     }
   }
