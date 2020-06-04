@@ -4,7 +4,7 @@
     <input type="text" matInput (keyup)="onOrgUnitGroupLevelFilter($event)" placeholder="Search levels or groups" />
   </mat-form-field>
   <div class="ngx-dhis2-org-unit-level-group__card">
-    <div class="ngx-dhis2-org-unit-level-group__inner-list">
+    <div class="ngx-dhis2-org-unit-level-group__inner-list" [style.height]="'calc(' + height + ' - 160px)'">
       <mat-list *ngIf="orgUnitFilterConfig.showOrgUnitLevelSection">
         <div mat-subheader>
           Levels

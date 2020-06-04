@@ -4,7 +4,7 @@ import {
   EventEmitter,
   Input,
   OnInit,
-  Output
+  Output,
 } from '@angular/core';
 
 import { OrgUnitFilterConfig } from '../../models/org-unit-filter-config.model';
@@ -17,13 +17,15 @@ import { OrgUnitTypes } from '../../constants/org-unit-types.constants';
   selector: 'ngx-dhis2-org-unit-level-group',
   templateUrl: './ngx-dhis2-org-unit-level-group.component.html',
   styleUrls: ['./ngx-dhis2-org-unit-level-group.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgxDhis2OrgUnitLevelGroupComponent implements OnInit {
   @Input() orgUnitLevels: OrgUnitLevel[];
   @Input() loadingLevels: boolean;
   @Input() loadingGroups: boolean;
   @Input() orgUnitGroups: OrgUnitGroup[];
+  @Input() height: string;
+
   @Input() orgUnitFilterConfig: OrgUnitFilterConfig;
 
   orgUnitGroupLevelSearchQuery: string;
@@ -63,7 +65,7 @@ export class NgxDhis2OrgUnitLevelGroupComponent implements OnInit {
         type:
           itemType === 'LEVEL'
             ? OrgUnitTypes.ORGANISATION_UNIT_LEVEL
-            : OrgUnitTypes.ORGANISATION_UNIT_GROUP
+            : OrgUnitTypes.ORGANISATION_UNIT_GROUP,
       });
     } else {
       this.activateOrgUnitLevelOrGroup.emit({
@@ -75,7 +77,7 @@ export class NgxDhis2OrgUnitLevelGroupComponent implements OnInit {
         type:
           itemType === 'LEVEL'
             ? OrgUnitTypes.ORGANISATION_UNIT_LEVEL
-            : OrgUnitTypes.ORGANISATION_UNIT_GROUP
+            : OrgUnitTypes.ORGANISATION_UNIT_GROUP,
       });
     }
   }

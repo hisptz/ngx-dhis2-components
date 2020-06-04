@@ -4,7 +4,7 @@ import {
   Input,
   Output,
   EventEmitter,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 
@@ -19,13 +19,14 @@ import { OrgUnitTypes } from '../../constants/org-unit-types.constants';
   selector: 'ngx-dhis2-org-unit-selection',
   templateUrl: './ngx-dhis2-org-unit-selection.component.html',
   styleUrls: ['./ngx-dhis2-org-unit-selection.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NgxDhis2OrgUnitSelectionComponent implements OnInit {
   @Input() selectedOrgUnits: any[];
   @Input() loadingOrgUnits: boolean;
   @Input() orgUnitsLoaded: boolean;
   @Input() userOrgUnitSelected: boolean;
+  @Input() height: string;
 
   @Output() activateOrgUnit = new EventEmitter();
   @Output() deactivateOrgUnit = new EventEmitter();
@@ -40,14 +41,14 @@ export class NgxDhis2OrgUnitSelectionComponent implements OnInit {
   onActivateOrgUnit(orgUnit: OrgUnit) {
     this.activateOrgUnit.emit({
       ...orgUnit,
-      type: OrgUnitTypes.ORGANISATION_UNIT
+      type: OrgUnitTypes.ORGANISATION_UNIT,
     });
   }
 
   onDeactivateOrgUnit(orgUnit: OrgUnit) {
     this.deactivateOrgUnit.emit({
       ...orgUnit,
-      type: OrgUnitTypes.ORGANISATION_UNIT
+      type: OrgUnitTypes.ORGANISATION_UNIT,
     });
   }
 }

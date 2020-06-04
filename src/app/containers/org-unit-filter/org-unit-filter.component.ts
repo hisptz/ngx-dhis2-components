@@ -19,6 +19,9 @@ export class OrgUnitFilterComponent implements OnInit {
     reportUse: false,
     additionalQueryFields: ['dataSets'],
     batchSize: 400,
+    hideActionButtons: true,
+    contentHeight: '500px',
+    emitOnSelection: true,
   };
   selectedOrgUnitItems: any[] = [
     { id: 'O6uvpzGd5pu', name: 'Bo', level: 3 },
