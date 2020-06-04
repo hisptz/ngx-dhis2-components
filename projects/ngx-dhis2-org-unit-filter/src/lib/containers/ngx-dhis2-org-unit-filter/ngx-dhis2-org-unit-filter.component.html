@@ -1,8 +1,8 @@
 <div class="ngx-dhis2-org-unit-filter__container">
   <!--user organisation unit selection options-->
   <ngx-dhis2-user-org-unit-selection *ngIf="orgUnitFilterConfig.showUserOrgUnitSection"
-    [userOrgUnits]="userOrgUnits$ | async" [height]="orgUnitFilterConfig.contentHeight"
-    (activateUserOrgUnit)="onSelectOrgUnit($event)" (deactivateUserOrgUnit)="onDeselectOrgUnit($event)">
+    [userOrgUnits]="userOrgUnits$ | async" (activateUserOrgUnit)="onSelectOrgUnit($event)"
+    (deactivateUserOrgUnit)="onDeselectOrgUnit($event)">
   </ngx-dhis2-user-org-unit-selection>
   <!--end of user organisation unit selection options-->
 
@@ -12,8 +12,8 @@
       <!--organisation unit selection area-->
       <ngx-dhis2-org-unit-selection [selectedOrgUnits]="selectedOrgUnits" [loadingOrgUnits]="loadingOrgUnits$ | async"
         [orgUnitsLoaded]="orgUnitLoaded$ | async" [userOrgUnitSelected]="isAnyUserOrgUnitSelected$ | async"
-        (activateOrgUnit)="onSelectOrgUnit($event)" (deactivateOrgUnit)="onDeselectOrgUnit($event)"
-        (deactivateAllOrgUnit)="onDeselectAllOrgUnits()">
+        [height]="orgUnitFilterConfig.contentHeight" (activateOrgUnit)="onSelectOrgUnit($event)"
+        (deactivateOrgUnit)="onDeselectOrgUnit($event)" (deactivateAllOrgUnit)="onDeselectAllOrgUnits()">
       </ngx-dhis2-org-unit-selection>
       <!--end of organisation unit selection area-->
     </div>

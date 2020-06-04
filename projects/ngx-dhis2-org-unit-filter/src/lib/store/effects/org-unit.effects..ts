@@ -4,7 +4,6 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import { concatMap, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
-
 import { getUserOrgUnitIds } from '../../helpers/get-user-org-unit-ids.helper';
 import { OrgUnit } from '../../models/org-unit.model';
 import { OrgUnitService } from '../../services/org-unit.service';
@@ -13,7 +12,7 @@ import {
   initiateOrgUnits,
   loadOrgUnitFail,
   loadOrgUnits,
-  setHighestLevelOrgUnits
+  setHighestLevelOrgUnits,
 } from '../actions/org-unit.actions';
 import { OrgUnitFilterState } from '../reducers/org-unit-filter.reducer';
 import { getOrgUnitLoadingInitiated } from '../selectors/org-unit.selectors';
@@ -24,7 +23,7 @@ export class OrgUnitEffects {
     () =>
       this.actions$.pipe(
         ofType(loadOrgUnits),
-        concatMap(action =>
+        concatMap((action) =>
           of(action).pipe(
             withLatestFrom(this.store.select(getOrgUnitLoadingInitiated))
           )
@@ -43,7 +42,7 @@ export class OrgUnitEffects {
 
                   this.store.dispatch(
                     setHighestLevelOrgUnits({
-                      highestLevelOrgUnits: userOrgUnits
+                      highestLevelOrgUnits: userOrgUnits,
                     })
                   );
 
@@ -52,7 +51,7 @@ export class OrgUnitEffects {
                     .pipe(
                       map((orgUnits: OrgUnit[]) => ({
                         orgUnits,
-                        currentUser
+                        currentUser,
                       }))
                     );
                 })
