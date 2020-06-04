@@ -11,32 +11,31 @@ import { Store } from '@ngrx/store';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { DEFAULT_ORG_UNIT_FILTER_CONFIG } from '../../constants/default-org-unit-filter-config.constant';
+import { OrgUnitTypes } from '../../constants/org-unit-types.constants';
 import { getOrgUnitSelection } from '../../helpers/get-org-unit-selection.helper';
 import { OrgUnitFilterConfig } from '../../models/org-unit-filter-config.model';
 import { OrgUnitGroup } from '../../models/org-unit-group.model';
 import { OrgUnitLevel } from '../../models/org-unit-level.model';
 import { OrgUnit } from '../../models/org-unit.model';
-import { OrgUnitFilterState } from '../../store/reducers/org-unit-filter.reducer';
-
 import { loadOrgUnitGroups } from '../../store/actions/org-unit-group.actions';
 import { loadOrgUnitLevels } from '../../store/actions/org-unit-level.actions';
 import { loadOrgUnits } from '../../store/actions/org-unit.actions';
+import { OrgUnitFilterState } from '../../store/reducers/org-unit-filter.reducer';
 import {
-  getOrgUnitGroupLoading,
   getOrgUnitGroupBasedOnOrgUnitsSelected,
+  getOrgUnitGroupLoading,
 } from '../../store/selectors/org-unit-group.selectors';
 import {
-  getOrgUnitLevelLoading,
   getOrgUnitLevelBasedOnOrgUnitsSelected,
+  getOrgUnitLevelLoading,
 } from '../../store/selectors/org-unit-level.selectors';
 import {
+  getOrgUnitLoaded,
   getOrgUnitLoading,
   getUserOrgUnitsBasedOnOrgUnitsSelected,
-  getOrgUnitLoaded,
 } from '../../store/selectors/org-unit.selectors';
-import { OrgUnitTypes } from '../../constants/org-unit-types.constants';
+
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'ngx-dhis2-org-unit-filter',
@@ -47,6 +46,7 @@ import { OrgUnitTypes } from '../../constants/org-unit-types.constants';
 export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
   @Input() selectedOrgUnitItems: any[];
   @Input() orgUnitFilterConfig: OrgUnitFilterConfig;
+
   orgUnitLevels$: Observable<OrgUnitLevel[]>;
   orgUnitGroups$: Observable<OrgUnitGroup[]>;
   userOrgUnits$: Observable<OrgUnit[]>;
