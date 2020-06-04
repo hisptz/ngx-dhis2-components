@@ -6,12 +6,12 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges
+  SimpleChanges,
 } from '@angular/core';
 import { Fn } from '@iapps/function-analytics';
 import {
   NgxDhis2HttpClientService,
-  SystemInfo
+  SystemInfo,
 } from '@iapps/ngx-dhis2-http-client';
 import { find } from 'lodash';
 
@@ -25,7 +25,7 @@ import { getPeriodTypesByFilterType } from '../../helpers/get-period-types-by-fi
 import { PeriodFilterType } from '../../models/period-filter-type.model';
 import {
   PERIOD_FILTER_TYPES,
-  PeriodFilterTypes
+  PeriodFilterTypes,
 } from '../../constants/period-filter-types.constant';
 import { getPeriodFilterTypesByConfig } from '../../helpers/get-period-filter-types-by-config.helper';
 import { getCurrentPeriodFilterType } from '../../helpers/get-current-period-filter-type.helper';
@@ -33,7 +33,7 @@ import { getCurrentPeriodFilterType } from '../../helpers/get-current-period-fil
 @Component({
   selector: 'ngx-dhis2-period-filter',
   templateUrl: './period-filter.component.html',
-  styleUrls: ['./period-filter.component.css']
+  styleUrls: ['./period-filter.component.css'],
 })
 export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   @Input() selectedPeriodType: string;
@@ -42,7 +42,7 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
 
   @Output() update = new EventEmitter();
   @Output() close = new EventEmitter();
-  @Output() change = new EventEmitter();
+  @Output() changePeriod = new EventEmitter();
 
   /* For data range picker */
   minStartDate: Date;
@@ -93,7 +93,7 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit() {
     this.periodFilterConfig = {
       ...PERIOD_FILTER_CONFIG,
-      ...(this.periodFilterConfig || {})
+      ...(this.periodFilterConfig || {}),
     };
 
     this.periodFilterTypes = getPeriodFilterTypesByConfig(
@@ -101,14 +101,16 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
       this.periodFilterConfig
     );
 
+    this.currentPeriodFilterType = getCurrentPeriodFilterType(
+      this.periodFilterTypes,
+      this.selectedPeriodType
+    );
 
-    this.currentPeriodFilterType = getCurrentPeriodFilterType(this.periodFilterTypes, this.selectedPeriodType);
-    
     this.periodFilterTypeEnum = PeriodFilterTypes;
 
     const lowestPeriodType = find(this.periodTypes, [
       'id',
-      this.periodFilterConfig.lowestPeriodType
+      this.periodFilterConfig.lowestPeriodType,
     ]);
 
     if (lowestPeriodType) {
@@ -172,12 +174,12 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
         dimension: 'ou',
         startDate: {
           id: this.startDate,
-          name: this.startDate
+          name: this.startDate,
         },
         endDate: {
           id: this.endDate,
-          name: this.endDate
-        }
+          name: this.endDate,
+        },
       });
     }
   }
@@ -205,7 +207,7 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
         .setPreferences({
           childrenPeriodSortOrder:
             this.periodFilterConfig.childrenPeriodSortOrder || 'DESC',
-          allowFuturePeriods: true
+          allowFuturePeriods: true,
         })
         .get();
 
@@ -232,7 +234,7 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
     this.selectedPeriods = [...this.selectedPeriods, period];
 
     if (this.periodFilterConfig.emitOnSelection) {
-      this._onUpdatePeriod(false);
+      this._onUpdatePeriod();
     }
   }
 
@@ -246,7 +248,7 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
     this._setAvailablePeriods();
 
     if (this.periodFilterConfig.emitOnSelection) {
-      this._onUpdatePeriod(false);
+      this._onUpdatePeriod();
     }
   }
 
@@ -290,7 +292,7 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
     this.availablePeriods = [];
 
     if (this.periodFilterConfig.emitOnSelection) {
-      this._onUpdatePeriod(false);
+      this._onUpdatePeriod();
     }
   }
 
@@ -303,7 +305,7 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
     this.availablePeriods = getAvailablePeriods([], this.periodInstance.list());
 
     if (this.periodFilterConfig.emitOnSelection) {
-      this._onUpdatePeriod(false);
+      this._onUpdatePeriod();
     }
   }
 
@@ -333,16 +335,12 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
       items: this.selectedPeriods,
       dimension: 'pe',
       lowestPeriodType: this.periodFilterConfig.lowestPeriodType,
-      changed: true
+      changed: true,
     };
   }
 
-  private _onUpdatePeriod(isUpdate: boolean = true) {
-    if (isUpdate) {
-      this.update.emit(this._getPeriodSelection());
-    } else {
-      this.change.emit(this._getPeriodSelection());
-    }
+  private _onUpdatePeriod() {
+    this.update.emit(this._getPeriodSelection());
   }
 
   private _setAvailablePeriods() {

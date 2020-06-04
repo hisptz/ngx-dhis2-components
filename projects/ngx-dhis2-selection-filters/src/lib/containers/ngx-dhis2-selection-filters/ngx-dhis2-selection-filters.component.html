@@ -1,11 +1,10 @@
 <div class="selection-filter-container">
   <!--selection filter header-->
   <div class="selection-filter-header">
-    <button mat-stroked-button class="selection-filter-btn" (click)="onToggleFilter($event)"
-      [title]="'Filter by different dimensions' | translate">
-      <i class="fa fa-filter mr-2"></i>
-      <span>Filter</span>
-      <i class="fa {{ showFilters ? 'fa-caret-left' : 'fa-caret-right' }} ml-2"></i>
+    <button mat-stroked-button (click)="onOpenFilter($event)"
+      [matTooltip]="'Filter by Different dimensions' | translate">
+      <mat-icon [style.color]="'gray'">filter_alt</mat-icon>
+      <span class="filter-button-title">Filter</span>
     </button>
     <div class="selection-filter-btn-list" *ngIf="showFilters">
       <!--data filter button-->

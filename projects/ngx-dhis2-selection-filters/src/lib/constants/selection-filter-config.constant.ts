@@ -9,6 +9,5 @@ export const SELECTION_FILTER_CONFIG: SelectionFilterConfig = {
   showDynamicDimension: true,
   orgUnitFilterConfig: {
     singleSelection: true,
-    closeOnDestroy: true
-  }
+  },
 };

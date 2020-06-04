@@ -19,14 +19,18 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { NgxDhis2DataFilterModule } from '@iapps/ngx-dhis2-data-filter';
 import { NgxDhis2OrgUnitFilterModule } from '@iapps/ngx-dhis2-org-unit-filter';
 import { NgxDhis2PeriodFilterModule } from '@iapps/ngx-dhis2-period-filter';
-import { TranslateModule } from '@ngx-translate/core';
 import { NgxDhis2ValidationRuleFilterModule } from '@iapps/ngx-dhis2-validation-rule-group-filter';
-
+import { TranslateModule } from '@ngx-translate/core';
+import { SelectionDialogComponent } from './components/selection-dialog/selection-dialog.component';
 import { NgxDhis2SelectionFiltersComponent } from './containers/ngx-dhis2-selection-filters/ngx-dhis2-selection-filters.component';
 import { SummarizeSelectionPipe } from './pipes/summarize-selection.pipe';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   imports: [
@@ -37,9 +41,18 @@ import { SummarizeSelectionPipe } from './pipes/summarize-selection.pipe';
     NgxDhis2PeriodFilterModule,
     NgxDhis2ValidationRuleFilterModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatDialogModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatTabsModule,
   ],
-  declarations: [NgxDhis2SelectionFiltersComponent, SummarizeSelectionPipe],
-  exports: [NgxDhis2SelectionFiltersComponent]
+  declarations: [
+    NgxDhis2SelectionFiltersComponent,
+    SummarizeSelectionPipe,
+    SelectionDialogComponent,
+  ],
+  entryComponents: [SelectionDialogComponent],
+  exports: [NgxDhis2SelectionFiltersComponent],
 })
 export class NgxDhis2SelectionFiltersModule {}

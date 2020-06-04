@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import * as _ from 'lodash';
-
 import { getDataElementsFromIndicators } from '../../helpers/get-data-elements-from-indicators.helper';
+import { getLayout } from '../../helpers/get-layout.helper';
 import { updateSelectionFilterConfig } from '../../helpers/update-selection-filter-config.helper';
 import { SelectionFilterConfig } from '../../models/selected-filter-config.model';
-import { getLayout } from '../../helpers/get-layout.helper';
+import { SelectionDialogComponent } from '../../components/selection-dialog/selection-dialog.component';
+
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'ngx-dhis2-selection-filters',
@@ -36,7 +38,7 @@ export class NgxDhis2SelectionFiltersComponent implements OnInit {
   selectedPeriods: any[];
   selectedOrgUnits: any[];
 
-  constructor() {
+  constructor(private dialog: MatDialog) {
     this.showFilters = this.showFilterBody = false;
   }
 
@@ -63,14 +65,19 @@ export class NgxDhis2SelectionFiltersComponent implements OnInit {
       : '';
   }
 
-  onToggleFilter(e) {
+  onOpenFilter(e) {
     e.stopPropagation();
-    this.showFilters = !this.showFilters;
-    if (this.showFilters) {
-      this.showFilterBody = true;
-    } else {
-      this.showFilterBody = false;
-    }
+    const selectionDialog = this.dialog.open(SelectionDialogComponent, {
+      width: '50%',
+      data: {
+        dataSelections: this.dataSelections,
+        selectionFilterConfig: this.selectionFilterConfig,
+      },
+    });
+
+    selectionDialog.afterClosed().subscribe((result) => {
+      console.log(result);
+    });
   }
 
   toggleCurrentFilter(e, selectedFilter) {

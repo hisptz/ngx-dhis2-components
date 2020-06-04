@@ -60,6 +60,7 @@
   font-weight: lighter;
   border-radius: 2px;
 }
+
 .period-body {
   display: flex;
   width: 100%;
@@ -104,20 +105,18 @@
 
 .period-list {
   list-style-type: none;
-  height: 372px;
   padding: 0;
   overflow: auto;
 }
 
 .selected-period-list {
-  height: 388px;
   padding: 0;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
 .period-list > li > a {
-  padding: 5px;
+  padding: 7px;
   display: inline-flex;
   align-items: center;
   cursor: pointer;
@@ -180,7 +179,7 @@
   border-radius: 5px;
   display: inline-flex;
   align-items: center;
-  padding: 2px 8px 2px 8px;
+  padding: 3px 8px 3px 8px;
   font-size: 14px;
   background-color: #b2dfdb;
 }

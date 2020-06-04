@@ -6,6 +6,11 @@
   display: flex;
 }
 
+.filter-button-title {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
 .selection-filter-btn {
   outline: none;
   display: flex;
