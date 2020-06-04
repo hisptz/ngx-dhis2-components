@@ -18,6 +18,9 @@ export class SelectionFiltersComponent implements OnInit {
       },
       periodFilterConfig: {
         singleSelection: false,
+        hideActionButtons: true,
+        contentHeight: '360px',
+        emitOnSelection: true,
       },
     };
   }

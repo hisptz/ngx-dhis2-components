@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { getLayout } from '../../helpers/get-layout.helper';
 import { updateSelectionFilterConfig } from '../../helpers/update-selection-filter-config.helper';
 import { getDataElementsFromIndicators } from '../../helpers/get-data-elements-from-indicators.helper';
+import { updateDataSelections } from '../../helpers/update-data-selections.helpers';
 
 @Component({
   selector: 'lib-selection-dialog',
@@ -19,7 +20,6 @@ export class SelectionDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   onFilterUpdate(selectedItems, selectedFilter) {
-    console.log(selectedItems);
     if (selectedFilter === 'LAYOUT') {
       const layouts = _.flatten(
         _.map(_.keys(selectedItems), (selectedItemKey: string) => {
@@ -77,7 +77,7 @@ export class SelectionDialogComponent implements OnInit {
                 },
               ]
             : [
-                ...this.data.updateDataSelectionWithNewSelections(
+                ...updateDataSelections(
                   this.data.dataSelections || [],
                   selectedItem
                 ),
@@ -97,7 +97,7 @@ export class SelectionDialogComponent implements OnInit {
               },
             ]
           : [
-              ...this.data.updateDataSelectionWithNewSelections(
+              ...updateDataSelections(
                 this.data.dataSelections || [],
                 selectedItems
               ),

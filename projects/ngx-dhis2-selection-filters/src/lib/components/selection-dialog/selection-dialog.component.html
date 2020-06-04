@@ -1,10 +1,9 @@
-<h2 mat-dialog-title>{{'Filter by Different Dimensions' | translate}}</h2>
 <mat-dialog-content *ngIf="data">
-    <mat-tab-group mat-stretch-tabs dynamicHeight="true">
+    <mat-tab-group dynamicHeight="true">
         <mat-tab *ngIf="data?.selectionFilterConfig?.showDataFilter">
             <ng-template mat-tab-label>
-                <mat-icon>dns</mat-icon>
-                <span class="button-text">Data</span>
+                <mat-icon class="tab-icon">dns</mat-icon>
+                <span>Data</span>
             </ng-template>
             <div class="selection-filter-content">
                 <ngx-dhis2-data-filter [selectedItems]="data.selectedData"
@@ -15,7 +14,7 @@
         </mat-tab>
         <mat-tab *ngIf="data?.selectionFilterConfig?.showValidationRuleGroupFilter">
             <ng-template mat-tab-label>
-                <mat-icon>warning</mat-icon>
+                <mat-icon class="tab-icon">warning</mat-icon>
                 <span class="button-text">Validation</span>
             </ng-template>
             <div class="selection-filter-content">
@@ -28,7 +27,7 @@
         </mat-tab>
         <mat-tab *ngIf="data?.selectionFilterConfig?.showPeriodFilter">
             <ng-template mat-tab-label>
-                <mat-icon>watch_later</mat-icon>
+                <mat-icon class="tab-icon">watch_later</mat-icon>
                 <span class="button-text">Period</span>
             </ng-template>
             <div class="selection-filter-content">
@@ -41,7 +40,7 @@
         </mat-tab>
         <mat-tab *ngIf="data?.selectionFilterConfig?.showOrgUnitFilter">
             <ng-template mat-tab-label>
-                <mat-icon>device_hub</mat-icon>
+                <mat-icon class="tab-icon">device_hub</mat-icon>
                 <span class="button-text">Organisation unit</span>
             </ng-template>
             <div class="selection-filter-content">
