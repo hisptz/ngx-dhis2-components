@@ -47,10 +47,10 @@
       <tr>
         <td class="period-available-body p-1">
           <ul class="period-list" [style.height]="periodFilterConfig.contentHeight">
-            <li *ngFor="let availablePeriod of availablePeriods" matTooltip="Select {{ availablePeriod.name }} ({{
+            <li *ngFor="let availablePeriod of availablePeriods">
+              <a (click)="onSelectPeriod(availablePeriod, $event)" matTooltip="Select {{ availablePeriod.name }} ({{
                 availablePeriod.type
-              }} period)">
-              <a (click)="onSelectPeriod(availablePeriod, $event)">
+              }} period)" matTooltipPosition="right">
                 <div class="period-list-icon"></div>
                 <span>{{ availablePeriod.name }}</span>
               </a>
@@ -80,7 +80,7 @@
               <span>{{ selectedPeriod.name }}</span>
               <span (click)="onDeselectPeriod(selectedPeriod, $event)" matTooltip="Remove {{ selectedPeriod.name }} ({{
                   selectedPeriod.type
-                }} period)" class="selected-period-close">&times;</span>
+                }} period)" matTooltipPosition="right" class="selected-period-close">&times;</span>
             </div>
           </div>
           <div *ngIf="!periodFilterConfig.singleSelection" class="d-flex justify-content-center">
