@@ -31,4 +31,13 @@ export interface OrgUnitFilterConfig {
 
   // Specify additional organisation unit query fields
   additionalQueryFields?: string[];
+
+  // Specify whether selected item should be emitted on selection or not
+  emitOnSelection?: boolean;
+
+  // Specify if action buttons should be hidden or not
+  hideActionButtons?: boolean;
+
+  // Set height of organisation unit selection content
+  contentHeight?: string;
 }

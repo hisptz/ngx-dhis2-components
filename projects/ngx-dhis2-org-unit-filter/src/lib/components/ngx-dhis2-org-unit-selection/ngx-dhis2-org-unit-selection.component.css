@@ -8,7 +8,6 @@
 }
 
 .ngx-dhis2-org-unit-selection__tree_list {
-  /* height: 100%; */
   margin: 5px;
 }
 
@@ -16,6 +15,8 @@
 .ngx-dhis2-org-unit-selection-card {
   position: relative;
   border-radius: 0;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  padding: 7px;
 }
 
 .ngx-dhis2-org-unit-filter__disabled-overlay {
