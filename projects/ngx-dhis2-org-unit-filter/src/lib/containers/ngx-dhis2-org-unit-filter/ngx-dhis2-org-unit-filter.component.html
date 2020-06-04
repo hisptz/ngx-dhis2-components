@@ -36,7 +36,7 @@
   <!--organisation unit selection container-->
 
 
-  <div class="ngx-dhis2-org-unit-filter__footer">
+  <div class="ngx-dhis2-org-unit-filter__footer" *ngIf="!orgUnitFilterConfig.hideActionButtons">
     <div class="ngx-dhis2-org-unit-filter__selected">
       <ngx-dhis2-org-unit-selected-org-unit [selectedOrgUnits]="selectedOrgUnits"
         (deactivateOrgUnit)="onDeselectOrgUnit($event)" (deactivateAllOrgUnits)="onDeselectAllOrgUnits()">
