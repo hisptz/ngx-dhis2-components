@@ -12,14 +12,18 @@ export class SelectionFiltersComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectionFilterConfig = {
+      showValidationRuleGroupFilter: false,
       orgUnitFilterConfig: {
         singleSelection: false,
         reportUse: false,
+        contentHeight: '370px',
+        emitOnSelection: true,
+        hideActionButtons: true,
       },
       periodFilterConfig: {
         singleSelection: false,
         hideActionButtons: true,
-        contentHeight: '360px',
+        contentHeight: '355px',
         emitOnSelection: true,
       },
     };

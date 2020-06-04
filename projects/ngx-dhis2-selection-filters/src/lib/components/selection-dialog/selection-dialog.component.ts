@@ -12,12 +12,26 @@ import { updateDataSelections } from '../../helpers/update-data-selections.helpe
   styleUrls: ['./selection-dialog.component.scss'],
 })
 export class SelectionDialogComponent implements OnInit {
+  selectedFilter: string;
+
+  // selections
+  selectedData: any[];
+  selectedDynamicDimensions: any[];
+  selectedDataGroups: any[];
+  selectedValidationDataElements: any[];
+  selectedValidationRuleGroups: Array<{ id: string; name: string }>;
+  lowestPeriodType: string;
+  selectedPeriods: any[];
+  selectedOrgUnits: any[];
   constructor(
     private dialogRef: MatDialogRef<SelectionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // set selection paremeters
+    this._setSelectionParameters();
+  }
 
   onFilterUpdate(selectedItems, selectedFilter) {
     if (selectedFilter === 'LAYOUT') {
@@ -165,17 +179,5 @@ export class SelectionDialogComponent implements OnInit {
       validationRuleGroup && validationRuleGroup.periodType
         ? validationRuleGroup.periodType.id
         : '';
-
-    // set layout
-    const layoutItem = _.groupBy(
-      _.map(this.data.dataSelections, (dataSelection) => {
-        return {
-          name: dataSelection.name,
-          value: dataSelection.dimension,
-          layout: dataSelection.layout,
-        };
-      }),
-      'layout'
-    );
   }
 }
