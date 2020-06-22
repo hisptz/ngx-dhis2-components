@@ -76,9 +76,7 @@
           <div class="selected-period-list" [style.height]="'calc(' + periodFilterConfig.contentHeight + ' + 16px)'">
             <div class="selected-period-chip" *ngFor="let selectedPeriod of selectedPeriods">
               <span>{{ selectedPeriod.name }}</span>
-              <span (click)="onDeselectPeriod(selectedPeriod, $event)" matTooltip="Remove {{ selectedPeriod.name }} ({{
-                  selectedPeriod.type
-                }} period)" matTooltipPosition="right" class="selected-period-close">&times;</span>
+              <span (click)="onDeselectPeriod(selectedPeriod, $event)" class="selected-period-close">&times;</span>
             </div>
           </div>
           <div *ngIf="!periodFilterConfig.singleSelection" class="d-flex justify-content-center">
