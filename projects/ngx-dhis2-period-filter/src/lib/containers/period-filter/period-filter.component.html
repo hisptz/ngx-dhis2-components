@@ -48,9 +48,7 @@
         <td class="period-available-body p-1">
           <ul class="period-list" [style.height]="periodFilterConfig.contentHeight">
             <li *ngFor="let availablePeriod of availablePeriods">
-              <a (click)="onSelectPeriod(availablePeriod, $event)" matTooltip="Select {{ availablePeriod.name }} ({{
-                availablePeriod.type
-              }} period)" matTooltipPosition="right">
+              <a (click)="onSelectPeriod(availablePeriod, $event)" >
                 <div class="period-list-icon"></div>
                 <span>{{ availablePeriod.name }}</span>
               </a>
