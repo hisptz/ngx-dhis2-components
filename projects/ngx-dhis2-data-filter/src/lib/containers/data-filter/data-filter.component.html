@@ -167,7 +167,6 @@
                     currentPage: currentPageForAvailableDataItems
                   }
           "
-          matTooltip="Click to select {{ dataFilterItem.name }}"
           id="{{ dataFilterItem.id | addUnderscore }} "
         >
           <a (click)="onSelectDataItem(dataFilterItem, $event)">{{
@@ -214,7 +213,6 @@
                     currentPage: currentPageForSelectedDataItems
                   }
           "
-          matTooltip="Click to remove {{ item.name }}"
         >
           <a (click)="onRemoveDataItem({ dataItem: item }, $event)">
             <span class="badge badge-info">{{ item.type | readableName }}</span
