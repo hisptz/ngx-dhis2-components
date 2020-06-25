@@ -29,6 +29,7 @@ import {
 } from '../../constants/period-filter-types.constant';
 import { getPeriodFilterTypesByConfig } from '../../helpers/get-period-filter-types-by-config.helper';
 import { getCurrentPeriodFilterType } from '../../helpers/get-current-period-filter-type.helper';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'ngx-dhis2-period-filter',
@@ -241,7 +242,7 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   }
   onClickToSelectPeriod(period, e, type) {
     const { ctrlKey, shiftKey } = e;
-    e.stopPropagation();
+   e.stopPropagation();
     switch (type) {
       case 'SELECT': {
         this.updateSelectedPeriodList(period, ctrlKey, shiftKey);
@@ -430,7 +431,7 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onDeselectAllPeriods(e) {
-    e.stopPropagation();
+   e.stopPropagation();
     // remove all items from selected bucket
     this.selectedPeriods = [];
 
@@ -481,5 +482,8 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
       this.selectedPeriods,
       this.periodInstance.list()
     );
+  }
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.selectedPeriods, event.previousIndex, event.currentIndex);
   }
 }
