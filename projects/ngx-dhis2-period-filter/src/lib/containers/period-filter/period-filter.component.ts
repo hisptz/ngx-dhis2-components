@@ -13,7 +13,7 @@ import {
   NgxDhis2HttpClientService,
   SystemInfo,
 } from '@iapps/ngx-dhis2-http-client';
-import { find } from 'lodash';
+import { find, map, flattenDeep } from 'lodash';
 
 import { PERIOD_FILTER_CONFIG } from '../../constants/period-filter-config.constant';
 import { getAvailablePeriods } from '../../helpers/get-available-periods.helper';
@@ -63,6 +63,8 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   periodFilterTypes: PeriodFilterType[];
   periodFilterTypeEnum: any;
   currentPeriodFilterType: string;
+  selectedPeriodList = [];
+  deselectedPeriodList = [];
 
   constructor(private httpClient: NgxDhis2HttpClientService) {
     this.periodTypeInstance = new Fn.PeriodType();
@@ -236,6 +238,60 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
     if (this.periodFilterConfig.emitOnSelection) {
       this._onUpdatePeriod();
     }
+  }
+  onClickToSelectPeriod(period, e, type) {
+    console.log({ period, e, type });
+    e.stopPropagation();
+    switch (type) {
+      case 'SELECT': {
+        this.selectedPeriodList = [...[], period];
+        break;
+      }
+      case 'DESELECT': {
+        this.deselectedPeriodList = [...[], period];
+        break;
+      }
+
+      default:
+        break;
+    }
+  }
+
+  moveSelectedPeriods(e) {
+    this.selectedPeriodList = flattenDeep(
+      map(this.selectedPeriodList || [], (periodItem) => {
+        this.onSelectPeriod(periodItem, e);
+        const periodMoved =
+          periodItem && periodItem.hasOwnProperty('id') && periodItem.id
+            ? find(
+                this.selectedPeriods || [],
+                (selectedPeriod) => selectedPeriod.id === periodItem.id
+              )
+            : null;
+        return periodMoved ? [] : periodItem;
+      }) || []
+    );
+  }
+
+  moveDeselectedPeriods(e) {
+    this.deselectedPeriodList = flattenDeep(
+      map(this.deselectedPeriodList || [], (periodItem) => {
+        this.onDeselectPeriod(periodItem, e);
+        const periodMoved =
+          periodItem && periodItem.hasOwnProperty('id') && periodItem.id
+            ? find(
+                this.selectedPeriods || [],
+                (selectedPeriod) => selectedPeriod.id === periodItem.id
+              )
+            : null;
+        return periodMoved ? periodItem : [];
+      }) || []
+    );
+  }
+
+  isInArray(arr: any[], id) {
+    const item = find(arr || [], (arrItem) => arrItem.id === id) || '';
+    return item ? true : false;
   }
 
   onDeselectPeriod(period: any, e) {
