@@ -69,12 +69,12 @@
 
 .period-available {
   overflow: auto;
-  width: 54%;
+  width: 50%;
 }
 
 .period-selected {
   margin-left: 5px;
-  width: 46%;
+  width: 38%;
 }
 
 .period-available-body,
@@ -182,6 +182,7 @@
   padding: 3px 8px 3px 8px;
   font-size: 14px;
   background-color: #b2dfdb;
+  cursor: pointer;
 }
 
 .selected-period-close {
@@ -211,4 +212,31 @@
 .period-range-container {
   margin-top: 10px;
   position: relative;
+}
+
+.period-body .transfer-section {
+  display: flex;
+  width: 12%;
+  /* height: 100%; */
+  flex-direction: column;
+  justify-content: center;
+
+  align-items: center;
+  padding-left: 0.1em;
+  padding-right: 0.1em;
+}
+
+
+.period-body .transfer-section button {
+  border: 1px solid #e0e0e0;
+  border-radius: 3px !important;
+}
+.period-body .transfer-section button:first-child {
+  margin-bottom: 1em;
+}
+.selected-active {
+  background-color: #00796b !important;
+}
+.selected-active span{
+   color: #fff;
 }
