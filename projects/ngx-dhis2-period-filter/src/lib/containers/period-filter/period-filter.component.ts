@@ -13,7 +13,7 @@ import {
   NgxDhis2HttpClientService,
   SystemInfo,
 } from '@iapps/ngx-dhis2-http-client';
-import { find, map, flattenDeep } from 'lodash';
+import { find, map, flattenDeep, uniqBy, filter } from 'lodash';
 
 import { PERIOD_FILTER_CONFIG } from '../../constants/period-filter-config.constant';
 import { getAvailablePeriods } from '../../helpers/get-available-periods.helper';
@@ -240,20 +240,97 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
   onClickToSelectPeriod(period, e, type) {
-    console.log({ period, e, type });
+    const { ctrlKey, shiftKey } = e;
     e.stopPropagation();
     switch (type) {
       case 'SELECT': {
-        this.selectedPeriodList = [...[], period];
+        this.updateSelectedPeriodList(period, ctrlKey, shiftKey);
         break;
       }
       case 'DESELECT': {
-        this.deselectedPeriodList = [...[], period];
+        this.updateDeselectedPeriodList(period, ctrlKey, shiftKey);
         break;
       }
 
       default:
         break;
+    }
+  }
+  updateSelectedPeriodList(period, ctrlKey, shiftKey) {
+    if ((ctrlKey && shiftKey) || shiftKey) {
+      const periodIndex =
+        period && period.hasOwnProperty('id') && this.availablePeriods
+          ? this.availablePeriods.findIndex(
+              (availablePeriod) => availablePeriod.id === period.id
+            ) || 0
+          : 0;
+
+      this.selectedPeriodList =
+        this.availablePeriods && this.availablePeriods.length >= 0
+          ? uniqBy(
+              [
+                ...this.selectedPeriodList,
+                ...this.availablePeriods.slice(0, periodIndex + 1),
+              ],
+              'id'
+            ) || this.selectedPeriodList
+          : [];
+    } else if (ctrlKey) {
+      const periodInList =
+        period && period.hasOwnProperty('id')
+          ? find(
+              this.selectedPeriodList || [],
+              (selectedPeriod) => selectedPeriod.id === period.id
+            )
+          : null;
+      this.selectedPeriodList =
+        periodInList && periodInList.hasOwnProperty('id')
+          ? filter(
+              this.selectedPeriodList || [],
+              (periodListItem) => periodListItem.id !== periodInList.id
+            ) || this.selectedPeriodList
+          : [...this.selectedPeriodList, period];
+    } else {
+      this.selectedPeriodList = [...[], period];
+    }
+  }
+
+  updateDeselectedPeriodList(period, ctrlKey, shiftKey) {
+    if ((ctrlKey && shiftKey) || shiftKey) {
+      const periodIndex =
+        period && period.hasOwnProperty('id') && this.availablePeriods
+          ? this.selectedPeriods.findIndex(
+              (selectedPeriod) => selectedPeriod.id === period.id
+            )
+          : 0;
+
+      this.deselectedPeriodList =
+        this.selectedPeriods && this.selectedPeriods.length >= 0
+          ? uniqBy(
+              [
+                ...this.deselectedPeriodList,
+                ...this.selectedPeriods.slice(0, periodIndex + 1),
+              ],
+              'id'
+            ) || this.deselectedPeriodList
+          : [];
+    } else if (ctrlKey) {
+      const periodInList =
+        period && period.hasOwnProperty('id')
+          ? find(
+              this.deselectedPeriodList || [],
+              (deselectedPeriod) => deselectedPeriod.id === period.id
+            )
+          : null;
+      this.deselectedPeriodList =
+        periodInList && periodInList.hasOwnProperty('id')
+          ? filter(
+              this.deselectedPeriodList || [],
+              (periodListItem) => periodListItem.id !== periodInList.id
+            ) || this.deselectedPeriodList
+          : [...this.deselectedPeriodList, period];
+    } else {
+      this.deselectedPeriodList = [...[], period];
     }
   }
 
