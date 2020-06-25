@@ -96,9 +96,6 @@
                   onClickToSelectPeriod(availablePeriod, $event, 'SELECT')
                 "
                 (dblclick)="onSelectPeriod(availablePeriod, $event)"
-                matTooltip="Select {{ availablePeriod.name }} ({{
-                  availablePeriod.type
-                }} period)"
                 matTooltipPosition="right"
               >
                 <div class="period-list-icon"></div>
@@ -178,9 +175,6 @@
               <span class="selected-active-name">{{ selectedPeriod.name }}</span>
               <span
                 (click)="onDeselectPeriod(selectedPeriod, $event)"
-                matTooltip="Remove {{ selectedPeriod.name }} ({{
-                  selectedPeriod.type
-                }} period)"
                 matTooltipPosition="right"
                 class="selected-period-close"
                 >&times;</span
