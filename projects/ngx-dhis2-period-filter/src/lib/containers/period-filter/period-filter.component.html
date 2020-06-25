@@ -153,6 +153,8 @@
       <tr>
         <td class="period-selected-body p-1">
           <div
+          cdkDropList
+          (cdkDropListDropped)="drop($event)"
             class="selected-period-list"
             [style.height]="
               'calc(' + periodFilterConfig.contentHeight + ' + 16px)'
@@ -161,6 +163,7 @@
             <div
               class="selected-period-chip"
               *ngFor="let selectedPeriod of selectedPeriods"
+              cdkDrag
               [ngClass]="{
                 'selected-active': isInArray(
                   deselectedPeriodList,
@@ -170,6 +173,7 @@
               (click)="
                 onClickToSelectPeriod(selectedPeriod, $event, 'DESELECT')
               "
+             
             >
               <span class="selected-active-name">{{ selectedPeriod.name }}</span>
               <span
