@@ -29,7 +29,7 @@ import {
 } from '../../constants/period-filter-types.constant';
 import { getPeriodFilterTypesByConfig } from '../../helpers/get-period-filter-types-by-config.helper';
 import { getCurrentPeriodFilterType } from '../../helpers/get-current-period-filter-type.helper';
-import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'ngx-dhis2-period-filter',
@@ -241,21 +241,49 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
   onClickToSelectPeriod(period, e, type) {
-    const { ctrlKey, shiftKey } = e;
-   e.stopPropagation();
-    switch (type) {
-      case 'SELECT': {
-        this.updateSelectedPeriodList(period, ctrlKey, shiftKey);
-        break;
+    console.log({ config: this.periodFilterConfig });
+    if (
+      this.periodFilterConfig &&
+      this.periodFilterConfig.hasOwnProperty('singleSelection') &&
+      !this.periodFilterConfig.singleSelection
+    ) {
+      const { ctrlKey, shiftKey } = e;
+      e.stopPropagation();
+      switch (type) {
+        case 'SELECT': {
+          this.updateSelectedPeriodList(period, ctrlKey, shiftKey);
+          break;
+        }
+        case 'DESELECT': {
+          this.updateDeselectedPeriodList(period, ctrlKey, shiftKey);
+          break;
+        }
+
+        default:
+          break;
       }
-      case 'DESELECT': {
-        this.updateDeselectedPeriodList(period, ctrlKey, shiftKey);
-        break;
+    } else {
+      switch (type) {
+        case 'SELECT': {
+          this.updateSingleSelectedPeriodList(period);
+          break;
+        }
+        case 'DESELECT': {
+          this.updateSingleDeselectedPeriodList(period);
+          break;
+        }
+
+        default:
+          break;
       }
 
-      default:
-        break;
     }
+  }
+  updateSingleSelectedPeriodList(period) {
+    this.selectedPeriodList = [...[], period];
+  }
+  updateSingleDeselectedPeriodList(period) {
+    this.deselectedPeriodList = [...[], period];
   }
   updateSelectedPeriodList(period, ctrlKey, shiftKey) {
     if ((ctrlKey && shiftKey) || shiftKey) {
@@ -431,7 +459,7 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onDeselectAllPeriods(e) {
-   e.stopPropagation();
+    e.stopPropagation();
     // remove all items from selected bucket
     this.selectedPeriods = [];
 
@@ -484,6 +512,10 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.selectedPeriods, event.previousIndex, event.currentIndex);
+    moveItemInArray(
+      this.selectedPeriods,
+      event.previousIndex,
+      event.currentIndex
+    );
   }
 }
