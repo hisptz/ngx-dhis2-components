@@ -108,6 +108,9 @@
   padding: 0;
   overflow: auto;
 }
+.period-list li {
+  padding: 0.2em;
+}
 
 .selected-period-list {
   padding: 0;

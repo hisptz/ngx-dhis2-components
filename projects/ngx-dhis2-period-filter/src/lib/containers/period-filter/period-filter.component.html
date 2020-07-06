@@ -84,7 +84,7 @@
             class="period-list"
             [style.height]="periodFilterConfig.contentHeight"
           >
-            <li *ngFor="let availablePeriod of availablePeriods">
+            <li  *ngFor="let availablePeriod of availablePeriods">
               <a
                 [ngClass]="{
                   'selected-active': isInArray(
@@ -95,7 +95,7 @@
                 (click)="
                   onClickToSelectPeriod(availablePeriod, $event, 'SELECT')
                 "
-                (dblclick)="onSelectPeriod(availablePeriod, $event)"
+                (dblclick)="moveSingleSelectedPeriod(availablePeriod, $event)"
                 matTooltipPosition="right"
               >
                 <div class="period-list-icon"></div>
@@ -170,6 +170,7 @@
               (click)="
                 onClickToSelectPeriod(selectedPeriod, $event, 'DESELECT')
               "
+              (dblclick)="moveSingleDeselectedPeriod(selectedPeriod, $event)"
              
             >
               <span class="selected-active-name">{{ selectedPeriod.name }}</span>

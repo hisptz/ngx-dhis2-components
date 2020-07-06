@@ -279,6 +279,14 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
 
     }
   }
+  moveSingleSelectedPeriod(availablePeriod, e) {
+     this.onSelectPeriod(availablePeriod, e);
+     this.selectedPeriodList = [];
+  }
+  moveSingleDeselectedPeriod(period, e) {
+    this.onDeselectPeriod(period, e);
+    this.deselectedPeriodList = [];
+ }
   updateSingleSelectedPeriodList(period) {
     this.selectedPeriodList = [...[], period];
   }
