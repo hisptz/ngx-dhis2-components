@@ -4,8 +4,10 @@
 }
 
 .data-filter-content {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  /* display: grid;
+  grid-template-columns: repeat(2, 1fr); */
+  display: flex;
+  flex-direction: column;
   padding: 0.2em;
 }
 
@@ -135,9 +137,24 @@
 .data-filter-grouping-btn > img {
   height: 17px;
 }
-
-.data-filter-available-header {
+.data-filter-headers-section {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   border: solid 1px #dddddd;
+}
+.data-filter-section {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+.data-filter-section .data-filter-available-body,
+.data-filter-section .data-filter-selected-body {
+  width: 44%;
+}
+.data-filter-available-header {
+  width: 50%;
   display: flex;
   justify-content: space-between;
   font-size: 13px;
@@ -149,9 +166,10 @@
 }
 
 .data-filter-selected-header {
-  border-top: solid 1px #dddddd;
-  border-bottom: solid 1px #dddddd;
-  border-right: solid 1px #dddddd;
+  /* border-top: solid 1px #dddddd;
+  border-bottom: solid 1px #dddddd;*/
+  width: 50%;
+  border-left: solid 1px #dddddd; 
   display: flex;
   justify-content: space-between;
   font-size: 13px;
@@ -164,6 +182,8 @@
 
 .data-filter-available-body,
 .data-filter-selected-body {
+  display: flex;
+  flex-direction: row;
   padding: 0.2em;
   min-height: 200px;
   overflow: auto;
@@ -171,6 +191,7 @@
 
 .data-filter-selected-body {
   border-right: solid 1px #dddddd;
+  border-left: solid 1px #dddddd;
   border-bottom: solid 1px #dddddd;
 }
 
@@ -194,6 +215,7 @@
   display: block;
   font-size: 14px;
   padding: 10px;
+  margin-top: 10px;
 }
 
 .data-filter-available-body > ul > li > a:hover,
@@ -220,4 +242,28 @@
 
 .data-btn {
   outline: none;
+}
+.transfer-section {
+  width: 12%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  align-items: center;
+  padding-left: 0.1em;
+  padding-right: 0.1em;
+}
+
+
+.transfer-section button {
+  border: 1px solid #e0e0e0;
+  border-radius: 3px !important;
+}
+.transfer-section button:first-child {
+  margin-bottom: 1em;
+}
+
+.selected-active {
+  background-color: #00796b !important;
+  color: #fff !important;
 }

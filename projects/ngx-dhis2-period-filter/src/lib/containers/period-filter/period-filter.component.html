@@ -84,8 +84,9 @@
             class="period-list"
             [style.height]="periodFilterConfig.contentHeight"
           >
-            <li  *ngFor="let availablePeriod of availablePeriods">
+            <li   *ngFor="let availablePeriod of availablePeriods">
               <a
+              style="margin: 0.2em;"
                 [ngClass]="{
                   'selected-active': isInArray(
                     selectedPeriodList,

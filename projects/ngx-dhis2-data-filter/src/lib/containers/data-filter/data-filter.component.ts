@@ -7,7 +7,8 @@ import {
   Output
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { uniqBy, isPlainObject, find, slice, omit, filter } from 'lodash';
+import { uniqBy, isPlainObject, find, slice, omit, filter, flattenDeep } from 'lodash';
+import {map as _map} from 'lodash';
 import {
   getCurrentDataFilterGroup,
   getDataFilterLoadingStatus
@@ -92,6 +93,8 @@ export class DataFilterComponent implements OnInit, OnDestroy {
   currentDataFilterGroup$: Observable<any>;
   dataFilterItems$: Observable<any[]>;
   dataFilterLoading$: Observable<boolean>;
+  selectedItemsList = [];
+  deselectedItemsList = [];
 
   constructor(private dataFilterStore: Store<DataFilterState>) {
     // Set default data group preferences
@@ -376,5 +379,171 @@ export class DataFilterComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.close.emit(this.emit());
+  }
+  isInArray(arr: any[], id) {
+    const item = find(arr || [], (arrItem) => arrItem.id === id) || '';
+    return item ? true : false;
+  }
+
+  onClickToSelectData(dataFilterItem, dataFilterItems, e, type) {
+    if (
+      this.dataFilterConfig &&
+      this.dataFilterConfig.hasOwnProperty('singleSelection') &&
+      !this.dataFilterConfig.singleSelection
+    ) {
+      const { ctrlKey, shiftKey } = e;
+      e.stopPropagation();
+      switch (type) {
+        case 'SELECT': {
+          this.updateSelectedItemsList(dataFilterItem,dataFilterItems, ctrlKey, shiftKey);
+          break;
+        }
+        case 'DESELECT': {
+          this.updateDeselectedItemsList(dataFilterItem, dataFilterItems, ctrlKey, shiftKey);
+          break;
+        }
+
+        default:
+          break;
+      }
+    } else {
+      switch (type) {
+        case 'SELECT': {
+          this.updateSingleSelectedPeriodList(dataFilterItem);
+          break;
+        }
+        case 'DESELECT': {
+          this.updateSingleDeselectedPeriodList(dataFilterItem);
+          break;
+        }
+
+        default:
+          break;
+      }
+
+    }
+  }
+  updateSelectedItemsList(item, dataFilterItems, ctrlKey, shiftKey) {
+    console.log({item, ctrlKey, shiftKey, selected: this.selectedItems, dataFilterItems});
+    if ((ctrlKey && shiftKey) || shiftKey) {
+      const itemIndex =
+        item && item.hasOwnProperty('id') && dataFilterItems
+          ? dataFilterItems.findIndex(
+              (availableItem) => availableItem.id === item.id
+            ) || 0
+          : 0;
+
+      this.selectedItemsList =
+        dataFilterItems && dataFilterItems.length >= 0
+          ? uniqBy(
+              [
+                ...this.selectedItemsList,
+                ...dataFilterItems.slice(0, itemIndex + 1),
+              ],
+              'id'
+            ) || this.selectedItemsList
+          : [];
+    } else if (ctrlKey) {
+      const itemInList =
+        item && item.hasOwnProperty('id')
+          ? find(
+              this.selectedItems || [],
+              (selectedItem) => selectedItem.id === item.id
+            )
+          : null;
+      this.selectedItemsList =
+        itemInList && itemInList.hasOwnProperty('id')
+          ? filter(
+              this.selectedItemsList || [],
+              (periodListItem) => periodListItem.id !== itemInList.id
+            ) || this.selectedItemsList
+          : [...this.selectedItemsList, item];
+    } else {
+      this.selectedItemsList = [...[], item];
+    }
+  }
+  updateDeselectedItemsList(item, dataFilterItems, ctrlKey, shiftKey) {
+
+    if ((ctrlKey && shiftKey) || shiftKey) {
+      const itemIndex =
+      item && item.hasOwnProperty('id') && dataFilterItems
+        ? dataFilterItems.findIndex(
+            (availableItem) => availableItem.id === item.id
+          ) || 0
+        : 0;
+
+      this.deselectedItemsList =
+        this.selectedItems && this.selectedItems.length >= 0
+          ? uniqBy(
+              [
+                ...this.deselectedItemsList,
+                ...this.selectedItems.slice(0, itemIndex + 1),
+              ],
+              'id'
+            ) || this.deselectedItemsList
+          : [];
+    } else if (ctrlKey) {
+      const itemInList =
+        item && item.hasOwnProperty('id')
+          ? find(
+              this.deselectedItemsList || [],
+              (deselectedPeriod) => deselectedPeriod.id === item.id
+            )
+          : null;
+      this.deselectedItemsList =
+      itemInList && itemInList.hasOwnProperty('id')
+          ? filter(
+              this.deselectedItemsList || [],
+              (dataListItem) => dataListItem.id !== itemInList.id
+            ) || this.deselectedItemsList
+          : [...this.deselectedItemsList, item];
+    } else {
+      this.deselectedItemsList = [...[], item];
+    }
+
+  }
+  updateSingleSelectedPeriodList(dataFilterItem) {
+
+  }
+  updateSingleDeselectedPeriodList(dataFilterItem) {
+
+  }
+  moveSingleSelectedDataItem(item, e) {
+    this.onSelectDataItem(item, e);
+    this.selectedItemsList = [];
+ }
+ moveSingleDeselectedDataItem(dataItem, e) {
+   this.onRemoveDataItem({dataItem}, e);
+   this.deselectedItemsList = [];
+}
+  moveSelectedItems(e) {
+    this.selectedItemsList = flattenDeep(
+      _map(this.selectedItemsList || [], (dataItem) => {
+        this. onSelectDataItem(dataItem, e);
+        const itemMoved =
+          dataItem && dataItem.hasOwnProperty('id') && dataItem.id
+            ? find(
+                this.selectedItems || [],
+                (selectedItem) => selectedItem.id === dataItem.id
+              )
+            : null;
+        return itemMoved ? [] : dataItem;
+      }) || []
+    );
+  }
+  moveDeselectedItems(e) {
+    this.deselectedItemsList = flattenDeep(
+      _map(this.deselectedItemsList || [], (dataItem) => {
+        this.onRemoveDataItem({dataItem}, e);
+        const itemMoved =
+          dataItem && dataItem.hasOwnProperty('id') && dataItem.id
+            ? find(
+                this.selectedItems || [],
+                (selectedItem) => selectedItem.id === dataItem.id
+              )
+            : null;
+        return itemMoved ? dataItem : [];
+      }) || []
+    );
   }
 }

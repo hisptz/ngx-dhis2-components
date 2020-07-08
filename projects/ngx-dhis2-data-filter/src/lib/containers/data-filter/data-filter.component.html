@@ -94,7 +94,7 @@
         [(ngModel)]="dataItemSearchTerm"
       />
     </mat-form-field>
-
+  <div class="data-filter-headers-section">
     <div
       class="data-filter-available-header {{
         showGroupingPanel ? 'data-filter-full-width' : ''
@@ -133,7 +133,8 @@
         >{{ selectedItems.length }} Selected</span
       >
     </div>
-
+  </div>
+<div class="data-filter-section">
     <div
       class="data-filter-available-body {{
         showGroupingPanel ? 'data-filter-full-width' : ''
@@ -169,7 +170,18 @@
           "
           id="{{ dataFilterItem.id | addUnderscore }} "
         >
-          <a (click)="onSelectDataItem(dataFilterItem, $event)">{{
+          <a  
+           *ngIf="dataFilterItems$ | async as dataFilterItems"
+           [ngClass]="{
+            'selected-active': isInArray(
+              selectedItemsList,
+              dataFilterItem?.id
+            )
+          }"
+          (click)="
+          onClickToSelectData(dataFilterItem,dataFilterItems, $event, 'SELECT')
+        "
+          (dblclick)="moveSingleSelectedDataItem(dataFilterItem, $event)">{{
             dataFilterItem.name
           }}</a>
         </li>
@@ -195,13 +207,35 @@
           </a>
         </li>
       </ul>
+     
     </div>
-
+   
+    <div  class="transfer-section">
+      <button
+      type="button"
+      class="transfer-btn"
+      (click)="moveSelectedItems($event)"
+      [disabled]="!selectedItemsList.length"
+      mat-icon-button
+    >
+      <mat-icon>arrow_forward</mat-icon>
+    </button>
+    <button
+      type="button"
+      class="transfer-btn"
+      mat-icon-button
+      (click)="moveDeselectedItems($event)"
+      [disabled]="!deselectedItemsList.length"
+    >
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    </div>
     <div
       *ngIf="!showGroupingPanel"
       class="data-filter-selected-body"
       [ngStyle]="{ height: showGroupingPanel ? '350px' : '150px' }"
     >
+  
       <ul>
         <li
           *ngFor="
@@ -214,7 +248,16 @@
                   }
           "
         >
-          <a (click)="onRemoveDataItem({ dataItem: item }, $event)">
+          <a 
+          *ngIf="dataFilterItems$ | async as dataFilterItems"
+          [ngClass]="{
+            'selected-active': isInArray(
+              deselectedItemsList,
+              item?.id
+            )
+          }"
+          (click)="onClickToSelectData(item,dataFilterItems, $event, 'DESELECT')"
+          (dblclick)="moveSingleDeselectedDataItem(item,$event)">
             <span class="badge badge-info">{{ item.type | readableName }}</span
             >&nbsp;
             <span>{{ item.name }}</span>
@@ -230,6 +273,7 @@
       </ul>
     </div>
   </div>
+</div>
   <!-- end of data filter section -->
 
   <!-- data filter groups -->
