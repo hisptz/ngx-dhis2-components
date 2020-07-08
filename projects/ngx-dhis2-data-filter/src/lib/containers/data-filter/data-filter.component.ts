@@ -424,7 +424,6 @@ export class DataFilterComponent implements OnInit, OnDestroy {
     }
   }
   updateSelectedItemsList(item, dataFilterItems, ctrlKey, shiftKey) {
-    console.log({item, ctrlKey, shiftKey, selected: this.selectedItems, dataFilterItems});
     if ((ctrlKey && shiftKey) || shiftKey) {
       const itemIndex =
         item && item.hasOwnProperty('id') && dataFilterItems
