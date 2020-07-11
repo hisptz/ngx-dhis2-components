@@ -35,6 +35,8 @@ import {
   getOrgUnitLoading,
   getUserOrgUnitsBasedOnOrgUnitsSelected,
 } from '../../store/selectors/org-unit.selectors';
+import { NgxDhis2HttpClientService, User } from '@iapps/ngx-dhis2-http-client';
+import { getUserOrgUnitIds } from '../../helpers/get-user-org-unit-ids.helper';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -56,11 +58,15 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
   loadingOrgUnits$: Observable<boolean>;
   orgUnitLoaded$: Observable<boolean>;
   topOrgUnitLevel$: Observable<number>;
+  highestLevelOrgUnitIds$: Observable<string[]>;
 
   @Output() orgUnitUpdate: EventEmitter<any> = new EventEmitter<any>();
   @Output() orgUnitClose: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private store: Store<OrgUnitFilterState>) {
+  constructor(
+    private store: Store<OrgUnitFilterState>,
+    private httpService: NgxDhis2HttpClientService
+  ) {
     this.selectedOrgUnitItems = [];
   }
 
@@ -82,6 +88,14 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
       ...DEFAULT_ORG_UNIT_FILTER_CONFIG,
       ...(this.orgUnitFilterConfig || {}),
     };
+
+    this.highestLevelOrgUnitIds$ = this.httpService
+      .me()
+      .pipe(
+        map((user: User) =>
+          getUserOrgUnitIds(user, this.orgUnitFilterConfig.reportUse)
+        )
+      );
 
     if (!this.selectedOrgUnitItems) {
       this.selectedOrgUnitItems = [];

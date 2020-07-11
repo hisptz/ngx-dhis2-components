@@ -26,11 +26,11 @@
     </div>
     <!-- end of loading org units -->
 
-    <div *ngIf="highestLevelOrgUnitIds$ | async as highestLevelOrgUnitIds">
+    <div *ngIf="highestLevelOrgUnitIds">
       <div class="ngx-dhis2-org-unit-selection_no_org_unit"
         *ngIf="orgUnitsLoaded && highestLevelOrgUnitIds.length === 0">No organisation units</div>
       <div class="ngx-dhis2-org-unit-selection__tree_list">
-        <div class="ngx-dhis2-org-unit-selection__tree_item" *ngFor="let orgUnitId of highestLevelOrgUnitIds$ | async">
+        <div class="ngx-dhis2-org-unit-selection__tree_item" *ngFor="let orgUnitId of highestLevelOrgUnitIds">
           <ngx-dhis2-org-unit-tree-item [orgUnitId]="orgUnitId" [selectedOrgUnits]="selectedOrgUnits"
             (activate)="onActivateOrgUnit($event)" (deactivate)="onDeactivateOrgUnit($event)">
           </ngx-dhis2-org-unit-tree-item>
