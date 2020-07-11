@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { OrgUnitTypes } from '../../constants/org-unit-types.constants';
 import { OrgUnit } from '../../models/org-unit.model';
+import { Observable } from 'rxjs';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -21,7 +22,7 @@ export class NgxDhis2OrgUnitSelectionComponent implements OnInit {
   @Input() loadingOrgUnits: boolean;
   @Input() orgUnitsLoaded: boolean;
   @Input() userOrgUnitSelected: boolean;
-  @Input() highestLevelOrgUnitIds: string[];
+  @Input() highestLevelOrgUnitIds$: Observable<string[]>;
   @Input() height: string;
 
   @Output() activateOrgUnit = new EventEmitter();

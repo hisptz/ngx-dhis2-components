@@ -12,7 +12,7 @@
       <!--organisation unit selection area-->
       <ngx-dhis2-org-unit-selection [selectedOrgUnits]="selectedOrgUnits" [loadingOrgUnits]="loadingOrgUnits$ | async"
         [orgUnitsLoaded]="orgUnitLoaded$ | async" [userOrgUnitSelected]="isAnyUserOrgUnitSelected$ | async"
-        [height]="orgUnitFilterConfig.contentHeight" [highestLevelOrgUnitIds]="highestLevelOrgUnitIds$ | async"
+        [height]="orgUnitFilterConfig.contentHeight" [highestLevelOrgUnitIds$]="highestLevelOrgUnitIds$"
         (activateOrgUnit)="onSelectOrgUnit($event)" (deactivateOrgUnit)="onDeselectOrgUnit($event)"
         (deactivateAllOrgUnit)="onDeselectAllOrgUnits()">
       </ngx-dhis2-org-unit-selection>
