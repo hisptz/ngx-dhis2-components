@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NgxDhis2HttpClientService, User } from '@iapps/ngx-dhis2-http-client';
 import { from, Observable, of, zip } from 'rxjs';
-import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 
 import { getOrgUnitUrls } from '../helpers/get-org-unit-urls.helper';
 import { OrgUnitFilterConfig } from '../models/org-unit-filter-config.model';

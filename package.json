@@ -42,7 +42,7 @@
     "@angular/router": "~9.1.9",
     "@iapps/function-analytics": "^1.0.0-beta.21",
     "@iapps/ngx-dhis2-data-filter": "^1.0.0-beta.18",
-    "@iapps/ngx-dhis2-http-client": "file:dist/ngx-dhis2-http-client/iapps-ngx-dhis2-http-client-2.0.8-rc.2.tgz",
+    "@iapps/ngx-dhis2-http-client": "file:dist/ngx-dhis2-http-client/iapps-ngx-dhis2-http-client-2.0.8-rc.3.tgz",
     "@iapps/ngx-dhis2-org-unit-filter": "^1.1.22",
     "@iapps/ngx-dhis2-period-filter": "^2.0.0-rc.1",
     "@iapps/ngx-dhis2-validation-rule-group-filter": "^1.0.0-beta.2",

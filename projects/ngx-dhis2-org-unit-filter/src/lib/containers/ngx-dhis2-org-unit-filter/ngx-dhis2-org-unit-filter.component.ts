@@ -9,15 +9,17 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as _ from 'lodash';
-import { Observable, from, zip } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { DEFAULT_ORG_UNIT_FILTER_CONFIG } from '../../constants/default-org-unit-filter-config.constant';
 import { OrgUnitTypes } from '../../constants/org-unit-types.constants';
 import { getOrgUnitSelection } from '../../helpers/get-org-unit-selection.helper';
+import { getSelectedOrgUnits } from '../../helpers/get-selected-org-units.helper';
 import { OrgUnitFilterConfig } from '../../models/org-unit-filter-config.model';
 import { OrgUnitGroup } from '../../models/org-unit-group.model';
 import { OrgUnitLevel } from '../../models/org-unit-level.model';
 import { OrgUnit } from '../../models/org-unit.model';
+import { OrgUnitService } from '../../services/org-unit.service';
 import { loadOrgUnitGroups } from '../../store/actions/org-unit-group.actions';
 import { loadOrgUnitLevels } from '../../store/actions/org-unit-level.actions';
 import { loadOrgUnits } from '../../store/actions/org-unit.actions';
@@ -35,9 +37,6 @@ import {
   getOrgUnitLoading,
   getUserOrgUnitsBasedOnOrgUnitsSelected,
 } from '../../store/selectors/org-unit.selectors';
-import { NgxDhis2HttpClientService, User } from '@iapps/ngx-dhis2-http-client';
-import { getUserOrgUnits } from '../../helpers/get-user-org-units.helper';
-import { OrgUnitService } from '../../services/org-unit.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -72,15 +71,7 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
   }
 
   get selectedOrgUnits(): any[] {
-    return _.filter(
-      this.selectedOrgUnitItems,
-      (selectedOrgUnit) =>
-        (!selectedOrgUnit.type &&
-          selectedOrgUnit.id &&
-          selectedOrgUnit.id.indexOf('LEVEL') === -1 &&
-          selectedOrgUnit.id.indexOf('OU_GROUP') === -1) ||
-        selectedOrgUnit.type === OrgUnitTypes.ORGANISATION_UNIT
-    );
+    return getSelectedOrgUnits(this.selectedOrgUnitItems);
   }
 
   ngOnInit() {
