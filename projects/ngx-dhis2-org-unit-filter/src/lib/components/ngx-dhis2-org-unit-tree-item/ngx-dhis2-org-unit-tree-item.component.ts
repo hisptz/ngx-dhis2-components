@@ -66,6 +66,7 @@ export class NgxDhis2OrgUnitTreeItemComponent implements OnInit, OnChanges {
         ? of(this.orgUnit.children)
         : this.orgUnitService.loadChildren(
             this.orgUnit.id,
+            this.orgUnit.level,
             this.orgUnitFilterConfig
           );
 

@@ -3,5 +3,6 @@ export const DEFAULT_ORG_UNIT_FIELDS: string[] = [
   'name',
   'level',
   'path',
-  'parent'
+  'parent',
+  'children[id,name,level,path]',
 ];

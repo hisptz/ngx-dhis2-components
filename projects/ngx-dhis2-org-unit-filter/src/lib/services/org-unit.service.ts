@@ -10,10 +10,15 @@ import { DEFAULT_ORG_UNIT_FIELDS } from '../constants/default-org-unit-fields.co
 import * as _ from 'lodash';
 import { getCombinedOrgUnits } from '../helpers/get-combined-org-units.helper';
 import { getUserOrgUnits } from '../helpers/get-user-org-units.helper';
+import { OrgUnitLevelService } from './org-unit-level.service';
+import { OrgUnitLevel } from '../models/org-unit-level.model';
 
 @Injectable()
 export class OrgUnitService {
-  constructor(private httpClient: NgxDhis2HttpClientService) {}
+  constructor(
+    private httpClient: NgxDhis2HttpClientService,
+    private orgUnitLevelService: OrgUnitLevelService
+  ) {}
 
   loadAll(
     orgUnitFilterConfig: OrgUnitFilterConfig,
@@ -81,6 +86,7 @@ export class OrgUnitService {
 
   loadById(
     id: string,
+    level: number,
     orgUnitFilterConfig: OrgUnitFilterConfig
   ): Observable<OrgUnit> {
     const orgUnitFields = _.join(
@@ -95,7 +101,7 @@ export class OrgUnitService {
         `organisationUnits/${id}.json?fields=${orgUnitFields}`,
         { useIndexDb: true }
       ),
-      this.loadChildren(id, orgUnitFilterConfig)
+      this.loadChildren(id, level, orgUnitFilterConfig)
     ).pipe(
       map((results: any[]) => {
         return {
@@ -108,6 +114,7 @@ export class OrgUnitService {
 
   loadChildren(
     id: string,
+    level: number,
     orgUnitFilterConfig: OrgUnitFilterConfig
   ): Observable<OrgUnit[]> {
     const orgUnitFields = _.join(
@@ -118,12 +125,23 @@ export class OrgUnitService {
       ','
     );
 
-    return this.httpClient
-      .get(
-        `organisationUnits.json?fields=${orgUnitFields}&order=name:asc&filter=parent.id:eq:${id}&paging=false`,
-        { useIndexDb: true }
-      )
-      .pipe(map((res) => (res ? res.organisationUnits : [])));
+    return this.orgUnitLevelService.loadAll().pipe(
+      mergeMap((orgUnitLevels: OrgUnitLevel[]) => {
+        const lowestOrgUnitLevel: OrgUnitLevel = _.maxBy(
+          orgUnitLevels,
+          'level'
+        );
+
+        return lowestOrgUnitLevel && lowestOrgUnitLevel.level > level
+          ? this.httpClient
+              .get(
+                `organisationUnits.json?fields=${orgUnitFields}&order=name:asc&filter=parent.id:eq:${id}&paging=false`,
+                { useIndexDb: true }
+              )
+              .pipe(map((res) => (res ? res.organisationUnits : [])))
+          : of([]);
+      })
+    );
   }
 
   loadUserOrgUnits(
@@ -139,9 +157,11 @@ export class OrgUnitService {
 
         return zip(
           ...userOrgUnits.map((orgUnit: OrgUnit) =>
-            this.loadChildren(orgUnit.id, orgUnitFilterConfig).pipe(
-              map((children: OrgUnit[]) => ({ ...orgUnit, children }))
-            )
+            this.loadChildren(
+              orgUnit.id,
+              orgUnit.level,
+              orgUnitFilterConfig
+            ).pipe(map((children: OrgUnit[]) => ({ ...orgUnit, children })))
           )
         );
       })

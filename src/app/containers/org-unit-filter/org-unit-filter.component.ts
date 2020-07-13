@@ -15,7 +15,7 @@ export class OrgUnitFilterComponent implements OnInit {
     showUserOrgUnitSection: true,
     showOrgUnitLevelGroupSection: true,
     showOrgUnitGroupSection: true,
-    showOrgUnitLevelSection: false,
+    showOrgUnitLevelSection: true,
     reportUse: false,
     additionalQueryFields: ['dataSets'],
     batchSize: 400,
