@@ -32,6 +32,7 @@ import { IndicatorGroupEffects } from './store/effects/indicator-group.effects';
 import { IndicatorEffects } from './store/effects/indicator.effects';
 import { dataFilterReducer } from './store/reducers/data-filter.reducer';
 import { NgxDhis2HttpClientModule } from '@iapps/ngx-dhis2-http-client';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   imports: [
@@ -49,6 +50,7 @@ import { NgxDhis2HttpClientModule } from '@iapps/ngx-dhis2-http-client';
     MatInputModule,
     MatCardModule,
     StoreModule.forFeature('dataFilter', dataFilterReducer),
+    MatIconModule,
     EffectsModule.forFeature([
       DataFilterEffects,
       FunctionEffects,

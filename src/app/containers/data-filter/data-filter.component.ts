@@ -12,7 +12,7 @@ export class DataFilterComponent implements OnInit {
   action: string;
   selectedDataItems: any[] = [];
   dataFilterConfig: DataFilterConfig = {
-    singleSelection: true,
+    singleSelection: false,
     enabledSelections: ['in', 'fn', 'de'],
     showGroupingButton: false,
   };
