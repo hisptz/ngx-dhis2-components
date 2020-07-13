@@ -6,7 +6,6 @@ export function filterDataItem(dataItem: any, filterList: any[]) {
       dataValue = dataValue ? dataValue[attributeKey] : dataItem[attributeKey];
     });
 
-    console.log(dataValue);
     switch (condition) {
       case 'ilike':
         return (dataValue || '').indexOf(filterValue) !== -1;

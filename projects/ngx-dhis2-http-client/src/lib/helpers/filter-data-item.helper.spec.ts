@@ -159,7 +159,55 @@ describe('Given filter parameter to filter data equaling nested filter attribute
 
   const filterStatus = filterDataItem(dataItem, filterList);
 
-  it('should return true if filter value matches', () => {
+  it('should return true if nested filter value matches with data', () => {
     expect(filterStatus).toBeTruthy();
+  });
+});
+
+describe('Given filter parameter to filter data whose part is included in filter attribute value nested filter attribute value', () => {
+  const filterList = [
+    {
+      attribute: 'parent.id',
+      condition: 'ilike',
+      filterValue: 'two',
+    },
+  ];
+
+  const filterStatus = filterDataItem(dataItem, filterList);
+
+  it('should return true if filter value is part of data attribute', () => {
+    expect(filterStatus).toBeTruthy();
+  });
+});
+
+describe('Given filter parameter to filter data with value being part filter attribute value array', () => {
+  const inDataItemOne = {
+    id: 'one',
+    path: 'one/two/three',
+    level: 2,
+    parent: { id: 'two' },
+  };
+
+  const inDataItemTwo = {
+    id: 'two',
+    path: 'two/three',
+    level: 2,
+    parent: { id: 'three' },
+  };
+
+  const filterList = [
+    {
+      attribute: 'parent.id',
+      condition: 'in',
+      filterValue: '[two,three]',
+    },
+  ];
+
+  const filterStatusOne = filterDataItem(inDataItemOne, filterList);
+  const filterStatusTwo = filterDataItem(inDataItemTwo, filterList);
+
+  it('should return true if filter value is part of data attribute', () => {
+    expect(filterStatusOne).toBeTruthy();
+    expect(filterStatusTwo).toBeTruthy();
   });
 });
