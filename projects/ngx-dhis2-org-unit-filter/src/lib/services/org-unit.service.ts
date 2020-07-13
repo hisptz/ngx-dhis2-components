@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NgxDhis2HttpClientService } from '@iapps/ngx-dhis2-http-client';
+import { NgxDhis2HttpClientService, User } from '@iapps/ngx-dhis2-http-client';
 import { from, Observable, of, zip } from 'rxjs';
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 
@@ -9,6 +9,7 @@ import { OrgUnit } from '../models/org-unit.model';
 import { DEFAULT_ORG_UNIT_FIELDS } from '../constants/default-org-unit-fields.constants';
 import * as _ from 'lodash';
 import { getCombinedOrgUnits } from '../helpers/get-combined-org-units.helper';
+import { getUserOrgUnits } from '../helpers/get-user-org-units.helper';
 
 @Injectable()
 export class OrgUnitService {
@@ -22,14 +23,14 @@ export class OrgUnitService {
     const orgUnitFields = _.join(
       _.uniq([
         ...DEFAULT_ORG_UNIT_FIELDS,
-        ...(orgUnitFilterConfig.additionalQueryFields || [])
+        ...(orgUnitFilterConfig.additionalQueryFields || []),
       ]),
       ','
     );
     return this.httpClient
       .get('organisationUnits.json', {
         useIndexDb: true,
-        fetchOnlineIfNotExist: false
+        fetchOnlineIfNotExist: false,
       })
       .pipe(
         catchError(() => of({ organisationUnits: [] })),
@@ -78,6 +79,75 @@ export class OrgUnitService {
       );
   }
 
+  loadById(
+    id: string,
+    orgUnitFilterConfig: OrgUnitFilterConfig
+  ): Observable<OrgUnit> {
+    const orgUnitFields = _.join(
+      _.uniq([
+        ...DEFAULT_ORG_UNIT_FIELDS,
+        ...(orgUnitFilterConfig.additionalQueryFields || []),
+      ]),
+      ','
+    );
+    return zip(
+      this.httpClient.get(
+        `organisationUnits/${id}.json?fields=${orgUnitFields}`,
+        { useIndexDb: true }
+      ),
+      this.loadChildren(id, orgUnitFilterConfig)
+    ).pipe(
+      map((results: any[]) => {
+        return {
+          ...results[0],
+          children: results[1] || [],
+        };
+      })
+    );
+  }
+
+  loadChildren(
+    id: string,
+    orgUnitFilterConfig: OrgUnitFilterConfig
+  ): Observable<OrgUnit[]> {
+    const orgUnitFields = _.join(
+      _.uniq([
+        ...DEFAULT_ORG_UNIT_FIELDS,
+        ...(orgUnitFilterConfig.additionalQueryFields || []),
+      ]),
+      ','
+    );
+
+    return this.httpClient
+      .get(
+        `organisationUnits.json?fields=${orgUnitFields}&order=name:asc&filter=parent.id:eq:${id}&paging=false`,
+        { useIndexDb: true }
+      )
+      .pipe(map((res) => (res ? res.organisationUnits : [])));
+  }
+
+  loadUserOrgUnits(
+    orgUnitFilterConfig: OrgUnitFilterConfig
+  ): Observable<OrgUnit[]> {
+    return this.httpClient.me().pipe(
+      switchMap((user: User) => {
+        const userOrgUnits: OrgUnit[] = getUserOrgUnits(
+          user,
+          orgUnitFilterConfig.reportUse,
+          false
+        );
+
+        return zip(
+          ...userOrgUnits.map((orgUnit: OrgUnit) =>
+            this.loadChildren(orgUnit.id, orgUnitFilterConfig).pipe(
+              map((children: OrgUnit[]) => ({ ...orgUnit, children }))
+            )
+          )
+        );
+      })
+    );
+  }
+
   private _getInitialOrgUnits(
     userOrgUnits: string[],
     pageSize: number,
@@ -104,7 +174,7 @@ export class OrgUnitService {
   private _loadOrgUnitsByUrl(orgUnitUrl: string) {
     return this.httpClient
       .get(orgUnitUrl, {
-        useIndexDb: true
+        useIndexDb: true,
       })
       .pipe(
         map((orgUnitResult: any) => {

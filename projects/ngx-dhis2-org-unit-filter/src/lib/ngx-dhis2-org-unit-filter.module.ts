@@ -8,6 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { NgxDhis2OrgUnitLevelGroupComponent } from './components/ngx-dhis2-org-unit-level-group/ngx-dhis2-org-unit-level-group.component';
@@ -39,6 +41,8 @@ import { orgUnitFilterReducer } from './store/reducers/org-unit-filter.reducer';
     MatInputModule,
     MatListModule,
     MatIconModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
     StoreModule.forFeature('orgUnitFilter', orgUnitFilterReducer),
     EffectsModule.forFeature([
       OrgUnitLevelEffects,

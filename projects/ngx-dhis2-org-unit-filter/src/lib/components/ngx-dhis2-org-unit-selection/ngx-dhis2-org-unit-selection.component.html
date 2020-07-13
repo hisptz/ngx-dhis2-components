@@ -1,8 +1,8 @@
 <div class="ngx-dhis2-org-unit-selection-card"
-  *ngIf="highestLevelOrgUnitIds$ | withOrgUnitLoading | async as highestLevelOrgUnitParams">
+  *ngIf="highestLevelOrgUnits$ | withOrgUnitLoading | async as highestLevelOrgUnitParams">
   <div class="ngx-dhis2-org-unit-filter__disabled-overlay" *ngIf="userOrgUnitSelected"></div>
   <!--org unit tree area-->
-  <div class="ngx-dhis2-org-unit-selection__tree p-2" [style.height]="height">
+  <div class="ngx-dhis2-org-unit-selection__tree p-2" [style.height]="orgUnitFilterConfig?.contentHeight">
     <div style="color: red;" *ngIf="highestLevelOrgUnitParams.error">
       Problem loading organisation units {{highestLevelOrgUnitParams.error}}
     </div>
@@ -14,9 +14,10 @@
       <div class="ngx-dhis2-org-unit-selection_no_org_unit" *ngIf="highestLevelOrgUnitParams.value.length === 0">No
         organisation units</div>
       <div class="ngx-dhis2-org-unit-selection__tree_list">
-        <div class="ngx-dhis2-org-unit-selection__tree_item" *ngFor="let orgUnitId of highestLevelOrgUnitParams.value">
-          <ngx-dhis2-org-unit-tree-item [orgUnitId]="orgUnitId" [selectedOrgUnits]="selectedOrgUnits"
-            (activate)="onActivateOrgUnit($event)" (deactivate)="onDeactivateOrgUnit($event)">
+        <div class="ngx-dhis2-org-unit-selection__tree_item" *ngFor="let orgUnit of highestLevelOrgUnitParams.value">
+          <ngx-dhis2-org-unit-tree-item [orgUnit]="orgUnit" [selectedOrgUnits]="selectedOrgUnits"
+            [orgUnitFilterConfig]="orgUnitFilterConfig" (activate)="onActivateOrgUnit($event)"
+            (deactivate)="onDeactivateOrgUnit($event)">
           </ngx-dhis2-org-unit-tree-item>
         </div>
       </div>

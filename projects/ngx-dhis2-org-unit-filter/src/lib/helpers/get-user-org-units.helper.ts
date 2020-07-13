@@ -1,12 +1,17 @@
 import * as _ from 'lodash';
 import { User } from '@iapps/ngx-dhis2-http-client';
-export function getUserOrgUnitIds(userInfo: User, isForReport: boolean) {
+import { OrgUnit } from '../models/org-unit.model';
+export function getUserOrgUnits(
+  userInfo: User,
+  isForReport: boolean,
+  onlyId = true
+) {
   return _.uniq(
     _.map(
       isForReport
         ? userInfo.dataViewOrganisationUnits || []
         : userInfo.organisationUnits || [],
-      (orgUnit) => orgUnit.id
+      (orgUnit) => (onlyId ? orgUnit.id : orgUnit)
     )
   );
 }

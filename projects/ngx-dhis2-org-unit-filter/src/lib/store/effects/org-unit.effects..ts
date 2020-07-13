@@ -4,7 +4,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import { concatMap, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
-import { getUserOrgUnitIds } from '../../helpers/get-user-org-unit-ids.helper';
+import { getUserOrgUnits } from '../../helpers/get-user-org-units.helper';
 import { OrgUnit } from '../../models/org-unit.model';
 import { OrgUnitService } from '../../services/org-unit.service';
 import {
@@ -35,7 +35,7 @@ export class OrgUnitEffects {
               .me()
               .pipe(
                 switchMap((currentUser: User) => {
-                  const userOrgUnits = getUserOrgUnitIds(
+                  const userOrgUnits = getUserOrgUnits(
                     currentUser,
                     action.orgUnitFilterConfig.reportUse
                   );

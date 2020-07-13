@@ -13,16 +13,16 @@ export { OrgUnit } from './lib/models/org-unit.model';
 
 export {
   getOrgUnitGroups,
-  getOrgUnitGroupLoaded
+  getOrgUnitGroupLoaded,
 } from './lib/store/selectors/org-unit-group.selectors';
 export {
   getOrgUnitLevels,
-  getOrgUnitLevelLoaded
+  getOrgUnitLevelLoaded,
 } from './lib/store/selectors/org-unit-level.selectors';
 export {
   getOrgUnitById,
   getOrgUnits,
-  getOrgUnitLoaded
+  getOrgUnitLoaded,
 } from './lib/store/selectors/org-unit.selectors';
 
 export { loadOrgUnitGroups } from './lib/store/actions/org-unit-group.actions';
@@ -32,4 +32,4 @@ export { loadOrgUnitLevels } from './lib/store/actions/org-unit-level.actions';
 export { getOrgUnitsWithoutChildrenAndGroups } from './lib/helpers/get-org-units-without-children.helper';
 export { getOrgUnitsWithChildren } from './lib/helpers/get-org-units-with-children.helper';
 export { getOrgUnitsByType } from './lib/helpers/get-org-units-by-type.helper';
-export { getUserOrgUnitIds } from './lib/helpers/get-user-org-unit-ids.helper';
+export { getUserOrgUnits as getUserOrgUnitIds } from './lib/helpers/get-user-org-units.helper';
