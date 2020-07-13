@@ -9,25 +9,25 @@ export function filterDataItem(dataItem: any, filterList: any[]) {
     console.log(dataValue);
     switch (condition) {
       case 'ilike':
-        return (dataItem[attribute] || '').indexOf(filterValue) !== -1;
+        return (dataValue || '').indexOf(filterValue) !== -1;
 
       case 'eq':
-        return dataItem[attribute] === filterValue;
+        return dataValue === filterValue;
 
       case 'le':
-        return parseInt(dataItem[attribute], 10) <= parseInt(filterValue, 10);
+        return parseInt(dataValue, 10) <= parseInt(filterValue, 10);
 
       case 'lt':
-        return parseInt(dataItem[attribute], 10) < parseInt(filterValue, 10);
+        return parseInt(dataValue, 10) < parseInt(filterValue, 10);
 
       case 'ge':
-        return parseInt(dataItem[attribute], 10) >= parseInt(filterValue, 10);
+        return parseInt(dataValue, 10) >= parseInt(filterValue, 10);
 
       case 'gt':
-        return parseInt(dataItem[attribute], 10) > parseInt(filterValue, 10);
+        return parseInt(dataValue, 10) > parseInt(filterValue, 10);
 
       case 'in':
-        return (filterValue || '').indexOf(dataItem[attribute]) !== -1;
+        return (filterValue || '').indexOf(dataValue) !== -1;
 
       default:
         return false;

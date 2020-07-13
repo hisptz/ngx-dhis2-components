@@ -148,18 +148,18 @@ describe('Given filter parameter to filter data that is greater than filter attr
   });
 });
 
-// describe('Given filter parameter to filter data equaling nested filter attribute value', () => {
-//   const filterList = [
-//     {
-//       attribute: 'parent.id',
-//       condition: 'eq',
-//       filterValue: 'two',
-//     },
-//   ];
+describe('Given filter parameter to filter data equaling nested filter attribute value', () => {
+  const filterList = [
+    {
+      attribute: 'parent.id',
+      condition: 'eq',
+      filterValue: 'two',
+    },
+  ];
 
-//   const filterStatus = filterDataItem(dataItem, filterList);
+  const filterStatus = filterDataItem(dataItem, filterList);
 
-//   it('should return true if filter value matches', () => {
-//     expect(filterStatus).toBeTruthy();
-//   });
-// });
+  it('should return true if filter value matches', () => {
+    expect(filterStatus).toBeTruthy();
+  });
+});
