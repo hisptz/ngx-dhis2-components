@@ -1,6 +1,12 @@
 export function filterDataItem(dataItem: any, filterList: any[]) {
   return (filterList || []).some((filterItem: any) => {
     const { attribute, condition, filterValue } = filterItem;
+    let dataValue;
+    (attribute || '').split('.').forEach((attributeKey: string) => {
+      dataValue = dataValue ? dataValue[attributeKey] : dataItem[attributeKey];
+    });
+
+    console.log(dataValue);
     switch (condition) {
       case 'ilike':
         return (dataItem[attribute] || '').indexOf(filterValue) !== -1;

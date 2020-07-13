@@ -66,7 +66,6 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<OrgUnitFilterState>,
-    private httpService: NgxDhis2HttpClientService,
     private orgUnitService: OrgUnitService
   ) {
     this.selectedOrgUnitItems = [];

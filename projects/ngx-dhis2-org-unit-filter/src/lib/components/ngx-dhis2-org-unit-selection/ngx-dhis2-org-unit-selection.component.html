@@ -16,7 +16,7 @@
       <div class="ngx-dhis2-org-unit-selection__tree_list">
         <div class="ngx-dhis2-org-unit-selection__tree_item" *ngFor="let orgUnit of highestLevelOrgUnitParams.value">
           <ngx-dhis2-org-unit-tree-item [orgUnit]="orgUnit" [selectedOrgUnits]="selectedOrgUnits"
-            [orgUnitFilterConfig]="orgUnitFilterConfig" (activate)="onActivateOrgUnit($event)"
+            [orgUnitFilterConfig]="orgUnitFilterConfig" [expanded]="true" (activate)="onActivateOrgUnit($event)"
             (deactivate)="onDeactivateOrgUnit($event)">
           </ngx-dhis2-org-unit-tree-item>
         </div>
