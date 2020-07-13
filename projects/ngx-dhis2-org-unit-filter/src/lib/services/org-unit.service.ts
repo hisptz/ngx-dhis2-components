@@ -86,7 +86,6 @@ export class OrgUnitService {
 
   loadById(
     id: string,
-    level: number,
     orgUnitFilterConfig: OrgUnitFilterConfig
   ): Observable<OrgUnit> {
     const orgUnitFields = _.join(
@@ -96,20 +95,32 @@ export class OrgUnitService {
       ]),
       ','
     );
-    return zip(
-      this.httpClient.get(
-        `organisationUnits/${id}.json?fields=${orgUnitFields}`,
-        { useIndexDb: true }
-      ),
-      this.loadChildren(id, level, orgUnitFilterConfig)
-    ).pipe(
-      map((results: any[]) => {
-        return {
-          ...results[0],
-          children: results[1] || [],
-        };
-      })
+    return this.httpClient.get(
+      `organisationUnits/${id}.json?fields=${orgUnitFields}`,
+      { useIndexDb: true }
     );
+  }
+
+  loadByIds(
+    ids: string[],
+    orgUnitFilterConfig: OrgUnitFilterConfig
+  ): Observable<OrgUnit[]> {
+    const orgUnitFields = _.join(
+      _.uniq([
+        ...DEFAULT_ORG_UNIT_FIELDS,
+        ...(orgUnitFilterConfig.additionalQueryFields || []),
+      ]),
+      ','
+    );
+
+    return this.httpClient
+      .get(
+        `organisationUnits.json?fields=${orgUnitFields}&filter=id:in:[${ids.join(
+          ','
+        )}]&paging=false`,
+        { useIndexDb: true }
+      )
+      .pipe(map((res: any) => (res ? res.organisationUnits : [])));
   }
 
   loadChildren(

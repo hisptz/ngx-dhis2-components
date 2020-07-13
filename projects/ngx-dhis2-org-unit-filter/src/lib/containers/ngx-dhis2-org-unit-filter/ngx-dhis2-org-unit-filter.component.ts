@@ -28,15 +28,14 @@ import {
   getOrgUnitGroupBasedOnOrgUnitsSelected,
   getOrgUnitGroupLoading,
 } from '../../store/selectors/org-unit-group.selectors';
-import {
-  getOrgUnitLevelBasedOnOrgUnitsSelected,
-  getOrgUnitLevelLoading,
-} from '../../store/selectors/org-unit-level.selectors';
+import { getOrgUnitLevelLoading } from '../../store/selectors/org-unit-level.selectors';
 import {
   getOrgUnitLoaded,
   getOrgUnitLoading,
   getUserOrgUnitsBasedOnOrgUnitsSelected,
 } from '../../store/selectors/org-unit.selectors';
+import { OrgUnitLevelService } from '../../services/org-unit-level.service';
+import { getOrgUnitLevelBySelectedOrgUnits } from '../../helpers/get-org-unit-level-by-selected-org-unit.helper';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -65,7 +64,8 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<OrgUnitFilterState>,
-    private orgUnitService: OrgUnitService
+    private orgUnitService: OrgUnitService,
+    private orgUnitLevelService: OrgUnitLevelService
   ) {
     this.selectedOrgUnitItems = [];
   }
@@ -110,11 +110,29 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _setOrUpdateOrgUnitProperties() {
+  private async _setOrUpdateOrgUnitProperties() {
+    const selectedOrgUnits =
+      this.selectedOrgUnits.length > 0
+        ? await this.orgUnitService
+            .loadByIds(
+              this.selectedOrgUnits.map((orgUnit: OrgUnit) => orgUnit.id),
+              this.orgUnitFilterConfig
+            )
+            .toPromise()
+        : [];
+
     // set or update org unit levels
-    this.orgUnitLevels$ = this.store.select(
-      getOrgUnitLevelBasedOnOrgUnitsSelected(this.selectedOrgUnitItems)
-    );
+    this.orgUnitLevels$ = this.orgUnitLevelService
+      .loadAll()
+      .pipe(
+        map((orgUnitLevels: OrgUnitLevel[]) =>
+          getOrgUnitLevelBySelectedOrgUnits(
+            orgUnitLevels,
+            selectedOrgUnits,
+            this.selectedOrgUnitItems
+          )
+        )
+      );
 
     // set or update org unit groups
     this.orgUnitGroups$ = this.store.select(
