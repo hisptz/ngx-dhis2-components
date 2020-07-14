@@ -7,7 +7,6 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { Store } from '@ngrx/store';
 import * as _ from 'lodash';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -26,11 +25,6 @@ import { OrgUnit } from '../../models/org-unit.model';
 import { OrgUnitGroupService } from '../../services/org-unit-group.service';
 import { OrgUnitLevelService } from '../../services/org-unit-level.service';
 import { OrgUnitService } from '../../services/org-unit.service';
-import { OrgUnitFilterState } from '../../store/reducers/org-unit-filter.reducer';
-import {
-  getOrgUnitLoaded,
-  getOrgUnitLoading,
-} from '../../store/selectors/org-unit.selectors';
 
 @Component({
   // tslint:disable-next-line:component-selector
