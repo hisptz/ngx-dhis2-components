@@ -5,7 +5,7 @@
   </mat-form-field>
   <div class="ngx-dhis2-org-unit-level-group__card">
     <div class="ngx-dhis2-org-unit-level-group__inner-list" [style.height]="'calc(' + height + ' - 60px)'">
-      <mat-list *ngIf="orgUnitFilterConfig.showOrgUnitLevelSection">
+      <mat-list *ngIf="orgUnitFilterConfig?.showOrgUnitLevelSection">
         <div mat-subheader>
           Levels
           <span class="ml-1 badge badge-secondary level-group-badge"
@@ -35,7 +35,7 @@
         </mat-list-item>
       </mat-list>
 
-      <mat-list *ngIf="orgUnitFilterConfig.showOrgUnitGroupSection">
+      <mat-list *ngIf="orgUnitFilterConfig?.showOrgUnitGroupSection">
         <div mat-subheader>
           Groups
           <span class="ml-1 badge badge-secondary level-group-badge"

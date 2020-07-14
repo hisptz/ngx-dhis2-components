@@ -13,10 +13,12 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DEFAULT_ORG_UNIT_FILTER_CONFIG } from '../../constants/default-org-unit-filter-config.constant';
 import { OrgUnitTypes } from '../../constants/org-unit-types.constants';
+import { USER_ORG_UNITS } from '../../constants/user-org-units.constants';
 import { getOrgUnitGroupsWithSelected } from '../../helpers/get-org-unit-groups-with-selected.helper';
 import { getOrgUnitLevelBySelectedOrgUnits } from '../../helpers/get-org-unit-level-by-selected-org-unit.helper';
 import { getOrgUnitSelection } from '../../helpers/get-org-unit-selection.helper';
 import { getSelectedOrgUnits } from '../../helpers/get-selected-org-units.helper';
+import { updateOrgUnitListWithSelectionStatus } from '../../helpers/update-org-unit-list-with-selection-status.helper';
 import { OrgUnitFilterConfig } from '../../models/org-unit-filter-config.model';
 import { OrgUnitGroup } from '../../models/org-unit-group.model';
 import { OrgUnitLevel } from '../../models/org-unit-level.model';
@@ -24,16 +26,10 @@ import { OrgUnit } from '../../models/org-unit.model';
 import { OrgUnitGroupService } from '../../services/org-unit-group.service';
 import { OrgUnitLevelService } from '../../services/org-unit-level.service';
 import { OrgUnitService } from '../../services/org-unit.service';
-import { loadOrgUnitGroups } from '../../store/actions/org-unit-group.actions';
-import { loadOrgUnitLevels } from '../../store/actions/org-unit-level.actions';
-import { loadOrgUnits } from '../../store/actions/org-unit.actions';
 import { OrgUnitFilterState } from '../../store/reducers/org-unit-filter.reducer';
-import { getOrgUnitGroupLoading } from '../../store/selectors/org-unit-group.selectors';
-import { getOrgUnitLevelLoading } from '../../store/selectors/org-unit-level.selectors';
 import {
   getOrgUnitLoaded,
   getOrgUnitLoading,
-  getUserOrgUnitsBasedOnOrgUnitsSelected,
 } from '../../store/selectors/org-unit.selectors';
 
 @Component({
@@ -49,8 +45,8 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
 
   orgUnitLevels$: Observable<OrgUnitLevel[]>;
   orgUnitGroups$: Observable<OrgUnitGroup[]>;
-  userOrgUnits$: Observable<OrgUnit[]>;
-  isAnyUserOrgUnitSelected$: Observable<boolean>;
+  userOrgUnits: OrgUnit[];
+  isAnyUserOrgUnitSelected: boolean;
   loadingOrgUnitLevels: boolean;
   loadingOrgUnitGroups: boolean;
   loadingOrgUnits$: Observable<boolean>;
@@ -136,17 +132,14 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
       );
 
     // set or update user org units
-    this.userOrgUnits$ = this.store.select(
-      getUserOrgUnitsBasedOnOrgUnitsSelected(this.selectedOrgUnitItems)
+    this.userOrgUnits = updateOrgUnitListWithSelectionStatus(
+      USER_ORG_UNITS,
+      this.selectedOrgUnitItems
     );
 
     // set or update user org unit selection status
-    this.isAnyUserOrgUnitSelected$ = this.userOrgUnits$.pipe(
-      map((userOrgUnits: OrgUnit[]) =>
-        (userOrgUnits || []).some(
-          (userOrgUnit: OrgUnit) => userOrgUnit.selected
-        )
-      )
+    this.isAnyUserOrgUnitSelected = (this.userOrgUnits || []).some(
+      (userOrgUnit: OrgUnit) => userOrgUnit.selected
     );
   }
 

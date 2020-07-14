@@ -8,18 +8,13 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { Store } from '@ngrx/store';
 import * as _ from 'lodash';
 import { Observable, of } from 'rxjs';
-import { take } from 'rxjs/operators';
-
-import { isOrgUnitSelected } from '../../helpers/is-org-unit-selected.helper';
-import { OrgUnit } from '../../models/org-unit.model';
-import { OrgUnitFilterState } from '../../store/reducers/org-unit-filter.reducer';
-import { getOrgUnitById } from '../../store/selectors/org-unit.selectors';
-import { OrgUnitService } from '../../services/org-unit.service';
-import { OrgUnitFilterConfig } from '../../models/org-unit-filter-config.model';
 import { getSelectedOrgUnitChildrenCount } from '../../helpers/get-selected-org-unit-children-count.helper';
+import { isOrgUnitSelected } from '../../helpers/is-org-unit-selected.helper';
+import { OrgUnitFilterConfig } from '../../models/org-unit-filter-config.model';
+import { OrgUnit } from '../../models/org-unit.model';
+import { OrgUnitService } from '../../services/org-unit.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -44,10 +39,7 @@ export class NgxDhis2OrgUnitTreeItemComponent implements OnInit, OnChanges {
   selected: boolean;
   selectedChildrenCount: number;
 
-  constructor(
-    private store: Store<OrgUnitFilterState>,
-    private orgUnitService: OrgUnitService
-  ) {}
+  constructor(private orgUnitService: OrgUnitService) {}
 
   ngOnChanges(simpleChanges: SimpleChanges) {
     if (
@@ -68,11 +60,11 @@ export class NgxDhis2OrgUnitTreeItemComponent implements OnInit, OnChanges {
             this.orgUnitFilterConfig
           );
 
-      this.setOrgUnitProperties();
+      this.setOrgUnitProperties(true);
     }
   }
 
-  setOrgUnitProperties() {
+  setOrgUnitProperties(firstTime?: boolean) {
     // get org unit selection status
     this.selected = isOrgUnitSelected(
       this.orgUnit.id,
@@ -84,7 +76,9 @@ export class NgxDhis2OrgUnitTreeItemComponent implements OnInit, OnChanges {
       this.selectedOrgUnits
     );
 
-    this.expanded = this.selectedChildrenCount > 0 || this.expanded;
+    if (firstTime) {
+      this.expanded = this.selectedChildrenCount > 0 || this.expanded;
+    }
   }
 
   onToggleOrgUnitChildren(e) {
