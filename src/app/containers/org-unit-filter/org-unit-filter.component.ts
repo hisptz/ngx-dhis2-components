@@ -26,6 +26,7 @@ export class OrgUnitFilterComponent implements OnInit {
   selectedOrgUnitItems: any[] = [
     { level: 3, name: 'Gbo', id: 'YmmeuGbqOwR' },
     { level: 4, name: 'Gbaiima CHC', id: 'jGYT5U5qJP6' },
+    { level: 4, name: 'Niagorehun MCHP', id: 'WOk7efLlLSj' },
     {
       id: 'OU_GROUP.AQQCxQqDxLe',
       name: 'Konta CHP',

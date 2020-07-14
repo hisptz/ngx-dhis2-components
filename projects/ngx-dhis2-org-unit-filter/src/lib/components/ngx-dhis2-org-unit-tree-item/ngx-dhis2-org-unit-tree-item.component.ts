@@ -16,12 +16,10 @@ import { take } from 'rxjs/operators';
 import { isOrgUnitSelected } from '../../helpers/is-org-unit-selected.helper';
 import { OrgUnit } from '../../models/org-unit.model';
 import { OrgUnitFilterState } from '../../store/reducers/org-unit-filter.reducer';
-import {
-  getOrgUnitById,
-  getSelectedOrgUnitChildrenCount,
-} from '../../store/selectors/org-unit.selectors';
+import { getOrgUnitById } from '../../store/selectors/org-unit.selectors';
 import { OrgUnitService } from '../../services/org-unit.service';
 import { OrgUnitFilterConfig } from '../../models/org-unit-filter-config.model';
+import { getSelectedOrgUnitChildrenCount } from '../../helpers/get-selected-org-unit-children-count.helper';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -44,7 +42,7 @@ export class NgxDhis2OrgUnitTreeItemComponent implements OnInit, OnChanges {
   orgUnit$: Observable<OrgUnit>;
   orgUnitChildren$: Observable<OrgUnit[]>;
   selected: boolean;
-  selectedChildrenCount$: Observable<number>;
+  selectedChildrenCount: number;
 
   constructor(
     private store: Store<OrgUnitFilterState>,
@@ -70,24 +68,23 @@ export class NgxDhis2OrgUnitTreeItemComponent implements OnInit, OnChanges {
             this.orgUnitFilterConfig
           );
 
-      this.setOrgUnitProperties(true);
+      this.setOrgUnitProperties();
     }
   }
 
-  setOrgUnitProperties(firstChange?: boolean) {
+  setOrgUnitProperties() {
     // get org unit selection status
     this.selected = isOrgUnitSelected(
       this.orgUnit.id,
       this.selectedOrgUnits || []
     );
 
-    // Get count of selected children for this organisation unit
-    this.selectedChildrenCount$ = this.store.select(
-      getSelectedOrgUnitChildrenCount(
-        this.orgUnit.id,
-        this.selectedOrgUnits || []
-      )
+    this.selectedChildrenCount = getSelectedOrgUnitChildrenCount(
+      this.orgUnit.id,
+      this.selectedOrgUnits
     );
+
+    this.expanded = this.selectedChildrenCount > 0 || this.expanded;
   }
 
   onToggleOrgUnitChildren(e) {

@@ -19,8 +19,8 @@
         }" (ngModelChange)="onToggleOrgUnit(orgUnit)">
       {{ orgUnit?.name }}
     </mat-checkbox>
-    <div class="badge badge-secondary ngx-dhis2-org-unit-count" *ngIf="(selectedChildrenCount$ | async) > 0">
-      {{ selectedChildrenCount$ | async }}
+    <div class="badge badge-secondary ngx-dhis2-org-unit-count" *ngIf="selectedChildrenCount > 0">
+      {{selectedChildrenCount}}
     </div>
   </div>
   <!-- end of org unit title area -->
