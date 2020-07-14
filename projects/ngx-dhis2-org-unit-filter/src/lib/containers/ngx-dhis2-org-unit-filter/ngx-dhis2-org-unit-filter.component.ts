@@ -10,7 +10,7 @@ import {
 import { Store } from '@ngrx/store';
 import * as _ from 'lodash';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { DEFAULT_ORG_UNIT_FILTER_CONFIG } from '../../constants/default-org-unit-filter-config.constant';
 import { OrgUnitTypes } from '../../constants/org-unit-types.constants';
 import { USER_ORG_UNITS } from '../../constants/user-org-units.constants';
@@ -49,8 +49,7 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
   isAnyUserOrgUnitSelected: boolean;
   loadingOrgUnitLevels: boolean;
   loadingOrgUnitGroups: boolean;
-  loadingOrgUnits$: Observable<boolean>;
-  orgUnitLoaded$: Observable<boolean>;
+  loadingOrgUnits: boolean;
   topOrgUnitLevel$: Observable<number>;
   highestLevelOrgUnits$: Observable<OrgUnit[]>;
   selectedOrgUnits$: Observable<OrgUnit[]>;
@@ -59,12 +58,14 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
   @Output() orgUnitClose: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(
-    private store: Store<OrgUnitFilterState>,
     private orgUnitService: OrgUnitService,
     private orgUnitLevelService: OrgUnitLevelService,
     private orgUnitGroupService: OrgUnitGroupService
   ) {
     this.selectedOrgUnitItems = [];
+    this.loadingOrgUnits = true;
+    this.loadingOrgUnitLevels = true;
+    this.loadingOrgUnitGroups = true;
   }
 
   get selectedOrgUnits(): any[] {
@@ -78,9 +79,13 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
       ...(this.orgUnitFilterConfig || {}),
     };
 
-    this.highestLevelOrgUnits$ = this.orgUnitService.loadUserOrgUnits(
-      this.orgUnitFilterConfig
-    );
+    this.highestLevelOrgUnits$ = this.orgUnitService
+      .loadUserOrgUnits(this.orgUnitFilterConfig)
+      .pipe(
+        tap(() => {
+          this.loadingOrgUnits = false;
+        })
+      );
 
     if (!this.selectedOrgUnitItems) {
       this.selectedOrgUnitItems = [];
@@ -88,8 +93,6 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
 
     // Set organisation unit information
     this._setOrUpdateOrgUnitProperties();
-    this.loadingOrgUnits$ = this.store.select(getOrgUnitLoading);
-    this.orgUnitLoaded$ = this.store.select(getOrgUnitLoaded);
   }
 
   ngOnDestroy() {
@@ -110,26 +113,28 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
     const selectedOrgUnits = await this.selectedOrgUnits$.toPromise();
 
     // set or update org unit levels
-    this.orgUnitLevels$ = this.orgUnitLevelService
-      .loadAll()
-      .pipe(
-        map((orgUnitLevels: OrgUnitLevel[]) =>
-          getOrgUnitLevelBySelectedOrgUnits(
-            orgUnitLevels,
-            selectedOrgUnits,
-            this.selectedOrgUnitItems
-          )
+    this.orgUnitLevels$ = this.orgUnitLevelService.loadAll().pipe(
+      map((orgUnitLevels: OrgUnitLevel[]) =>
+        getOrgUnitLevelBySelectedOrgUnits(
+          orgUnitLevels,
+          selectedOrgUnits,
+          this.selectedOrgUnitItems
         )
-      );
+      ),
+      tap(() => {
+        this.loadingOrgUnitLevels = false;
+      })
+    );
 
     // set or update org unit groups
-    this.orgUnitGroups$ = this.orgUnitGroupService
-      .loadAll()
-      .pipe(
-        map((orgUnitGroups: OrgUnitGroup[]) =>
-          getOrgUnitGroupsWithSelected(orgUnitGroups, this.selectedOrgUnitItems)
-        )
-      );
+    this.orgUnitGroups$ = this.orgUnitGroupService.loadAll().pipe(
+      map((orgUnitGroups: OrgUnitGroup[]) =>
+        getOrgUnitGroupsWithSelected(orgUnitGroups, this.selectedOrgUnitItems)
+      ),
+      tap(() => {
+        this.loadingOrgUnitGroups = false;
+      })
+    );
 
     // set or update user org units
     this.userOrgUnits = updateOrgUnitListWithSelectionStatus(

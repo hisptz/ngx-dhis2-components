@@ -104,7 +104,7 @@ export class NgxDhis2OrgUnitTreeItemComponent implements OnInit, OnChanges {
     this.activate.emit(organisationUnit);
   }
 
-  trackByFn(index, item) {
-    return item;
+  trackByOrgUnit(index: number, orgUnit: OrgUnit) {
+    return orgUnit ? orgUnit.id : index;
   }
 }

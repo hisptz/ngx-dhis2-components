@@ -77,10 +77,12 @@ mat-list-item {
   height: 35px !important;
 }
 
-.level-group-badge {
-  font-weight: 400;
-  padding: 5px;
+.ngx-dhis2-level-group-selected-count {
+  font-size: 12px;
+  padding: 3px 5px;
   border-radius: 2px;
+  font-weight: 400;
+  color: gray;
 }
 
 .org-unit-list-item {

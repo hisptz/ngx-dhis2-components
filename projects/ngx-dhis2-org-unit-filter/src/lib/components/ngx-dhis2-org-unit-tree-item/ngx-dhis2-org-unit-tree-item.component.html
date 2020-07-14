@@ -19,8 +19,8 @@
         }" (ngModelChange)="onToggleOrgUnit(orgUnit)">
       {{ orgUnit?.name }}
     </mat-checkbox>
-    <div class="badge badge-secondary ngx-dhis2-org-unit-count" *ngIf="selectedChildrenCount > 0">
-      {{selectedChildrenCount}}
+    <div class="ngx-dhis2-org-unit-count" *ngIf="selectedChildrenCount > 0">
+      ({{selectedChildrenCount}})
     </div>
   </div>
   <!-- end of org unit title area -->
@@ -29,7 +29,7 @@
   <div [style.margin-left]="'25px'" *ngIf="orgUnitChildrenParams?.value?.length > 0 && expanded">
     <div class="ngx-dhis2-org-unit-tree-item-child-item" *ngFor="
           let orgUnitChild of orgUnitChildrenParams?.value;
-          trackBy: trackByFn
+          trackBy: trackByOrgUnit
         ">
       <ngx-dhis2-org-unit-tree-item [orgUnit]="orgUnitChild" [orgUnitFilterConfig]="orgUnitFilterConfig"
         (activate)="onActivateOu($event)" (deactivate)="onDeactivateOu($event)" [selectedOrgUnits]="selectedOrgUnits"

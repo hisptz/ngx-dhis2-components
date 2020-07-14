@@ -21,7 +21,6 @@ import { OrgUnitFilterConfig } from '../../models/org-unit-filter-config.model';
 export class NgxDhis2OrgUnitSelectionComponent implements OnInit {
   @Input() selectedOrgUnits: any[];
   @Input() loadingOrgUnits: boolean;
-  @Input() orgUnitsLoaded: boolean;
   @Input() userOrgUnitSelected: boolean;
   @Input() highestLevelOrgUnits$: Observable<OrgUnit[]>;
   @Input() orgUnitFilterConfig: OrgUnitFilterConfig;
