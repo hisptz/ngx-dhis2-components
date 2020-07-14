@@ -1,38 +1,23 @@
-<div class="ngx-dhis2-org-unit-selection-card">
+<div class="ngx-dhis2-org-unit-selection-card"
+  *ngIf="highestLevelOrgUnits$ | withOrgUnitLoading | async as highestLevelOrgUnitParams">
   <div class="ngx-dhis2-org-unit-filter__disabled-overlay" *ngIf="userOrgUnitSelected"></div>
   <!--org unit tree area-->
-  <div class="ngx-dhis2-org-unit-selection__tree p-2" [style.height]="height">
-    <!-- loading org units -->
-    <div class="ngx-dhis2-org-unit-selection__loading" *ngIf="loadingOrgUnits">
-      <!-- loading org units -->
-      <div style="width: 100%;  padding: 7px;">
-        <div style="height: 7px; margin-bottom: 3px; width: 30%">
-          <app-ngx-dhis2-org-unit-progress></app-ngx-dhis2-org-unit-progress>
-        </div>
-        <div style="height: 7px; margin-bottom: 3px; width: 50%">
-          <app-ngx-dhis2-org-unit-progress></app-ngx-dhis2-org-unit-progress>
-        </div>
-        <div style="height: 7px; margin-bottom: 3px; width: 70%">
-          <app-ngx-dhis2-org-unit-progress></app-ngx-dhis2-org-unit-progress>
-        </div>
-        <div style="height: 7px; margin-bottom: 3px; width: 90%">
-          <app-ngx-dhis2-org-unit-progress></app-ngx-dhis2-org-unit-progress>
-        </div>
-        <div style="height: 7px; margin-bottom: 3px; width: 98%">
-          <app-ngx-dhis2-org-unit-progress></app-ngx-dhis2-org-unit-progress>
-        </div>
-      </div>
-      <!-- end of loading org units -->
+  <div class="ngx-dhis2-org-unit-selection__tree p-2" [style.height]="orgUnitFilterConfig?.contentHeight">
+    <div style="color: red;" *ngIf="highestLevelOrgUnitParams.error">
+      Problem loading organisation units {{highestLevelOrgUnitParams.error}}
     </div>
-    <!-- end of loading org units -->
 
-    <div *ngIf="highestLevelOrgUnitIds$ | async as highestLevelOrgUnitIds">
-      <div class="ngx-dhis2-org-unit-selection_no_org_unit"
-        *ngIf="orgUnitsLoaded && highestLevelOrgUnitIds.length === 0">No organisation units</div>
+    <ngx-dhis2-org-unit-selection-loading *ngIf="highestLevelOrgUnitParams.loading">
+    </ngx-dhis2-org-unit-selection-loading>
+
+    <div *ngIf="!highestLevelOrgUnitParams.loading && highestLevelOrgUnitParams.value">
+      <div class="ngx-dhis2-org-unit-selection_no_org_unit" *ngIf="highestLevelOrgUnitParams.value.length === 0">No
+        organisation units</div>
       <div class="ngx-dhis2-org-unit-selection__tree_list">
-        <div class="ngx-dhis2-org-unit-selection__tree_item" *ngFor="let orgUnitId of highestLevelOrgUnitIds$ | async">
-          <ngx-dhis2-org-unit-tree-item [orgUnitId]="orgUnitId" [selectedOrgUnits]="selectedOrgUnits"
-            (activate)="onActivateOrgUnit($event)" (deactivate)="onDeactivateOrgUnit($event)">
+        <div class="ngx-dhis2-org-unit-selection__tree_item" *ngFor="let orgUnit of highestLevelOrgUnitParams.value">
+          <ngx-dhis2-org-unit-tree-item [orgUnit]="orgUnit" [selectedOrgUnits]="selectedOrgUnits"
+            [orgUnitFilterConfig]="orgUnitFilterConfig" [expanded]="true" (activate)="onActivateOrgUnit($event)"
+            (deactivate)="onDeactivateOrgUnit($event)">
           </ngx-dhis2-org-unit-tree-item>
         </div>
       </div>

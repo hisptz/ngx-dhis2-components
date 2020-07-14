@@ -15,7 +15,7 @@ export class OrgUnitFilterComponent implements OnInit {
     showUserOrgUnitSection: true,
     showOrgUnitLevelGroupSection: true,
     showOrgUnitGroupSection: true,
-    showOrgUnitLevelSection: false,
+    showOrgUnitLevelSection: true,
     reportUse: false,
     additionalQueryFields: ['dataSets'],
     batchSize: 400,
@@ -24,7 +24,9 @@ export class OrgUnitFilterComponent implements OnInit {
     emitOnSelection: true,
   };
   selectedOrgUnitItems: any[] = [
-    { id: 'O6uvpzGd5pu', name: 'Bo', level: 3 },
+    { level: 3, name: 'Gbo', id: 'YmmeuGbqOwR' },
+    { level: 4, name: 'Gbaiima CHC', id: 'jGYT5U5qJP6' },
+    { level: 4, name: 'Niagorehun MCHP', id: 'WOk7efLlLSj' },
     {
       id: 'OU_GROUP.AQQCxQqDxLe',
       name: 'Konta CHP',

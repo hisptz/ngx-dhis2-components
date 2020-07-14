@@ -34,7 +34,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       version: 1,
       models: {
         users: 'id',
-        organisationUnitLevels: 'id',
+        organisationUnitLevels: 'id,level',
         organisationUnits: 'id,name,level',
         organisationUnitGroups: 'id',
         dataStore_scorecards: 'id',

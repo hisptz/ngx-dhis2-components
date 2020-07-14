@@ -6,7 +6,10 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
+    "test-http-client": "ng test ngx-dhis2-http-client -- --no-watch --no-progress --code-coverage --browsers=ChromeHeadlessCI",
+    "test-org-unit-filter": "ng test ngx-dhis2-org-unit-filter -- --no-watch --no-progress --code-coverage --browsers=ChromeHeadlessCI",
     "test:headless": "npm run test -- --no-watch --no-progress --code-coverage --browsers=ChromeHeadlessCI",
+    "test:ci": "npm run test-http-client && npm run test-org-unit-filter",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "e2e:headless": "npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js",
@@ -24,7 +27,8 @@
     "publish-menu": "npm run build-menu && cd dist/ngx-dhis2-menu && npm publish --access public && cd ../../",
     "publish-period-filter": "npm run build-period-filter && cd dist/ngx-dhis2-period-filter && npm publish --access public && cd ../../",
     "publish-selection-filters": "npm run build-selection-filters && cd dist/ngx-dhis2-selection-filters && npm publish --access public && cd ../../",
-    "pack-http-client": "npm run build-lib && cd dist/ngx-dhis2-http-client && npm pack"
+    "pack-http-client": "npm run build-http-client && cd dist/ngx-dhis2-http-client && npm pack",
+    "build-http-client:dev": "npm run pack-http-client && npm install dist/ngx-dhis2-http-client/*.tgz"
   },
   "private": true,
   "dependencies": {
@@ -40,7 +44,7 @@
     "@angular/router": "~9.1.9",
     "@iapps/function-analytics": "^1.0.0-beta.21",
     "@iapps/ngx-dhis2-data-filter": "^1.0.0-beta.18",
-    "@iapps/ngx-dhis2-http-client": "^2.0.8-rc.2",
+    "@iapps/ngx-dhis2-http-client": "^2.0.8-rc.4",
     "@iapps/ngx-dhis2-org-unit-filter": "^1.1.22",
     "@iapps/ngx-dhis2-period-filter": "^2.0.0-rc.1",
     "@iapps/ngx-dhis2-validation-rule-group-filter": "^1.0.0-beta.2",

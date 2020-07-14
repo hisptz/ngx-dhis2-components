@@ -1,8 +1,7 @@
 <div class="ngx-dhis2-org-unit-filter__container">
   <!--user organisation unit selection options-->
-  <ngx-dhis2-user-org-unit-selection *ngIf="orgUnitFilterConfig.showUserOrgUnitSection"
-    [userOrgUnits]="userOrgUnits$ | async" (activateUserOrgUnit)="onSelectOrgUnit($event)"
-    (deactivateUserOrgUnit)="onDeselectOrgUnit($event)">
+  <ngx-dhis2-user-org-unit-selection *ngIf="orgUnitFilterConfig.showUserOrgUnitSection" [userOrgUnits]="userOrgUnits"
+    (activateUserOrgUnit)="onSelectOrgUnit($event)" (deactivateUserOrgUnit)="onDeselectOrgUnit($event)">
   </ngx-dhis2-user-org-unit-selection>
   <!--end of user organisation unit selection options-->
 
@@ -10,9 +9,9 @@
   <div class="ngx-dhis2-org-unit-filter__selection-container">
     <div [style.width]="'100%'">
       <!--organisation unit selection area-->
-      <ngx-dhis2-org-unit-selection [selectedOrgUnits]="selectedOrgUnits" [loadingOrgUnits]="loadingOrgUnits$ | async"
-        [orgUnitsLoaded]="orgUnitLoaded$ | async" [userOrgUnitSelected]="isAnyUserOrgUnitSelected$ | async"
-        [height]="orgUnitFilterConfig.contentHeight" (activateOrgUnit)="onSelectOrgUnit($event)"
+      <ngx-dhis2-org-unit-selection [selectedOrgUnits]="selectedOrgUnits$ | async" [loadingOrgUnits]="loadingOrgUnits"
+        [userOrgUnitSelected]="isAnyUserOrgUnitSelected" [orgUnitFilterConfig]="orgUnitFilterConfig"
+        [highestLevelOrgUnits$]="highestLevelOrgUnits$" (activateOrgUnit)="onSelectOrgUnit($event)"
         (deactivateOrgUnit)="onDeselectOrgUnit($event)" (deactivateAllOrgUnit)="onDeselectAllOrgUnits()">
       </ngx-dhis2-org-unit-selection>
       <!--end of organisation unit selection area-->
@@ -23,8 +22,8 @@
         <!--organisation unit level group section -->
         <div class="ngx-dhis2-org-unit-filter__org-unit-level-group">
           <ngx-dhis2-org-unit-level-group [orgUnitLevels]="orgUnitLevels$ | async"
-            [orgUnitGroups]="orgUnitGroups$ | async" [loadingLevels]="loadingOrgUnitLevels$ | async"
-            [loadingGroups]="loadingOrgUnitGroups$ | async" [orgUnitFilterConfig]="orgUnitFilterConfig"
+            [orgUnitGroups]="orgUnitGroups$ | async" [loadingLevels]="loadingOrgUnitLevels"
+            [loadingGroups]="loadingOrgUnitGroups" [orgUnitFilterConfig]="orgUnitFilterConfig"
             [height]="orgUnitFilterConfig.contentHeight" (activateOrgUnitLevelOrGroup)="onSelectOrgUnit($event)"
             (deactivateOrgUnitLevelOrGroup)="onDeselectOrgUnit($event)"></ngx-dhis2-org-unit-level-group>
         </div>

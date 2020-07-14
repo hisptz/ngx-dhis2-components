@@ -10,7 +10,7 @@ export function filterIndexDBData(data, filterParams: string[]) {
     return {
       attribute: splitedFilterString[0],
       condition: splitedFilterString[1],
-      filterValue: splitedFilterString[2]
+      filterValue: splitedFilterString[2],
     };
   });
 

@@ -1,13 +1,13 @@
 import { createSelector, MemoizedSelector } from '@ngrx/store';
 import {
   OrgUnitFilterState,
-  getOrgUnitFilterState
+  getOrgUnitFilterState,
 } from '../reducers/org-unit-filter.reducer';
 import {
   selectAllOrgUnitGroups,
   getOrgUnitGroupLoadingState,
   getOrgUnitGroupLoadInitiatedState,
-  getOrgUnitGroupLoadedState
+  getOrgUnitGroupLoadedState,
 } from '../reducers/org-unit-group.reducer';
 import { OrgUnitGroup } from '../../models/org-unit-group.model';
 
@@ -35,21 +35,3 @@ export const getOrgUnitGroups = createSelector(
   getOrgUnitGroupState,
   selectAllOrgUnitGroups
 );
-
-export const getOrgUnitGroupBasedOnOrgUnitsSelected = (
-  selectedOrgUnits: any[]
-) =>
-  createSelector(
-    getOrgUnitGroups,
-    (orgUnitGroups: OrgUnitGroup[]) => {
-      return (orgUnitGroups || []).map((orgUnitGroup: OrgUnitGroup) => {
-        return {
-          ...orgUnitGroup,
-          selected: (selectedOrgUnits || []).some(
-            (selectedOrgUnit: any) =>
-              selectedOrgUnit.id === 'OU_GROUP-' + orgUnitGroup.id
-          )
-        };
-      });
-    }
-  );

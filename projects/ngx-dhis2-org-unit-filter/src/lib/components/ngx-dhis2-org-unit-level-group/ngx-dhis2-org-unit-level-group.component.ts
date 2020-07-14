@@ -81,4 +81,11 @@ export class NgxDhis2OrgUnitLevelGroupComponent implements OnInit {
       });
     }
   }
+
+  trackByOrgUnitLevel(index: number, orgUnitLevel: OrgUnitLevel) {
+    return orgUnitLevel ? orgUnitLevel.id : index;
+  }
+  trackByOrgUnitGroup(index: number, orgUnitGroup: OrgUnitGroup) {
+    return orgUnitGroup ? orgUnitGroup.id : index;
+  }
 }

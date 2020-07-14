@@ -1,31 +1,39 @@
-<div class="ngx-dhis2-org-unit-tree-item">
+<div class="ngx-dhis2-org-unit-tree-item"
+  *ngIf="orgUnitChildren$ | withOrgUnitLoading | async as orgUnitChildrenParams">
   <!-- org unit title area -->
   <div class="ngx-dhis2-org-unit-tree-item-title">
+    <button *ngIf="orgUnitChildrenParams.loading" class="ngx-dhis2-org-unit-tree-item-toggle-btn"
+      (click)="onToggleOrgUnitChildren($event)">
+      <div style="height: 10px; width: 10px;">
+        <app-ngx-dhis2-org-unit-progress></app-ngx-dhis2-org-unit-progress>
+      </div>
+    </button>
     <button class="ngx-dhis2-org-unit-tree-item-toggle-btn" (click)="onToggleOrgUnitChildren($event)"
-      *ngIf="(orgUnit$ | async)?.children.length > 0">
+      *ngIf="orgUnitChildrenParams?.value?.length > 0">
       <mat-icon *ngIf="expanded">arrow_drop_down</mat-icon>
       <mat-icon *ngIf="!expanded">arrow_right</mat-icon>
     </button>
-    <mat-checkbox *ngIf="orgUnit$ | async as orgUnit" [name]="orgUnit.id" [ngModel]="selected" [ngClass]="{
-        'ml-3': orgUnit?.children.length === 0,
-        'ngx-dhis2-org-unit-tree-item-name': true
-      }" (ngModelChange)="onToggleOrgUnit(orgUnit)">
-      {{ (orgUnit$ | async)?.name }}
+    <mat-checkbox [name]="orgUnit?.id" [ngModel]="selected" [ngClass]="{
+          'ngx-dhis2-org-unit-tree-item-margin-left': orgUnitChildrenParams?.value?.length === 0,
+          'ngx-dhis2-org-unit-tree-item-name': true
+        }" (ngModelChange)="onToggleOrgUnit(orgUnit)">
+      {{ orgUnit?.name }}
     </mat-checkbox>
-    <div class="badge badge-secondary ngx-dhis2-org-unit-count" *ngIf="(selectedChildrenCount$ | async) > 0">
-      {{ selectedChildrenCount$ | async }}
+    <div class="ngx-dhis2-org-unit-count" *ngIf="selectedChildrenCount > 0">
+      ({{selectedChildrenCount}})
     </div>
   </div>
   <!-- end of org unit title area -->
 
   <!-- org unit children area -->
-  <div [style.margin-left]="'25px'" *ngIf="(orgUnit$ | async)?.children.length > 0 && expanded">
+  <div [style.margin-left]="'25px'" *ngIf="orgUnitChildrenParams?.value?.length > 0 && expanded">
     <div class="ngx-dhis2-org-unit-tree-item-child-item" *ngFor="
-        let orgUnitChildId of (orgUnit$ | async).children;
-        trackBy: trackByFn
-      ">
-      <ngx-dhis2-org-unit-tree-item [orgUnitId]="orgUnitChildId" (activate)="onActivateOu($event)"
-        (deactivate)="onDeactivateOu($event)" [selectedOrgUnits]="selectedOrgUnits" [parentOrgUnit]="orgUnit$ | async">
+          let orgUnitChild of orgUnitChildrenParams?.value;
+          trackBy: trackByOrgUnit
+        ">
+      <ngx-dhis2-org-unit-tree-item [orgUnit]="orgUnitChild" [orgUnitFilterConfig]="orgUnitFilterConfig"
+        (activate)="onActivateOu($event)" (deactivate)="onDeactivateOu($event)" [selectedOrgUnits]="selectedOrgUnits"
+        [parentOrgUnit]="orgUnit">
       </ngx-dhis2-org-unit-tree-item>
     </div>
   </div>

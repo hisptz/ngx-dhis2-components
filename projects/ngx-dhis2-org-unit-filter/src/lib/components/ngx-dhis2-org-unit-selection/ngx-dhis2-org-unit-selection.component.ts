@@ -1,18 +1,15 @@
 import {
-  Component,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter,
   ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
 } from '@angular/core';
-import { Store } from '@ngrx/store';
-
-import { Observable } from 'rxjs';
-import { OrgUnit } from '../../models/org-unit.model';
-import { OrgUnitFilterState } from '../../store/reducers/org-unit-filter.reducer';
-import { getHighestLevelOrgUnitIds } from '../../store/selectors/org-unit.selectors';
 import { OrgUnitTypes } from '../../constants/org-unit-types.constants';
+import { OrgUnit } from '../../models/org-unit.model';
+import { Observable } from 'rxjs';
+import { OrgUnitFilterConfig } from '../../models/org-unit-filter-config.model';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -24,19 +21,16 @@ import { OrgUnitTypes } from '../../constants/org-unit-types.constants';
 export class NgxDhis2OrgUnitSelectionComponent implements OnInit {
   @Input() selectedOrgUnits: any[];
   @Input() loadingOrgUnits: boolean;
-  @Input() orgUnitsLoaded: boolean;
   @Input() userOrgUnitSelected: boolean;
-  @Input() height: string;
+  @Input() highestLevelOrgUnits$: Observable<OrgUnit[]>;
+  @Input() orgUnitFilterConfig: OrgUnitFilterConfig;
 
   @Output() activateOrgUnit = new EventEmitter();
   @Output() deactivateOrgUnit = new EventEmitter();
 
-  highestLevelOrgUnitIds$: Observable<Array<string>>;
-  constructor(private store: Store<OrgUnitFilterState>) {}
+  constructor() {}
 
-  ngOnInit() {
-    this.highestLevelOrgUnitIds$ = this.store.select(getHighestLevelOrgUnitIds);
-  }
+  ngOnInit() {}
 
   onActivateOrgUnit(orgUnit: OrgUnit) {
     this.activateOrgUnit.emit({
