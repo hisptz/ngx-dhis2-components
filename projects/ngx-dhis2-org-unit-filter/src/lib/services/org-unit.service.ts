@@ -149,7 +149,7 @@ export class OrgUnitService {
                 `organisationUnits.json?fields=${orgUnitFields}&order=name:asc&filter=parent.id:eq:${id}&paging=false`,
                 { useIndexDb: true }
               )
-              .pipe(map((res) => (res ? res.organisationUnits : [])))
+              .pipe(map((res) => (res ? _.sortBy(res.organisationUnits, 'name') : [])))
           : of([]);
       })
     );
@@ -158,6 +158,7 @@ export class OrgUnitService {
   loadUserOrgUnits(
     orgUnitFilterConfig: OrgUnitFilterConfig
   ): Observable<OrgUnit[]> {
+
     return this.httpClient.me().pipe(
       switchMap((user: User) => {
         const userOrgUnits: OrgUnit[] = getUserOrgUnits(
@@ -165,6 +166,8 @@ export class OrgUnitService {
           orgUnitFilterConfig.reportUse,
           false
         );
+
+
 
         return zip(
           ...userOrgUnits.map((orgUnit: OrgUnit) =>

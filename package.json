@@ -28,7 +28,9 @@
     "publish-period-filter": "npm run build-period-filter && cd dist/ngx-dhis2-period-filter && npm publish --access public && cd ../../",
     "publish-selection-filters": "npm run build-selection-filters && cd dist/ngx-dhis2-selection-filters && npm publish --access public && cd ../../",
     "pack-http-client": "npm run build-http-client && cd dist/ngx-dhis2-http-client && npm pack",
-    "build-http-client:dev": "npm run pack-http-client && npm install dist/ngx-dhis2-http-client/*.tgz"
+    "link-http-client": "npm run build-http-client && cd dist/ngx-dhis2-http-client && npm link",
+    "link-org-unit-filter": "npm run build-org-unit-filter && cd dist/ngx-dhis2-org-unit-filter && npm link",
+    "pack-org-unit-filter": "npm run build-org-unit-filter && cd dist/ngx-dhis2-org-unit-filter && npm pack"
   },
   "private": true,
   "dependencies": {
