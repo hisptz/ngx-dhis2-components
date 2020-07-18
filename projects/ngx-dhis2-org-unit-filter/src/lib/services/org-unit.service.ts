@@ -120,7 +120,8 @@ export class OrgUnitService {
         )}]&paging=false`,
         { useIndexDb: true }
       )
-      .pipe(map((res: any) => (res ? res.organisationUnits : [])));
+      .pipe(map((res: any) =>(res ? res.organisationUnits : [])
+      ));
   }
 
   loadChildren(
