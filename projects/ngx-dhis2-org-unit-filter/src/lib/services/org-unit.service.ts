@@ -12,6 +12,7 @@ import { getCombinedOrgUnits } from '../helpers/get-combined-org-units.helper';
 import { getUserOrgUnits } from '../helpers/get-user-org-units.helper';
 import { OrgUnitLevelService } from './org-unit-level.service';
 import { OrgUnitLevel } from '../models/org-unit-level.model';
+import { sortOrgUnitsByName } from '../helpers/sort-org-units.helper';
 
 @Injectable()
 export class OrgUnitService {
@@ -149,7 +150,11 @@ export class OrgUnitService {
                 `organisationUnits.json?fields=${orgUnitFields}&order=name:asc&filter=parent.id:eq:${id}&paging=false`,
                 { useIndexDb: true }
               )
-              .pipe(map((res) => (res ? res.organisationUnits : [])))
+              .pipe(
+                map((res) =>
+                  res ? sortOrgUnitsByName(res.organisationUnits) : []
+                )
+              )
           : of([]);
       })
     );

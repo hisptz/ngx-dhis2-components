@@ -9,9 +9,8 @@
   <div class="ngx-dhis2-org-unit-filter__selection-container">
     <div [style.width]="'100%'">
       <!--organisation unit selection area-->
-      <ngx-dhis2-org-unit-selection [selectedOrgUnits]="selectedOrgUnits$ | async" [loadingOrgUnits]="loadingOrgUnits"
-        [userOrgUnitSelected]="isAnyUserOrgUnitSelected" [orgUnitFilterConfig]="orgUnitFilterConfig"
-        [highestLevelOrgUnits$]="highestLevelOrgUnits$" (activateOrgUnit)="onSelectOrgUnit($event)"
+      <ngx-dhis2-org-unit-selection [selectedOrgUnits]="selectedOrgUnits" [loadingOrgUnits]="loadingOrgUnits"
+        [userOrgUnitSelected]="isAnyUserOrgUnitSelected" [orgUnitFilterConfig]="orgUnitFilterConfig" (activateOrgUnit)="onSelectOrgUnit($event)"
         (deactivateOrgUnit)="onDeselectOrgUnit($event)" (deactivateAllOrgUnit)="onDeselectAllOrgUnits()">
       </ngx-dhis2-org-unit-selection>
       <!--end of organisation unit selection area-->

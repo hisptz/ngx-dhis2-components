@@ -10,6 +10,8 @@ import { OrgUnitTypes } from '../../constants/org-unit-types.constants';
 import { OrgUnit } from '../../models/org-unit.model';
 import { Observable } from 'rxjs';
 import { OrgUnitFilterConfig } from '../../models/org-unit-filter-config.model';
+import { OrgUnitService } from '../../services/org-unit.service';
+import { tap } from 'rxjs/operators';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -22,15 +24,24 @@ export class NgxDhis2OrgUnitSelectionComponent implements OnInit {
   @Input() selectedOrgUnits: any[];
   @Input() loadingOrgUnits: boolean;
   @Input() userOrgUnitSelected: boolean;
-  @Input() highestLevelOrgUnits$: Observable<OrgUnit[]>;
   @Input() orgUnitFilterConfig: OrgUnitFilterConfig;
+
+  highestLevelOrgUnits$: Observable<OrgUnit[]>;
 
   @Output() activateOrgUnit = new EventEmitter();
   @Output() deactivateOrgUnit = new EventEmitter();
 
-  constructor() {}
+  constructor( private orgUnitService: OrgUnitService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.highestLevelOrgUnits$ = this.orgUnitService
+      .loadUserOrgUnits(this.orgUnitFilterConfig)
+      .pipe(
+        tap(() => {
+          this.loadingOrgUnits = false;
+        })
+      );
+  }
 
   onActivateOrgUnit(orgUnit: OrgUnit) {
     this.activateOrgUnit.emit({

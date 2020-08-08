@@ -10,19 +10,7 @@ export class OrgUnitFilterComponent implements OnInit {
   title = 'app';
   orgUnitObject: any;
   action: string;
-  orgUnitFilterConfig: OrgUnitFilterConfig = {
-    singleSelection: false,
-    showUserOrgUnitSection: true,
-    showOrgUnitLevelGroupSection: true,
-    showOrgUnitGroupSection: true,
-    showOrgUnitLevelSection: true,
-    reportUse: false,
-    additionalQueryFields: ['dataSets'],
-    batchSize: 400,
-    hideActionButtons: true,
-    contentHeight: '500px',
-    emitOnSelection: true,
-  };
+  orgUnitFilterConfig: OrgUnitFilterConfig = { singleSelection: false, reportUse: false }
   selectedOrgUnitItems: any[] = [
     { level: 3, name: 'Gbo', id: 'YmmeuGbqOwR' },
     { level: 4, name: 'Gbaiima CHC', id: 'jGYT5U5qJP6' },
