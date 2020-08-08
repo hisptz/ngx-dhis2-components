@@ -4,7 +4,7 @@ import { SelectionFilterConfig } from 'projects/ngx-dhis2-selection-filters/src/
 @Component({
   selector: 'app-selection-filters',
   templateUrl: './selection-filters.component.html',
-  styleUrls: ['./selection-filters.component.scss'],
+  styleUrls: ['./selection-filters.component.scss']
 })
 export class SelectionFiltersComponent implements OnInit {
   selectionFilterConfig: SelectionFilterConfig;
@@ -18,18 +18,18 @@ export class SelectionFiltersComponent implements OnInit {
         reportUse: false,
         contentHeight: '370px',
         emitOnSelection: true,
-        hideActionButtons: true,
+        hideActionButtons: true
       },
       periodFilterConfig: {
         singleSelection: false,
         hideActionButtons: true,
         contentHeight: '355px',
-        emitOnSelection: true,
-      },
+        emitOnSelection: true
+      }
     };
   }
 
   onFilterUpdate(dataSelections: any[]) {
-    console.log(dataSelections);
+    //console.log(dataSelections);
   }
 }

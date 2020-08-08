@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
+    "test-period-filter": "ng test ngx-dhis2-period-filter -- --no-watch --no-progress --code-coverage --browsers=ChromeHeadlessCI",
     "test-http-client": "ng test ngx-dhis2-http-client -- --no-watch --no-progress --code-coverage --browsers=ChromeHeadlessCI",
     "test-org-unit-filter": "ng test ngx-dhis2-org-unit-filter -- --no-watch --no-progress --code-coverage --browsers=ChromeHeadlessCI",
     "test:headless": "npm run test -- --no-watch --no-progress --code-coverage --browsers=ChromeHeadlessCI",
