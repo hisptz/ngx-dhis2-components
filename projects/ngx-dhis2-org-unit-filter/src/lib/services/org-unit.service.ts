@@ -12,6 +12,7 @@ import { getCombinedOrgUnits } from '../helpers/get-combined-org-units.helper';
 import { getUserOrgUnits } from '../helpers/get-user-org-units.helper';
 import { OrgUnitLevelService } from './org-unit-level.service';
 import { OrgUnitLevel } from '../models/org-unit-level.model';
+import { sortOrgUnitsByName } from '../helpers/sort-org-units.helper';
 
 @Injectable()
 export class OrgUnitService {
@@ -120,8 +121,7 @@ export class OrgUnitService {
         )}]&paging=false`,
         { useIndexDb: true }
       )
-      .pipe(map((res: any) =>(res ? res.organisationUnits : [])
-      ));
+      .pipe(map((res: any) => (res ? res.organisationUnits : [])));
   }
 
   loadChildren(
@@ -150,7 +150,11 @@ export class OrgUnitService {
                 `organisationUnits.json?fields=${orgUnitFields}&order=name:asc&filter=parent.id:eq:${id}&paging=false`,
                 { useIndexDb: true }
               )
-              .pipe(map((res) => (res ? _.sortBy(res.organisationUnits, 'name') : [])))
+              .pipe(
+                map((res) =>
+                  res ? sortOrgUnitsByName(res.organisationUnits) : []
+                )
+              )
           : of([]);
       })
     );
@@ -159,7 +163,6 @@ export class OrgUnitService {
   loadUserOrgUnits(
     orgUnitFilterConfig: OrgUnitFilterConfig
   ): Observable<OrgUnit[]> {
-
     return this.httpClient.me().pipe(
       switchMap((user: User) => {
         const userOrgUnits: OrgUnit[] = getUserOrgUnits(
@@ -167,8 +170,6 @@ export class OrgUnitService {
           orgUnitFilterConfig.reportUse,
           false
         );
-
-
 
         return zip(
           ...userOrgUnits.map((orgUnit: OrgUnit) =>
