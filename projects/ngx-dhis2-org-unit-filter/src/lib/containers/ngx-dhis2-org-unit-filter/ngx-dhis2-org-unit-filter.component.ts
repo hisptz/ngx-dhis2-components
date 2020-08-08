@@ -45,8 +45,7 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
   loadingOrgUnitGroups: boolean;
   loadingOrgUnits: boolean;
   topOrgUnitLevel$: Observable<number>;
-  highestLevelOrgUnits$: Observable<OrgUnit[]>;
-  selectedOrgUnits$: Observable<OrgUnit[]>;
+  selectedOrgUnits: OrgUnit[];
 
   @Output() orgUnitUpdate: EventEmitter<any> = new EventEmitter<any>();
   @Output() orgUnitClose: EventEmitter<any> = new EventEmitter<any>();
@@ -62,24 +61,12 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
     this.loadingOrgUnitGroups = true;
   }
 
-  get selectedOrgUnits(): any[] {
-    return getSelectedOrgUnits(this.selectedOrgUnitItems);
-  }
-
   ngOnInit() {
     // Set orgUnit filter configuration
     this.orgUnitFilterConfig = {
       ...DEFAULT_ORG_UNIT_FILTER_CONFIG,
       ...(this.orgUnitFilterConfig || {}),
     };
-
-    this.highestLevelOrgUnits$ = this.orgUnitService
-      .loadUserOrgUnits(this.orgUnitFilterConfig)
-      .pipe(
-        tap(() => {
-          this.loadingOrgUnits = false;
-        })
-      );
 
     if (!this.selectedOrgUnitItems) {
       this.selectedOrgUnitItems = [];
@@ -96,29 +83,33 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
   }
 
   private async _setOrUpdateOrgUnitProperties() {
-    this.selectedOrgUnits$ =
-      this.selectedOrgUnits.length > 0
+    const initialSelectedOrgUnits = getSelectedOrgUnits(
+      this.selectedOrgUnitItems
+    );
+    const selectedOrgUnits$ =
+      initialSelectedOrgUnits.length > 0
         ? this.orgUnitService.loadByIds(
-            this.selectedOrgUnits.map((orgUnit: OrgUnit) => orgUnit.id),
+            initialSelectedOrgUnits.map((orgUnit: OrgUnit) => orgUnit.id),
             this.orgUnitFilterConfig
           )
         : of([]);
+    selectedOrgUnits$.subscribe((selectedOrgUnits: OrgUnit[]) => {
+      this.selectedOrgUnits = selectedOrgUnits;
 
-    const selectedOrgUnits = await this.selectedOrgUnits$.toPromise();
-
-    // set or update org unit levels
-    this.orgUnitLevels$ = this.orgUnitLevelService.loadAll().pipe(
-      map((orgUnitLevels: OrgUnitLevel[]) =>
-        getOrgUnitLevelBySelectedOrgUnits(
-          orgUnitLevels,
-          selectedOrgUnits,
-          this.selectedOrgUnitItems
-        )
-      ),
-      tap(() => {
-        this.loadingOrgUnitLevels = false;
-      })
-    );
+      // set or update org unit levels
+      this.orgUnitLevels$ = this.orgUnitLevelService.loadAll().pipe(
+        map((orgUnitLevels: OrgUnitLevel[]) =>
+          getOrgUnitLevelBySelectedOrgUnits(
+            orgUnitLevels,
+            selectedOrgUnits,
+            this.selectedOrgUnitItems
+          )
+        ),
+        tap(() => {
+          this.loadingOrgUnitLevels = false;
+        })
+      );
+    });
 
     // set or update org unit groups
     this.orgUnitGroups$ = this.orgUnitGroupService.loadAll().pipe(
