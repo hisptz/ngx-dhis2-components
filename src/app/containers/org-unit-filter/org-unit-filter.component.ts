@@ -12,7 +12,6 @@ export class OrgUnitFilterComponent implements OnInit {
   action: string;
   orgUnitFilterConfig: OrgUnitFilterConfig = {
     singleSelection: true,
-    emitOnSelection: true,
     reportUse: false,
   };
   selectedOrgUnitItems: any[] = [];
