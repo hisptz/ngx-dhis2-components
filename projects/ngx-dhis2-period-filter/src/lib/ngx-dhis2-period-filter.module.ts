@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PeriodFilterComponent } from './containers/period-filter/period-filter.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
@@ -14,12 +13,11 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import {DragDropModule} from '@angular/cdk/drag-drop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 @NgModule({
   declarations: [PeriodFilterComponent],
   imports: [
     CommonModule,
-    BrowserAnimationsModule,
     FormsModule,
     MatButtonModule,
     MatSelectModule,
@@ -34,6 +32,6 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     MatButtonToggleModule,
     DragDropModule
   ],
-  exports: [PeriodFilterComponent],
+  exports: [PeriodFilterComponent]
 })
 export class NgxDhis2PeriodFilterModule {}

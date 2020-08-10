@@ -132,7 +132,11 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onSetPeriodFilterType(e, periodFilterType) {
-    e.stopPropagation();
+    if (e) {
+      e.stopPropagation();
+    }
+
+    //console.log('here ::: ', periodFilterType.value);
 
     if (
       periodFilterType &&
@@ -144,6 +148,12 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
         periodFilterType.value
       );
 
+      if (periodFilterType.value === PeriodFilterTypes.DATE_RANGE) {
+        this.selectedPeriods = [];
+        this.periodTypes = [];
+        this.currentPeriodFilterType = periodFilterType.value;
+      }
+
       //console.log('pe typers :: ', this.periodTypes);
 
       if (this.periodTypes.length > 0) {
@@ -152,10 +162,6 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
         this._setPeriodProperties(this.selectedPeriodType);
 
         this.onUpdatePeriodType(null, this.selectedPeriodType);
-      }
-
-      if (periodFilterType === PeriodFilterTypes.DATE_RANGE) {
-        this.selectedPeriods = [];
       }
 
       this.startDate = null;
@@ -436,7 +442,9 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onUpdatePeriodType(e, selectedPeriodType: string) {
-    e.stopPropagation();
+    if (e) {
+      e.stopPropagation();
+    }
     if (this.periodFilterConfig.resetOnPeriodTypeChange) {
       this.selectedPeriods = [];
     }
