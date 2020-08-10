@@ -25,6 +25,7 @@ import { OrgUnit } from '../../models/org-unit.model';
 import { OrgUnitGroupService } from '../../services/org-unit-group.service';
 import { OrgUnitLevelService } from '../../services/org-unit-level.service';
 import { OrgUnitService } from '../../services/org-unit.service';
+import { updateOrgUnitSelections } from '../../helpers/update-org-unit-selections.helper';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -134,47 +135,11 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
   }
 
   onSelectOrgUnit(orgUnit: any) {
-    if (orgUnit.type === OrgUnitTypes.ORGANISATION_UNIT_LEVEL) {
-      this.selectedOrgUnitItems = [
-        ..._.filter(
-          this.selectedOrgUnitItems || [],
-          (selectedOrgUnitItem) =>
-            selectedOrgUnitItem.type !== OrgUnitTypes.ORGANISATION_UNIT_GROUP
-        ),
-        orgUnit,
-      ];
-    } else if (orgUnit.type === OrgUnitTypes.ORGANISATION_UNIT_GROUP) {
-      this.selectedOrgUnitItems = [
-        ..._.filter(
-          this.selectedOrgUnitItems || [],
-          (selectedOrgUnitItem) =>
-            selectedOrgUnitItem.type !== OrgUnitTypes.ORGANISATION_UNIT_LEVEL
-        ),
-        orgUnit,
-      ];
-    } else {
-      this.selectedOrgUnitItems = !this.orgUnitFilterConfig.singleSelection
-        ? [
-            ...(orgUnit.type === OrgUnitTypes.USER_ORGANISATION_UNIT
-              ? _.filter(
-                  this.selectedOrgUnitItems || [],
-                  (selectedOrgUnitItem) =>
-                    selectedOrgUnitItem.type ===
-                    OrgUnitTypes.USER_ORGANISATION_UNIT
-                )
-              : this.selectedOrgUnitItems),
-            orgUnit,
-          ]
-        : [
-            ...(orgUnit.type === OrgUnitTypes.USER_ORGANISATION_UNIT
-              ? []
-              : _.filter(
-                  this.selectedOrgUnitItems || [],
-                  (selectedOrgUnit) => selectedOrgUnit.type !== orgUnit.type
-                )),
-            orgUnit,
-          ];
-    }
+    this.selectedOrgUnitItems = updateOrgUnitSelections(
+      orgUnit,
+      this.selectedOrgUnitItems,
+      this.orgUnitFilterConfig
+    );
 
     // Also update organisation units
     this._setOrUpdateOrgUnitProperties();
