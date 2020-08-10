@@ -1,4 +1,5 @@
 export function getAvailablePeriods(selectedPeriods: any[], periods = []) {
+  //console.log(periods);
   // remove selected periods
   return (periods || []).filter(
     (period: any) =>

@@ -138,7 +138,6 @@ Others
     <ngx-dhis2-period-filter
         [selectedPeriods]="selectedPeriodItems"
         [periodFilterConfig]="periodFilterConfig"
-        [selectedPeriodType]="'Range'"
         (update)="onPeriodUpdate($event, 'UPDATE')"
         (change)="onPeriodUpdate($event, 'CHANGE')"
         (close)="onPeriodUpdate($event, 'CLOSE')"
@@ -148,7 +147,7 @@ Others
 
 ```
 
-**3. Sample outputs**
+**4. Sample outputs**
 
 - Example 1: Fixed periods
 
@@ -212,9 +211,11 @@ Others
   ````
 
 - Example 3: Range periods
+
   - action
     `UPDATE`
   - payload
+
   ````
    {
   "items": [
@@ -239,3 +240,21 @@ Others
 
       ```
   ````
+
+  **5. Setting Default filter type**
+  The selection period filter type determines which periods filter type to load by default when the period filter is opened(Fixed, Relative or Range)
+
+```
+<div>
+    <ngx-dhis2-period-filter
+        [selectedPeriods]="selectedPeriodItems"
+        [periodFilterConfig]="periodFilterConfig"
+        [selectedPeriodFilterType] = "'Range'"
+        (update)="onPeriodUpdate($event, 'UPDATE')"
+        (change)="onPeriodUpdate($event, 'CHANGE')"
+        (close)="onPeriodUpdate($event, 'CLOSE')"
+        >
+    </ngx-dhis2-period-filter>
+</div>
+
+```

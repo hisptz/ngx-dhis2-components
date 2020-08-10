@@ -33,6 +33,7 @@
                 <mat-icon>arrow_drop_down</mat-icon>
               </div>
             </button>
+
             <mat-card
               class="period-type-container"
               *ngIf="showPeriodTypeSelection"
@@ -84,9 +85,9 @@
             class="period-list"
             [style.height]="periodFilterConfig.contentHeight"
           >
-            <li   *ngFor="let availablePeriod of availablePeriods">
+            <li *ngFor="let availablePeriod of availablePeriods">
               <a
-              style="margin: 0.2em;"
+                style="margin: 0.2em;"
                 [ngClass]="{
                   'selected-active': isInArray(
                     selectedPeriodList,
@@ -100,7 +101,9 @@
                 matTooltipPosition="right"
               >
                 <div class="period-list-icon"></div>
-                <span class="selected-active-name">{{ availablePeriod?.name }}</span>
+                <span class="selected-active-name">{{
+                  availablePeriod?.name
+                }}</span>
               </a>
             </li>
           </ul>
@@ -119,6 +122,7 @@
         </td>
       </tr>
     </table>
+
     <div class="transfer-section">
       <button
         type="button"
@@ -151,8 +155,8 @@
       <tr>
         <td class="period-selected-body p-1">
           <div
-          cdkDropList
-          (cdkDropListDropped)="drop($event)"
+            cdkDropList
+            (cdkDropListDropped)="drop($event)"
             class="selected-period-list"
             [style.height]="
               'calc(' + periodFilterConfig.contentHeight + ' + 16px)'
@@ -172,9 +176,10 @@
                 onClickToSelectPeriod(selectedPeriod, $event, 'DESELECT')
               "
               (dblclick)="moveSingleDeselectedPeriod(selectedPeriod, $event)"
-             
             >
-              <span class="selected-active-name">{{ selectedPeriod.name }}</span>
+              <span class="selected-active-name">{{
+                selectedPeriod.name
+              }}</span>
               <span
                 (click)="onDeselectPeriod(selectedPeriod, $event)"
                 matTooltipPosition="right"
