@@ -13,6 +13,9 @@ export class OrgUnitFilterComponent implements OnInit {
   orgUnitFilterConfig: OrgUnitFilterConfig = {
     singleSelection: true,
     reportUse: false,
+    emitOnSelection: true,
+    hideActionButtons: true,
+    minLevel: 4,
   };
   selectedOrgUnitItems: any[] = [];
 

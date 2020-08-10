@@ -52,13 +52,17 @@ export class NgxDhis2OrgUnitTreeItemComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     if (this.orgUnit) {
-      this.orgUnitChildren$ = this.orgUnit.children
-        ? of(this.orgUnit.children)
-        : this.orgUnitService.loadChildren(
-            this.orgUnit.id,
-            this.orgUnit.level,
-            this.orgUnitFilterConfig
-          );
+      if (this.orgUnit.level === this.orgUnitFilterConfig.minLevel) {
+        this.orgUnitChildren$ = of([]);
+      } else {
+        this.orgUnitChildren$ = this.orgUnit.children
+          ? of(this.orgUnit.children)
+          : this.orgUnitService.loadChildren(
+              this.orgUnit.id,
+              this.orgUnit.level,
+              this.orgUnitFilterConfig
+            );
+      }
 
       this.setOrgUnitProperties(true);
     }

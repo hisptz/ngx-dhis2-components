@@ -5,7 +5,7 @@ export function getUserOrgUnits(
   userInfo: User,
   isForReport: boolean,
   onlyId = true
-) {
+): string[] | OrgUnit[] {
   return _.uniq(
     _.map(
       isForReport

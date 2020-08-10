@@ -106,7 +106,6 @@ export class OrgUnitService {
     ids: string[],
     orgUnitFilterConfig: OrgUnitFilterConfig
   ): Observable<OrgUnit[]> {
-    console.log(ids);
     const orgUnitFields = _.join(
       _.uniq([
         ...DEFAULT_ORG_UNIT_FIELDS,
@@ -170,7 +169,7 @@ export class OrgUnitService {
           user,
           orgUnitFilterConfig.reportUse,
           false
-        );
+        ) as OrgUnit[];
 
         return zip(
           ...userOrgUnits.map((orgUnit: OrgUnit) =>
