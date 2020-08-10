@@ -15,21 +15,7 @@ export class OrgUnitFilterComponent implements OnInit {
     emitOnSelection: true,
     reportUse: false,
   };
-  selectedOrgUnitItems: any[] = [
-    { level: 3, name: 'Gbo', id: 'YmmeuGbqOwR' },
-    { level: 4, name: 'Gbaiima CHC', id: 'jGYT5U5qJP6' },
-    { level: 4, name: 'Niagorehun MCHP', id: 'WOk7efLlLSj' },
-    {
-      id: 'OU_GROUP.AQQCxQqDxLe',
-      name: 'Konta CHP',
-      level: 4,
-    },
-    {
-      id: 'LEVEL-1',
-      name: 'Kukuna CHP',
-      level: 4,
-    },
-  ];
+  selectedOrgUnitItems: any[] = [];
 
   constructor() {}
 

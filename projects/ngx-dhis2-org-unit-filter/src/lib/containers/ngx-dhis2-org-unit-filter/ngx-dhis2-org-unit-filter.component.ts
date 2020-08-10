@@ -8,7 +8,7 @@ import {
   Output,
 } from '@angular/core';
 import * as _ from 'lodash';
-import { Observable, of } from 'rxjs';
+import { Observable, of, zip } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { DEFAULT_ORG_UNIT_FILTER_CONFIG } from '../../constants/default-org-unit-filter-config.constant';
 import { OrgUnitTypes } from '../../constants/org-unit-types.constants';
@@ -83,17 +83,35 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
     }
   }
 
+  private _getSanitizedSelectedOrgUnits(
+    selectedOrgUnitItems
+  ): Observable<OrgUnit[]> {
+    const initialSelectedOrgUnits: OrgUnit[] = getSelectedOrgUnits(
+      selectedOrgUnitItems
+    );
+    const sanitizedOrgUnits: OrgUnit[] = initialSelectedOrgUnits.filter(
+      (orgUnit) => orgUnit.path
+    );
+    const unSanitizedOrgUnits: OrgUnit[] = initialSelectedOrgUnits.filter(
+      (orgUnit) => !orgUnit.path
+    );
+
+    return initialSelectedOrgUnits.length > 0
+      ? zip(
+          of(sanitizedOrgUnits),
+          unSanitizedOrgUnits.length > 0
+            ? this.orgUnitService.loadByIds(
+                unSanitizedOrgUnits.map((orgUnit: OrgUnit) => orgUnit.id),
+                this.orgUnitFilterConfig
+              )
+            : of([])
+        ).pipe(map((results) => [...results[0], ...results[1]]))
+      : of([]);
+  }
   private async _setOrUpdateOrgUnitProperties() {
-    const initialSelectedOrgUnits = getSelectedOrgUnits(
+    const selectedOrgUnits$ = this._getSanitizedSelectedOrgUnits(
       this.selectedOrgUnitItems
     );
-    const selectedOrgUnits$ =
-      initialSelectedOrgUnits.length > 0
-        ? this.orgUnitService.loadByIds(
-            initialSelectedOrgUnits.map((orgUnit: OrgUnit) => orgUnit.id),
-            this.orgUnitFilterConfig
-          )
-        : of([]);
     selectedOrgUnits$.subscribe((selectedOrgUnits: OrgUnit[]) => {
       this.selectedOrgUnits = selectedOrgUnits;
 
