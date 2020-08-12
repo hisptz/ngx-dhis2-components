@@ -115,6 +115,12 @@ export class NgxDhis2OrgUnitFilterComponent implements OnInit, OnDestroy {
     selectedOrgUnits$.subscribe((selectedOrgUnits: OrgUnit[]) => {
       this.selectedOrgUnits = selectedOrgUnits;
 
+      this.selectedOrgUnitItems = this.selectedOrgUnitItems.map(
+        (selectedOrgUnit) =>
+          _.find(selectedOrgUnits, ['id', selectedOrgUnit.id]) ||
+          selectedOrgUnit
+      );
+
       // set or update org unit levels
       this.orgUnitLevels$ = this.orgUnitLevelService.loadAll().pipe(
         map((orgUnitLevels: OrgUnitLevel[]) =>

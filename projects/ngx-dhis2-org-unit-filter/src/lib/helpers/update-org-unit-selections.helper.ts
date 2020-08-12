@@ -6,47 +6,75 @@ export function updateOrgUnitSelections(
   selectedOrgUnitItems: any[],
   orgUnitFilterConfig: OrgUnitFilterConfig
 ): any[] {
-  if (selectedOrgUnit.type === OrgUnitTypes.ORGANISATION_UNIT_LEVEL) {
-    selectedOrgUnitItems = [
-      ..._.filter(
-        selectedOrgUnitItems || [],
-        (selectedOrgUnitItem) =>
-          selectedOrgUnitItem.type !== OrgUnitTypes.ORGANISATION_UNIT_GROUP
-      ),
-      selectedOrgUnit,
-    ];
-  } else if (selectedOrgUnit.type === OrgUnitTypes.ORGANISATION_UNIT_GROUP) {
-    selectedOrgUnitItems = [
-      ..._.filter(
-        selectedOrgUnitItems || [],
-        (selectedOrgUnitItem) =>
-          selectedOrgUnitItem.type !== OrgUnitTypes.ORGANISATION_UNIT_LEVEL
-      ),
-      selectedOrgUnit,
-    ];
-  } else {
-    selectedOrgUnitItems = !orgUnitFilterConfig.singleSelection
-      ? [
-          ...(selectedOrgUnit.type === OrgUnitTypes.USER_ORGANISATION_UNIT
-            ? _.filter(
-                selectedOrgUnitItems || [],
-                (selectedOrgUnitItem) =>
-                  selectedOrgUnitItem.type ===
-                  OrgUnitTypes.USER_ORGANISATION_UNIT
-              )
-            : selectedOrgUnitItems),
-          selectedOrgUnit,
-        ]
-      : [
-          ...(selectedOrgUnit.type === OrgUnitTypes.USER_ORGANISATION_UNIT
-            ? []
-            : _.filter(
-                selectedOrgUnitItems || [],
-                (orgUnit) => orgUnit.type !== selectedOrgUnit.type
-              )),
-          selectedOrgUnit,
-        ];
-  }
+  switch (selectedOrgUnit.type) {
+    case OrgUnitTypes.ORGANISATION_UNIT_LEVEL:
+      return updateOrgUnitItemsWithSelected(
+        selectedOrgUnitItems,
+        selectedOrgUnit,
+        OrgUnitTypes.ORGANISATION_UNIT_GROUP
+      );
 
-  return selectedOrgUnitItems;
+    case OrgUnitTypes.ORGANISATION_UNIT_GROUP:
+      return updateOrgUnitItemsWithSelected(
+        selectedOrgUnitItems,
+        selectedOrgUnit,
+        OrgUnitTypes.ORGANISATION_UNIT_LEVEL
+      );
+
+    default:
+      return !orgUnitFilterConfig.singleSelection
+        ? updateMultipleNormalOrgUnitsWithSelected(
+            selectedOrgUnitItems,
+            selectedOrgUnit
+          )
+        : updateSingleNormalOrgUnitsWithSelected(
+            selectedOrgUnitItems,
+            selectedOrgUnit
+          );
+  }
+}
+
+function updateOrgUnitItemsWithSelected(
+  selectedOrgUnitItems,
+  selectedOrgUnit,
+  typeToExclude
+) {
+  return [
+    ..._.filter(
+      selectedOrgUnitItems || [],
+      (selectedOrgUnitItem) => selectedOrgUnitItem.type !== typeToExclude
+    ),
+    selectedOrgUnit,
+  ];
+}
+
+function updateMultipleNormalOrgUnitsWithSelected(
+  selectedOrgUnitItems,
+  selectedOrgUnit
+) {
+  return [
+    ...(selectedOrgUnit.type === OrgUnitTypes.USER_ORGANISATION_UNIT
+      ? _.filter(
+          selectedOrgUnitItems || [],
+          (selectedOrgUnitItem) =>
+            selectedOrgUnitItem.type === OrgUnitTypes.USER_ORGANISATION_UNIT
+        )
+      : selectedOrgUnitItems),
+    selectedOrgUnit,
+  ];
+}
+
+function updateSingleNormalOrgUnitsWithSelected(
+  selectedOrgUnitItems,
+  selectedOrgUnit
+) {
+  return [
+    ...(selectedOrgUnit.type === OrgUnitTypes.USER_ORGANISATION_UNIT
+      ? []
+      : _.filter(
+          selectedOrgUnitItems || [],
+          (orgUnit) => orgUnit.type !== selectedOrgUnit.type
+        )),
+    selectedOrgUnit,
+  ];
 }

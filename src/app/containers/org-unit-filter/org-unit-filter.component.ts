@@ -15,9 +15,14 @@ export class OrgUnitFilterComponent implements OnInit {
     reportUse: false,
     emitOnSelection: true,
     hideActionButtons: true,
-    minLevel: 4,
+    minLevel: 5,
   };
-  selectedOrgUnitItems: any[] = [];
+  selectedOrgUnitItems: any[] = [
+    {
+      id: '52c9be7e2e159',
+      name: 'AICC Hospital at District Level',
+    },
+  ];
 
   constructor() {}
 

@@ -1,6 +1,6 @@
-import { OrgUnit } from '../models/org-unit.model';
-import { OrgUnitLevel } from '../models/org-unit-level.model';
 import { minBy } from 'lodash';
+import { OrgUnitLevel } from '../models/org-unit-level.model';
+import { OrgUnit } from '../models/org-unit.model';
 
 export function getOrgUnitLevelBySelectedOrgUnits(
   orgUnitLevels: OrgUnitLevel[],
@@ -15,12 +15,19 @@ export function getOrgUnitLevelBySelectedOrgUnits(
     .map((orgUnitLevel: OrgUnitLevel) => {
       return {
         ...orgUnitLevel,
-        selected: (otherSelectedOrgUnits || []).some(
-          (selectedOrgUnit: any) =>
-            selectedOrgUnit.id === 'LEVEL-' + orgUnitLevel.level
-        ),
+        selected: isOrgUnitLevelSelected(otherSelectedOrgUnits, orgUnitLevel),
       };
     });
+}
+
+function isOrgUnitLevelSelected(
+  selectedOrgUnits: OrgUnit[],
+  orgUnitLevel: OrgUnitLevel
+) {
+  return (selectedOrgUnits || []).some(
+    (selectedOrgUnit: any) =>
+      selectedOrgUnit.id === 'LEVEL-' + orgUnitLevel.level
+  );
 }
 
 function getTopSelectedOrgUnitLevel(selectedOrgUnits: OrgUnit[]): number {

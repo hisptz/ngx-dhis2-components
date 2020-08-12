@@ -6,13 +6,11 @@ describe('Given I set single selection mode', () => {
   const orgUnit: OrgUnit = {
     id: 'first',
     name: 'First OrgUnit',
-    type: OrgUnitTypes.ORGANISATION_UNIT,
   };
   const selectedOrgUnits: OrgUnit[] = [
     {
       id: 'second',
       name: 'Second OrgUnit',
-      type: OrgUnitTypes.ORGANISATION_UNIT,
     },
   ];
 
@@ -24,5 +22,27 @@ describe('Given I set single selection mode', () => {
   it('should return only one organisation unit per every selection', () => {
     expect(updatedSelectedOrgUnits.length).toEqual(1);
     expect(updatedSelectedOrgUnits[0]).toEqual(orgUnit);
+  });
+});
+
+describe('Given I set multiple selection mode', () => {
+  const orgUnit: OrgUnit = {
+    id: 'first',
+    name: 'First OrgUnit',
+  };
+  const selectedOrgUnits: OrgUnit[] = [
+    {
+      id: 'second',
+      name: 'Second OrgUnit Level',
+    },
+  ];
+
+  const updatedSelectedOrgUnits = updateOrgUnitSelections(
+    orgUnit,
+    selectedOrgUnits,
+    { singleSelection: false }
+  );
+  it('should return organisations both existing and selected', () => {
+    expect(updatedSelectedOrgUnits.length).toEqual(2);
   });
 });
