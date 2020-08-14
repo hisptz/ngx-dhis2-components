@@ -73,7 +73,12 @@ function updateSingleNormalOrgUnitsWithSelected(
       ? []
       : _.filter(
           selectedOrgUnitItems || [],
-          (orgUnit) => orgUnit.type !== selectedOrgUnit.type
+          (orgUnit) =>
+            orgUnit.type &&
+            ![
+              OrgUnitTypes.ORGANISATION_UNIT,
+              OrgUnitTypes.USER_ORGANISATION_UNIT,
+            ].includes(orgUnit.type)
         )),
     selectedOrgUnit,
   ];

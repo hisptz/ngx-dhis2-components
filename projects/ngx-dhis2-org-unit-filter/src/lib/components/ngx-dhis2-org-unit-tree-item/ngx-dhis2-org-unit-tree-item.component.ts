@@ -15,6 +15,7 @@ import { isOrgUnitSelected } from '../../helpers/is-org-unit-selected.helper';
 import { OrgUnitFilterConfig } from '../../models/org-unit-filter-config.model';
 import { OrgUnit } from '../../models/org-unit.model';
 import { OrgUnitService } from '../../services/org-unit.service';
+import { OrgUnitTypes } from '../../constants/org-unit-types.constants';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -105,7 +106,10 @@ export class NgxDhis2OrgUnitTreeItemComponent implements OnInit, OnChanges {
   }
 
   onActivateOu(organisationUnit) {
-    this.activate.emit(organisationUnit);
+    this.activate.emit({
+      ...organisationUnit,
+      type: OrgUnitTypes.ORGANISATION_UNIT,
+    });
   }
 
   trackByOrgUnit(index: number, orgUnit: OrgUnit) {

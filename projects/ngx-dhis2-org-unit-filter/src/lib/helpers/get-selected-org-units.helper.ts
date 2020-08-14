@@ -9,5 +9,5 @@ export function getSelectedOrgUnits(selectedOrgUnitItems: any[]): any[] {
         selectedOrgUnit.id.indexOf('LEVEL') === -1 &&
         selectedOrgUnit.id.indexOf('OU_GROUP') === -1) ||
       selectedOrgUnit.type === OrgUnitTypes.ORGANISATION_UNIT
-  );
+  ).map((orgUnit) => ({ ...orgUnit, type: OrgUnitTypes.ORGANISATION_UNIT }));
 }

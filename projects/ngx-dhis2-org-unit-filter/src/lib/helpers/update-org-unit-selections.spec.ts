@@ -1,8 +1,7 @@
-import { updateOrgUnitSelections } from './update-org-unit-selections.helper';
 import { OrgUnit } from '../models/org-unit.model';
-import { OrgUnitTypes } from '../constants/org-unit-types.constants';
+import { updateOrgUnitSelections } from './update-org-unit-selections.helper';
 
-describe('Given I set single selection mode', () => {
+describe('Given I set single selection mode and add org unit in an existing list', () => {
   const orgUnit: OrgUnit = {
     id: 'first',
     name: 'First OrgUnit',
