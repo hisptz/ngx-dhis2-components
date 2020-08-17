@@ -196,6 +196,10 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
           name: this.endDate
         }
       });
+
+      if (this.periodFilterConfig.emitOnSelection) {
+        this._onUpdatePeriod();
+      }
     }
   }
 
