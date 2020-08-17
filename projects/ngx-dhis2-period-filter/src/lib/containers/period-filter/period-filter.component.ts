@@ -95,6 +95,20 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
+    this.startDate =
+      this.selectedPeriods &&
+      this.selectedPeriods[0] &&
+      this.selectedPeriods[0]['startDate']
+        ? this.selectedPeriods[0]['startDate']['id']
+        : null;
+
+    this.endDate =
+      this.selectedPeriods &&
+      this.selectedPeriods[0] &&
+      this.selectedPeriods[0]['endDate']
+        ? this.selectedPeriods[0]['endDate']['id']
+        : null;
+
     this.periodFilterConfig = {
       ...PERIOD_FILTER_CONFIG,
       ...(this.periodFilterConfig || {})
