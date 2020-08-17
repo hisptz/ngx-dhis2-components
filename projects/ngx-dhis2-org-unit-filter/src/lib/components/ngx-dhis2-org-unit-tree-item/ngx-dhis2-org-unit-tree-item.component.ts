@@ -15,6 +15,7 @@ import { isOrgUnitSelected } from '../../helpers/is-org-unit-selected.helper';
 import { OrgUnitFilterConfig } from '../../models/org-unit-filter-config.model';
 import { OrgUnit } from '../../models/org-unit.model';
 import { OrgUnitService } from '../../services/org-unit.service';
+import { OrgUnitTypes } from '../../constants/org-unit-types.constants';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -52,13 +53,17 @@ export class NgxDhis2OrgUnitTreeItemComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     if (this.orgUnit) {
-      this.orgUnitChildren$ = this.orgUnit.children
-        ? of(this.orgUnit.children)
-        : this.orgUnitService.loadChildren(
-            this.orgUnit.id,
-            this.orgUnit.level,
-            this.orgUnitFilterConfig
-          );
+      if (this.orgUnit.level === this.orgUnitFilterConfig.minLevel) {
+        this.orgUnitChildren$ = of([]);
+      } else {
+        this.orgUnitChildren$ = this.orgUnit.children
+          ? of(this.orgUnit.children)
+          : this.orgUnitService.loadChildren(
+              this.orgUnit.id,
+              this.orgUnit.level,
+              this.orgUnitFilterConfig
+            );
+      }
 
       this.setOrgUnitProperties(true);
     }
@@ -101,7 +106,10 @@ export class NgxDhis2OrgUnitTreeItemComponent implements OnInit, OnChanges {
   }
 
   onActivateOu(organisationUnit) {
-    this.activate.emit(organisationUnit);
+    this.activate.emit({
+      ...organisationUnit,
+      type: OrgUnitTypes.ORGANISATION_UNIT,
+    });
   }
 
   trackByOrgUnit(index: number, orgUnit: OrgUnit) {

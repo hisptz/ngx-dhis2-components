@@ -10,20 +10,26 @@ export class OrgUnitFilterComponent implements OnInit {
   title = 'app';
   orgUnitObject: any;
   action: string;
-  orgUnitFilterConfig: OrgUnitFilterConfig = { singleSelection: false, reportUse: false }
+  orgUnitFilterConfig: OrgUnitFilterConfig = {
+    singleSelection: true,
+    showOrgUnitLevelGroupSection: false,
+    showUserOrgUnitSection: false,
+    reportUse: false,
+    emitOnSelection: true,
+    hideActionButtons: true,
+    minLevel: 4,
+  };
   selectedOrgUnitItems: any[] = [
-    { level: 3, name: 'Gbo', id: 'YmmeuGbqOwR' },
-    { level: 4, name: 'Gbaiima CHC', id: 'jGYT5U5qJP6' },
-    { level: 4, name: 'Niagorehun MCHP', id: 'WOk7efLlLSj' },
     {
-      id: 'OU_GROUP.AQQCxQqDxLe',
-      name: 'Konta CHP',
+      id: '52cd397580f17',
+      created: '2014-01-08T11:41:41.000Z',
+      lastUpdated: '2014-01-08T11:41:41.000Z',
+      code: 'MOROHOSP',
+      name: 'Morogoro Regional Hospital',
+      shortName: 'MorogoroRegHosp',
+      active: true,
       level: 4,
-    },
-    {
-      id: 'LEVEL-1',
-      name: 'Kukuna CHP',
-      level: 4,
+      path: '/52893cd1b8359/52893cd1ba688/52cd39714afac/52cd397580f17',
     },
   ];
 

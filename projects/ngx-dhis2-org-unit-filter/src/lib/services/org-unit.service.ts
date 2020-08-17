@@ -13,6 +13,7 @@ import { getUserOrgUnits } from '../helpers/get-user-org-units.helper';
 import { OrgUnitLevelService } from './org-unit-level.service';
 import { OrgUnitLevel } from '../models/org-unit-level.model';
 import { sortOrgUnitsByName } from '../helpers/sort-org-units.helper';
+import { OrgUnitTypes } from '../constants/org-unit-types.constants';
 
 @Injectable()
 export class OrgUnitService {
@@ -121,7 +122,14 @@ export class OrgUnitService {
         )}]&paging=false`,
         { useIndexDb: true }
       )
-      .pipe(map((res: any) => (res ? res.organisationUnits : [])));
+      .pipe(
+        map((res: any) =>
+          (res ? res.organisationUnits : []).map((orgUnit: OrgUnit) => ({
+            ...orgUnit,
+            type: OrgUnitTypes.ORGANISATION_UNIT,
+          }))
+        )
+      );
   }
 
   loadChildren(
@@ -169,7 +177,7 @@ export class OrgUnitService {
           user,
           orgUnitFilterConfig.reportUse,
           false
-        );
+        ) as OrgUnit[];
 
         return zip(
           ...userOrgUnits.map((orgUnit: OrgUnit) =>

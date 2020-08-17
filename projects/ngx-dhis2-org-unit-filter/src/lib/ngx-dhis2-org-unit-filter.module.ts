@@ -7,11 +7,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgxDhis2OrgUnitLevelGroupComponent } from './components/ngx-dhis2-org-unit-level-group/ngx-dhis2-org-unit-level-group.component';
 import { NgxDhis2OrgUnitProgressComponent } from './components/ngx-dhis2-org-unit-progress/ngx-dhis2-org-unit-progress.component';
 import { NgxDhis2OrgUnitSelectedOrgUnitComponent } from './components/ngx-dhis2-org-unit-selected-org-unit/ngx-dhis2-org-unit-selected-org-unit.component';
@@ -25,10 +23,6 @@ import { WithOrgUnitLoadingPipe } from './pipes/with-org-unit-loading.pipe';
 import { OrgUnitGroupService } from './services/org-unit-group.service';
 import { OrgUnitLevelService } from './services/org-unit-level.service';
 import { OrgUnitService } from './services/org-unit.service';
-import { OrgUnitGroupEffects } from './store/effects/org-unit-group.effects';
-import { OrgUnitLevelEffects } from './store/effects/org-unit-level.effects';
-import { OrgUnitEffects } from './store/effects/org-unit.effects.';
-import { orgUnitFilterReducer } from './store/reducers/org-unit-filter.reducer';
 
 @NgModule({
   imports: [
@@ -43,12 +37,6 @@ import { orgUnitFilterReducer } from './store/reducers/org-unit-filter.reducer';
     MatIconModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
-    StoreModule.forFeature('orgUnitFilter', orgUnitFilterReducer),
-    EffectsModule.forFeature([
-      OrgUnitLevelEffects,
-      OrgUnitGroupEffects,
-      OrgUnitEffects,
-    ]),
   ],
   declarations: [
     NgxDhis2OrgUnitFilterComponent,
