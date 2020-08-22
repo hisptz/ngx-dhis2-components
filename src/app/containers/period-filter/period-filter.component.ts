@@ -18,7 +18,7 @@ export class PeriodFilterComponent {
   periodObject: any;
   action: string;
   periodFilterConfig: PeriodFilterConfig = {
-    singleSelection: false,
+    singleSelection: true,
     emitOnSelection: true,
     childrenPeriodSortOrder: 'ASC',
     allowDateRangeSelection: true,
@@ -53,6 +53,8 @@ export class PeriodFilterComponent {
   ];
 
   onPeriodUpdate(periodObject, action) {
+    console.log('hapaaaaa :: ', periodObject);
+
     this.periodObject = periodObject;
     this.action = action;
   }

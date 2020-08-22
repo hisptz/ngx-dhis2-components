@@ -195,21 +195,26 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this.endDate = formatDateToYYMMDD(dateValue);
     }
-    if (this.startDate && this.endDate) {
-      this.selectedPeriods.push({
+    if (this.startDate || this.endDate) {
+      let periodObject = {
         id: 'dates-range',
         type: 'dates-range',
         name: this.startDate + ' to ' + this.endDate,
-        dimension: 'ou',
-        startDate: {
+        dimension: 'ou'
+      };
+
+      if (this.startDate) {
+        periodObject['startDate'] = {
           id: this.startDate,
           name: this.startDate
-        },
-        endDate: {
-          id: this.endDate,
-          name: this.endDate
-        }
-      });
+        };
+      }
+
+      if (this.endDate) {
+        periodObject['endDate'] = { id: this.endDate, name: this.endDate };
+      }
+
+      this.selectedPeriods.push(periodObject);
 
       if (this.periodFilterConfig.emitOnSelection) {
         this._onUpdatePeriod();
@@ -237,6 +242,8 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
             this.selectedPeriodType = 'Monthly';
           }
         }
+
+        //console.log('this.selectedPeriodType :: ', this.selectedPeriodType);
 
         this.periodInstance
           .setType(this.selectedPeriodType)
