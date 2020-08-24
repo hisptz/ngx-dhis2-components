@@ -53,7 +53,7 @@ export class PeriodFilterComponent {
   ];
 
   onPeriodUpdate(periodObject, action) {
-    console.log('hapaaaaa :: ', periodObject);
+    //console.log('hapaaaaa :: ', periodObject);
 
     this.periodObject = periodObject;
     this.action = action;

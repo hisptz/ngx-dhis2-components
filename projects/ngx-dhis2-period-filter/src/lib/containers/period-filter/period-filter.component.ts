@@ -199,7 +199,12 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
       let periodObject = {
         id: 'dates-range',
         type: 'dates-range',
-        name: this.startDate + ' to ' + this.endDate,
+        name:
+          this.startDate && this.endDate
+            ? this.startDate + ' to ' + this.endDate
+            : this.startDate
+            ? `from ${this.startDate}`
+            : `to ${this.endDate}`,
         dimension: 'ou'
       };
 
