@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { DataFilterConfig } from 'projects/ngx-dhis2-data-filter/src/public_api';
+import { DataFilterConfig } from 'projects/ngx-dhis2-data-filter/src/public-api';
 
 @Component({
   selector: 'app-data-filter',
