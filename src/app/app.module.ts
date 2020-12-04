@@ -5,7 +5,7 @@ import { NgxDhis2HttpClientModule } from '@iapps/ngx-dhis2-http-client';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { NgxDhis2DataFilterModule } from 'projects/ngx-dhis2-data-filter/src/public-api';
+import { NgxDhis2DataFilterModule } from 'projects/ngx-dhis2-data-filter/src/public_api';
 import { NgxDhis2DictionaryModule } from 'projects/ngx-dhis2-dictionary/src/public-api';
 import { NgxDhis2MenuModule } from 'projects/ngx-dhis2-menu/src/public-api';
 import { NgxDhis2OrgUnitFilterModule } from 'projects/ngx-dhis2-org-unit-filter/src/public-api';
