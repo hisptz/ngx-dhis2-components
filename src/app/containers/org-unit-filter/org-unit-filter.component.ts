@@ -12,9 +12,9 @@ export class OrgUnitFilterComponent implements OnInit {
   action: string;
   orgUnitFilterConfig: OrgUnitFilterConfig = {
     singleSelection: true,
-    showOrgUnitLevelGroupSection: false,
-    showUserOrgUnitSection: false,
-    reportUse: false,
+    showOrgUnitLevelGroupSection: true,
+    showUserOrgUnitSection: true,
+    reportUse: true,
     emitOnSelection: true,
     hideActionButtons: true,
     minLevel: 4,
@@ -39,6 +39,7 @@ export class OrgUnitFilterComponent implements OnInit {
 
   onOrgUnitUpdate(orgUnitObject, action) {
     this.orgUnitObject = orgUnitObject;
+    console.log('or', this.orgUnitObject)
     this.action = action;
   }
 }

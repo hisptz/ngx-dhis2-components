@@ -31,7 +31,8 @@
     "pack-http-client": "npm run build-http-client && cd dist/ngx-dhis2-http-client && npm pack",
     "link-http-client": "npm run build-http-client && cd dist/ngx-dhis2-http-client && npm link",
     "link-org-unit-filter": "npm run build-org-unit-filter && cd dist/ngx-dhis2-org-unit-filter && npm link",
-    "pack-org-unit-filter": "npm run build-org-unit-filter && cd dist/ngx-dhis2-org-unit-filter && npm pack"
+    "pack-org-unit-filter": "npm run build-org-unit-filter && cd dist/ngx-dhis2-org-unit-filter && npm pack",
+    "postinstall": "ngcc"
   },
   "private": true,
   "dependencies": {
@@ -41,6 +42,7 @@
     "@angular/compiler": "~9.1.9",
     "@angular/core": "~9.1.9",
     "@angular/forms": "~9.1.9",
+    "@angular/localize": "^9.1.12",
     "@angular/material": "^9.2.4",
     "@angular/platform-browser": "~9.1.9",
     "@angular/platform-browser-dynamic": "~9.1.9",
@@ -60,7 +62,7 @@
     "@ngx-translate/http-loader": "^4.0.0",
     "bootstrap": "^4.5.0",
     "dexie": "^3.0.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.20",
     "ng2-dragula": "^2.1.1",
     "ngx-color-picker": "^9.1.0",
     "ngx-pagination": "^5.0.0",
@@ -69,7 +71,7 @@
     "zone.js": "~0.10.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.901.7",
+    "@angular-devkit/build-angular": "^0.1100.3",
     "@angular-devkit/build-ng-packagr": "~0.901.7",
     "@angular/cli": "^9.1.7",
     "@angular/compiler-cli": "~9.1.9",
@@ -78,7 +80,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^14.0.5",
     "codelyzer": "^5.2.2",
-    "commitizen": "^4.1.2",
+    "commitizen": "^4.2.2",
     "cz-conventional-changelog": "^3.2.0",
     "husky": "^4.2.5",
     "jasmine-core": "~3.5.0",
