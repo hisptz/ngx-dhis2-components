@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { DataElementGroupComponent } from './data-element-group.component';
 
@@ -6,7 +6,7 @@ describe('DataElementGroupComponent', () => {
   let component: DataElementGroupComponent;
   let fixture: ComponentFixture<DataElementGroupComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ DataElementGroupComponent ]
     })

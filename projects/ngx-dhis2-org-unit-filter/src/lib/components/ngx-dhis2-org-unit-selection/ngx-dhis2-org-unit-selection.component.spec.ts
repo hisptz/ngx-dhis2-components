@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgxDhis2OrgUnitProgressComponent } from '../ngx-dhis2-org-unit-progress/ngx-dhis2-org-unit-progress.component';
 import { NgxDhis2OrgUnitTreeItemComponent } from '../ngx-dhis2-org-unit-tree-item/ngx-dhis2-org-unit-tree-item.component';
@@ -15,7 +15,7 @@ describe('NgxDhis2OrgUnitSelectionComponent', () => {
   let component: NgxDhis2OrgUnitSelectionComponent;
   let fixture: ComponentFixture<NgxDhis2OrgUnitSelectionComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [

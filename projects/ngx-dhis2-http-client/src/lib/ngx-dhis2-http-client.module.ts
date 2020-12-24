@@ -15,7 +15,7 @@ export function initializeDb(indexDbServiceConfig: IndexDbServiceConfig) {
     imports: [HttpClientModule],
 })
 export class NgxDhis2HttpClientModule {
-    static forRoot(config: IndexDbServiceConfig): ModuleWithProviders {
+    static forRoot(config: IndexDbServiceConfig): ModuleWithProviders<NgxDhis2HttpClientModule> {
         return {
             ngModule: NgxDhis2HttpClientModule,
             providers: [

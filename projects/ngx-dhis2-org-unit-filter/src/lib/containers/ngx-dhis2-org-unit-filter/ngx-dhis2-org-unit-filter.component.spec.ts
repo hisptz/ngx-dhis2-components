@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { NgxDhis2OrgUnitFilterComponent } from './ngx-dhis2-org-unit-filter.component';
 import { NgxDhis2OrgUnitSelectedOrgUnitComponent } from '../../components/ngx-dhis2-org-unit-selected-org-unit/ngx-dhis2-org-unit-selected-org-unit.component';
@@ -18,7 +18,7 @@ describe('NgxDhis2OrgUnitFilterComponent', () => {
   let component: NgxDhis2OrgUnitFilterComponent;
   let fixture: ComponentFixture<NgxDhis2OrgUnitFilterComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         StoreModule.forRoot({}),

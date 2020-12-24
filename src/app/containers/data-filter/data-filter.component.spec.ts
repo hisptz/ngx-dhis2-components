@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 
 import { DataFilterComponent } from './data-filter.component';
@@ -9,7 +9,7 @@ describe('DataFilterComponent', () => {
   let fixture: ComponentFixture<DataFilterComponent>;
   let store: MockStore;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       providers: [provideMockStore({})],

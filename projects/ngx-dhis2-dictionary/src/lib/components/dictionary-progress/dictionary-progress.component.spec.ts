@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { DictionaryProgressComponent } from './dictionary-progress.component';
 
@@ -6,7 +6,7 @@ describe('DictionaryProgressComponent', () => {
   let component: DictionaryProgressComponent;
   let fixture: ComponentFixture<DictionaryProgressComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ DictionaryProgressComponent ]
     })

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { NgxDhis2OrgUnitLevelGroupComponent } from './ngx-dhis2-org-unit-level-group.component';
 import { NgxDhis2OrgUnitProgressComponent } from '../ngx-dhis2-org-unit-progress/ngx-dhis2-org-unit-progress.component';
@@ -9,7 +9,7 @@ describe('NgxDhis2OrgUnitLevelGroupComponent', () => {
   let component: NgxDhis2OrgUnitLevelGroupComponent;
   let fixture: ComponentFixture<NgxDhis2OrgUnitLevelGroupComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [
