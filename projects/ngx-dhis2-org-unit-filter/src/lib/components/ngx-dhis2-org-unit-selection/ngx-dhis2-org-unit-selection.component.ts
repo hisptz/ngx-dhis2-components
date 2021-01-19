@@ -31,7 +31,7 @@ export class NgxDhis2OrgUnitSelectionComponent implements OnInit {
   @Output() activateOrgUnit = new EventEmitter();
   @Output() deactivateOrgUnit = new EventEmitter();
 
-  constructor( private orgUnitService: OrgUnitService) {}
+  constructor(private orgUnitService: OrgUnitService) {}
 
   ngOnInit() {
     this.highestLevelOrgUnits$ = this.orgUnitService
