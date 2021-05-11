@@ -4,26 +4,24 @@ import * as _ from 'lodash';
 @Component({
   selector: 'app-data-element',
   templateUrl: './data-element.component.html',
-  styleUrls: ['./data-element.component.css']
+  styleUrls: ['./data-element.component.css'],
 })
 export class DataElementComponent implements OnInit {
-
   @Input() dataElementInfo: any;
   @Output() selectedMetadataId = new EventEmitter<string>();
-  @Input()  isprintSet: boolean;
-  listAllMetadataInGroup: boolean = false;
-  showOptions: boolean = false;
-  constructor() { }
+  @Input() isprintSet: boolean;
+  listAllMetadataInGroup = false;
+  showOptions = false;
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   setActiveItem(e, metaDataId) {
     this.selectedMetadataId.emit(metaDataId);
   }
 
   sortLegends(legends) {
-    return _.reverse(_.sortBy(legends, ['startValue']))
+    return _.reverse(_.sortBy(legends, ['startValue']));
   }
 
   getToCapitalLetters(color) {
@@ -36,14 +34,14 @@ export class DataElementComponent implements OnInit {
   }
 
   getOtherMetadata(allMedatada, listAllMetadataInGroup) {
-    let newSlicedList = [];
+    const newSlicedList = [];
     // _.map(allMedatada, (metadata) => {
     //   if (metadata.id !== this.dataElementInfo.data.metadata.id) {
     //     newSlicedList.push(metadata);
     //   }
     // })
     if (!listAllMetadataInGroup && !this.isprintSet) {
-      return allMedatada.slice(0,3)
+      return allMedatada.slice(0, 3);
     } else {
       return allMedatada;
     }
@@ -54,9 +52,18 @@ export class DataElementComponent implements OnInit {
   }
 
   formatTextToSentenceFormat(text) {
-    text.split('_').map(function(stringSection) {
-      return stringSection.slice(0,1).toUpperCase() + stringSection.slice(1).toLowerCase();
-    }).join(' ')
-    return text.split('_').join(' ').slice(0,1).toUpperCase() + text.split('_').join(' ').slice(1).toLowerCase();
+    text
+      .split('_')
+      .map((stringSection) => {
+        return (
+          stringSection.slice(0, 1).toUpperCase() +
+          stringSection.slice(1).toLowerCase()
+        );
+      })
+      .join(' ');
+    return (
+      text.split('_').join(' ').slice(0, 1).toUpperCase() +
+      text.split('_').join(' ').slice(1).toLowerCase()
+    );
   }
 }

@@ -4,17 +4,15 @@ import * as _ from 'lodash';
 @Component({
   selector: 'app-functions',
   templateUrl: './functions.component.html',
-  styleUrls: ['./functions.component.css']
+  styleUrls: ['./functions.component.css'],
 })
 export class FunctionsComponent implements OnInit {
-
   @Input() functionsDetails: any;
   @Output() selectedMetadataId = new EventEmitter<string>();
-  @Input()  isprintSet: any;
-  constructor() { }
+  @Input() isprintSet: any;
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   setActiveItem(e, metaDataId) {
     this.selectedMetadataId.emit(metaDataId);
@@ -26,17 +24,17 @@ export class FunctionsComponent implements OnInit {
   }
 
   getSizeOfTheFunction(functionDefinition) {
-    let functionSize = functionDefinition.length;
+    const functionSize = functionDefinition.length;
     if (functionSize < 1000) {
       return functionSize;
     } else if (functionSize >= 1000 && functionSize < 1000000) {
-      return (functionSize/1000).toFixed(2);
+      return (functionSize / 1000).toFixed(2);
     } else {
-      return (functionSize/1000000).toFixed(2);
+      return (functionSize / 1000000).toFixed(2);
     }
   }
 
   formatToUppercase(str) {
-    return _.upperCase(str)
+    return _.upperCase(str);
   }
 }

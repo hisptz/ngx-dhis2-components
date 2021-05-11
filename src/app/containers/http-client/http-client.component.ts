@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import {
   NgxDhis2HttpClientService,
-  Manifest
+  Manifest,
 } from '@iapps/ngx-dhis2-http-client';
 
 @Component({
   selector: 'app-http-client',
   templateUrl: './http-client.component.html',
-  styleUrls: ['./http-client.component.scss']
+  styleUrls: ['./http-client.component.scss'],
 })
 export class HttpClientComponent implements OnInit {
   constructor(private httpClient: NgxDhis2HttpClientService) {}
@@ -18,12 +18,12 @@ export class HttpClientComponent implements OnInit {
     });
     this.httpClient
       .get(
-        'organisationUnits.json?fields=id,name,level,parent,path&order=level:asc&order=name:asc&filter=path:ilike:O6uvpzGd5pu&pageSize=100&page=1',
+        'organisationUnits.json?fields=id,name,level,path,parent,children[id,name,level,path],dataSets&order=name:asc&filter=parent.id:eq:YmmeuGbqOwR&paging=false',
         {
-          useIndexDb: true
+          useIndexDb: true,
         }
       )
-      .subscribe(orgUnits => {
+      .subscribe((orgUnits) => {
         console.log(orgUnits);
       });
   }

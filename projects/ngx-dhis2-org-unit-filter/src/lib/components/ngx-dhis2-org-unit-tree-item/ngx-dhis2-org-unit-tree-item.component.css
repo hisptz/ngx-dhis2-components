@@ -23,10 +23,21 @@
   cursor: pointer;
 }
 
+.ngx-dhis2-org-unit-tree-item-margin-left {
+  margin-left: 32px;
+}
+
 .ngx-dhis2-org-unit-count {
-  font-size: 9px;
+  font-size: 11px;
   padding: 3px 5px;
   border-radius: 2px;
   font-weight: 400;
-  margin-bottom: 0.42rem;
+  margin-bottom: 0.38rem;
+  color: gray;
+}
+
+.ngx-dhis2-org-unit-children-loading {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
 }

@@ -3,7 +3,7 @@
     <!-- dictionary menu list -->
     <lib-dictionary-menu [selectedItem]="selectedIndicator" [dictionaryList]="dictionaryList$ | async"
       [dictionaryConfig]="dictionaryConfig" (setActiveItem)="setActiveItem($event)"
-      (removeItem)="remove($event, dictionaryList$ )">
+      (removeItem)="remove($event, dictionaryList$)">
     </lib-dictionary-menu>
     <!-- end of dictionary menu list -->
   </div>

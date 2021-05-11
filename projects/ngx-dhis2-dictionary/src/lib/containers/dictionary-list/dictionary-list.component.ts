@@ -4,49 +4,45 @@ import {
   EventEmitter,
   Input,
   OnInit,
-  Output
+  Output,
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { select, Store } from '@ngrx/store';
 import * as _ from 'lodash';
 import { Observable, pipe } from 'rxjs';
-
+import { DICTIONARY_CONFIG } from '../../constants/dictionary-config.constant';
+import { DictionaryConfig } from '../../models/dictionary-config.model';
 import { MetadataDictionary } from '../../models/dictionary.model';
-import { ExportService } from '../../services/export.service';
 import { InitializeDictionaryMetadataAction } from '../../store/actions/dictionary.actions';
+import {
+  LoadIndicatorGroupsAction,
+  loadIndicatorsAction,
+} from '../../store/actions/indicators.actions';
 import { DictionaryState } from '../../store/reducers/dictionary.reducer';
 import { AppState } from '../../store/reducers/indicators.reducers';
 import { getDictionaryList } from '../../store/selectors/dictionary.selectors';
 import {
   getAllIndicators,
   getIndicatorGroups,
-  getListOfIndicators
+  getListOfIndicators,
 } from '../../store/selectors/indicators.selectors';
 import { IndicatorGroupsState } from '../../store/state/indicators.state';
-import {
-  loadIndicatorsAction,
-  LoadIndicatorGroupsAction
-} from '../../store/actions/indicators.actions';
-import { DictionaryConfig } from '../../models/dictionary-config.model';
-import { DICTIONARY_CONFIG } from '../../constants/dictionary-config.constant';
 
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'ngx-dhis2-dictionary-list',
   templateUrl: './dictionary-list.component.html',
   styleUrls: ['./dictionary-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DictionaryListComponent implements OnInit {
   @Input() metadataIdentifiers: Array<string>;
   @Input() selectedItem: string;
   @Input() dictionaryConfig: DictionaryConfig;
 
-  @Output() dictionaryItemId = new EventEmitter<any>();
-  @Output() metadataInfo = new EventEmitter<any>();
-  @Output() metadataGroupsInfo = new EventEmitter<any>();
   dictionaryList$: Observable<MetadataDictionary[]>;
   indicatorGroups$: Observable<IndicatorGroupsState>;
+
   activeItem: number;
   indicators: any[] = [];
   newIndicators$: Observable<any>;
@@ -64,11 +60,14 @@ export class DictionaryListComponent implements OnInit {
   html: any;
   isPrintSet: boolean;
 
+  @Output() dictionaryItemId = new EventEmitter<any>();
+  @Output() metadataInfo = new EventEmitter<any>();
+  @Output() metadataGroupsInfo = new EventEmitter<any>();
+
   constructor(
-    private store: Store<DictionaryState>,
+    private sanitizer: DomSanitizer,
     private indicatorsStore: Store<AppState>,
-    private exportService: ExportService,
-    private sanitizer: DomSanitizer
+    private store: Store<DictionaryState> // private exportService: ExportService
   ) {}
 
   ngOnInit() {
@@ -83,7 +82,7 @@ export class DictionaryListComponent implements OnInit {
 
     this.dictionaryConfig = {
       ...DICTIONARY_CONFIG,
-      ...(this.dictionaryConfig || {})
+      ...(this.dictionaryConfig || {}),
     };
 
     this.selectedIndicator =
@@ -128,9 +127,9 @@ export class DictionaryListComponent implements OnInit {
     );
 
     this.dictionaryList$ = this.store.select(getDictionaryList(identifiers));
-    let objToEmit = {
+    const objToEmit = {
       selected: this.selectedIndicator,
-      otherSelectedIds: this.metadataIdentifiers
+      otherSelectedIds: this.metadataIdentifiers,
     };
     this.dictionaryItemId.emit(objToEmit);
   }
@@ -148,15 +147,15 @@ export class DictionaryListComponent implements OnInit {
     this.metadataIdentifiers = _.uniq(this.metadataIdentifiers);
     if (this.selectedIndicator === 'all') {
       this.loadAllIndicators();
-      let objToEmit = {
+      const objToEmit = {
         selected: 'all',
-        otherSelectedIds: this.metadataIdentifiers
+        otherSelectedIds: this.metadataIdentifiers,
       };
       this.dictionaryItemId.emit(objToEmit);
     } else {
-      let objToEmit = {
+      const objToEmit = {
         selected: this.selectedIndicator,
-        otherSelectedIds: this.metadataIdentifiers
+        otherSelectedIds: this.metadataIdentifiers,
       };
       this.dictionaryItemId.emit(objToEmit);
     }
@@ -170,10 +169,10 @@ export class DictionaryListComponent implements OnInit {
 
   remove(itemId, allIdentifiers) {
     this.listAllMetadataInGroup = false;
-    let identifiers = [];
-    allIdentifiers.subscribe(identifiersInfo => {
+    const identifiers = [];
+    allIdentifiers.subscribe((identifiersInfo) => {
       if (identifiersInfo.length > 0) {
-        identifiersInfo.forEach(identifier => {
+        identifiersInfo.forEach((identifier) => {
           if (
             itemId !== identifier.id &&
             identifier.name.indexOf('not found') < 0
@@ -184,21 +183,21 @@ export class DictionaryListComponent implements OnInit {
       }
     });
     this.metadataIdentifiers = _.uniq(identifiers);
-    if (this.metadataIdentifiers.length == 0) {
+    if (this.metadataIdentifiers.length === 0) {
       this.selectedIndicator = 'all';
       this.loadAllIndicators();
-      let objToEmit = {
+      const objToEmit = {
         selected: 'all',
-        otherSelectedIds: []
+        otherSelectedIds: [],
       };
       this.dictionaryItemId.emit(objToEmit);
     } else {
       this.selectedIndicator = this.metadataIdentifiers[
         this.metadataIdentifiers.length - 1
       ];
-      let objToEmit = {
+      const objToEmit = {
         selected: this.selectedIndicator,
-        otherSelectedIds: this.metadataIdentifiers
+        otherSelectedIds: this.metadataIdentifiers,
       };
       this.dictionaryItemId.emit(objToEmit);
       this.store.dispatch(
@@ -216,16 +215,18 @@ export class DictionaryListComponent implements OnInit {
       pipe(getListOfIndicators)
     );
     if (this.indicatorsList$) {
-      this.indicatorsList$.subscribe(indicatorList => {
+      this.indicatorsList$.subscribe((indicatorList) => {
         if (indicatorList) {
-          this.totalAvailableIndicators = indicatorList['pager']['total'];
+          this.totalAvailableIndicators = indicatorList.pager
+            ? indicatorList.pager.total
+            : 0;
           this.allIndicators$ = this.indicatorsStore.select(
             pipe(getAllIndicators)
           );
-          this.allIndicators$.subscribe(indicatorsLoaded => {
+          this.allIndicators$.subscribe((indicatorsLoaded) => {
             if (indicatorsLoaded) {
               this.indicators = [];
-              _.map(indicatorsLoaded, indicatorsByPage => {
+              _.map(indicatorsLoaded, (indicatorsByPage) => {
                 this.indicators = [...this.indicators, ...indicatorsByPage];
                 this.completedPercent =
                   100 *
@@ -247,16 +248,18 @@ export class DictionaryListComponent implements OnInit {
             pipe(getAllIndicators)
           );
           if (this.indicatorsList$) {
-            this.indicatorsList$.subscribe(indicatorList => {
-              if (indicatorList) {
-                this.totalAvailableIndicators = indicatorList['pager']['total'];
-                this.allIndicators$.subscribe(indicatorsLoaded => {
+            this.indicatorsList$.subscribe((indicatorListResult: any) => {
+              if (indicatorListResult) {
+                this.totalAvailableIndicators = indicatorListResult.pager
+                  ? indicatorListResult.pager.total
+                  : 0;
+                this.allIndicators$.subscribe((indicatorsLoaded) => {
                   if (indicatorsLoaded) {
                     this.indicators = [];
-                    _.map(indicatorsLoaded, indicatorsByPage => {
+                    _.map(indicatorsLoaded, (indicatorsByPage: any) => {
                       this.indicators = [
                         ...this.indicators,
-                        ...indicatorsByPage['indicators']
+                        ...indicatorsByPage.indicators,
                       ];
                       this.completedPercent =
                         100 *
@@ -277,9 +280,9 @@ export class DictionaryListComponent implements OnInit {
             select(getIndicatorGroups)
           );
           if (this.indicatorGroups$) {
-            this.indicatorGroups$.subscribe(indicatorGroups => {
+            this.indicatorGroups$.subscribe((indicatorGroups: any) => {
               if (indicatorGroups) {
-                this.indicatorGroups = indicatorGroups['indicatorGroups'];
+                this.indicatorGroups = indicatorGroups.indicatorGroups;
               }
             });
           }
@@ -290,7 +293,7 @@ export class DictionaryListComponent implements OnInit {
 
   getMetadataItemName(allItems, id) {
     _.map(allItems, (item: any) => {
-      if (item.id == id) {
+      if (item.id === id) {
         return item.name;
       }
     });
@@ -301,13 +304,15 @@ export class DictionaryListComponent implements OnInit {
   }
 
   getCategories(categoryOptionCombos) {
-    let categories = [];
-    categoryOptionCombos.forEach(categoryCombo => {
-      categoryCombo['categoryOptions'].forEach(option => {
-        _.map(option['categories'], (category: any) => {
-          categories.push(category);
-        });
-      });
+    const categories = [];
+    categoryOptionCombos.forEach((categoryCombo: any) => {
+      (categoryCombo ? categoryCombo.categoryOptions : []).forEach(
+        (option: any) => {
+          _.map(option.categories, (category: any) => {
+            categories.push(category);
+          });
+        }
+      );
     });
     return _.uniqBy(categories, 'id');
   }
@@ -323,7 +328,7 @@ export class DictionaryListComponent implements OnInit {
   formatTextToSentenceFormat(text) {
     text
       .split('_')
-      .map(function(stringSection) {
+      .map((stringSection: any) => {
         return (
           stringSection.slice(0, 1).toUpperCase() +
           stringSection.slice(1).toLowerCase()
@@ -331,30 +336,22 @@ export class DictionaryListComponent implements OnInit {
       })
       .join(' ');
     return (
-      text
-        .split('_')
-        .join(' ')
-        .slice(0, 1)
-        .toUpperCase() +
-      text
-        .split('_')
-        .join(' ')
-        .slice(1)
-        .toLowerCase()
+      text.split('_').join(' ').slice(0, 1).toUpperCase() +
+      text.split('_').join(' ').slice(1).toLowerCase()
     );
   }
 
   exportMetadataInformation(dictionaryItem) {
     this.html = document.getElementById('template-to-export').outerHTML;
     const theDate = new Date();
-    this.exportService.exportXLS(
-      dictionaryItem.name + '_generated_on_' + theDate,
-      this.html
-    );
+    // this.exportService.exportXLS(
+    //   dictionaryItem.name + '_generated_on_' + theDate,
+    //   this.html
+    // );
   }
 
   getOtherMetadata(allMedatada, listAllMetadataInGroup) {
-    let newSlicedList = [];
+    const newSlicedList = [];
     // _.map(allMedatada, (metadata) => {
     //   if (metadata.id !== this.selectedIndicator) {
     //     newSlicedList.push(metadata);
@@ -368,15 +365,15 @@ export class DictionaryListComponent implements OnInit {
   }
 
   getExpressionPart(element, indicator) {
-    let expressionPartAvailability = [];
+    const expressionPartAvailability = [];
     if (indicator.numerator.indexOf(element.id) > -1) {
       expressionPartAvailability.push('Numerator');
     } else if (indicator.denominator.indexOf(element.id) > -1) {
       expressionPartAvailability.push('Denominator');
     }
-    if (expressionPartAvailability.length == 1) {
+    if (expressionPartAvailability.length === 1) {
       return expressionPartAvailability[0];
-    } else if (expressionPartAvailability.length == 2) {
+    } else if (expressionPartAvailability.length === 2) {
       return (
         expressionPartAvailability[0] + ' and ' + expressionPartAvailability[1]
       );
@@ -398,12 +395,12 @@ export class DictionaryListComponent implements OnInit {
     this.listAllMetadataInGroup = true;
     this.isPrintSet = true;
     if (this.isPrintSet) {
-      setTimeout(function() {
-        this.isprintSet = false;
+      setTimeout(() => {
+        this.isPrintSet = false;
         window.print();
       }, 500);
-      setTimeout(function() {
-        this.isprintSet = false;
+      setTimeout(() => {
+        this.isPrintSet = false;
       }, 1000);
     }
   }

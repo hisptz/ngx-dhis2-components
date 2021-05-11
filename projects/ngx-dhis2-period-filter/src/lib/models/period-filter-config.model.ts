@@ -9,4 +9,6 @@ export interface PeriodFilterConfig {
   allowFixedPeriodSelection?: boolean;
   allowRelativePeriodSelection?: boolean;
   allowDateRangeSelection?: boolean;
+  hideActionButtons?: boolean;
+  contentHeight?: string;
 }

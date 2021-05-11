@@ -17,9 +17,6 @@ export interface OrgUnitFilterConfig {
   // Specify minimum level for org units
   minLevel?: number;
 
-  // Specify whether to update on select or unselect or on button click
-  updateOnSelect?: boolean;
-
   // Specify whether org unit selection is single or multiple
   singleSelection: boolean;
 
@@ -31,4 +28,13 @@ export interface OrgUnitFilterConfig {
 
   // Specify additional organisation unit query fields
   additionalQueryFields?: string[];
+
+  // Specify whether selected item should be emitted on selection or not
+  emitOnSelection?: boolean;
+
+  // Specify if action buttons should be hidden or not
+  hideActionButtons?: boolean;
+
+  // Set height of organisation unit selection content
+  contentHeight?: string;
 }

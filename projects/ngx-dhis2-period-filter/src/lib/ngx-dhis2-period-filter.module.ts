@@ -13,6 +13,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 @NgModule({
   declarations: [PeriodFilterComponent],
   imports: [
@@ -29,7 +30,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatInputModule,
     MatNativeDateModule,
     MatButtonToggleModule,
+    DragDropModule
   ],
-  exports: [PeriodFilterComponent],
+  exports: [PeriodFilterComponent]
 })
 export class NgxDhis2PeriodFilterModule {}

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ProgramIndicatorPropertiesComponent } from './program-indicator-properties.component';
 
@@ -6,7 +6,7 @@ describe('ProgramIndicatorPropertiesComponent', () => {
   let component: ProgramIndicatorPropertiesComponent;
   let fixture: ComponentFixture<ProgramIndicatorPropertiesComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ProgramIndicatorPropertiesComponent ]
     })

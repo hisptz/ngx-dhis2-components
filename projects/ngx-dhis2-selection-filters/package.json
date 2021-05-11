@@ -1,0 +1,17 @@
+{
+  "name": "@iapps/ngx-dhis2-selection-filters",
+  "version": "1.0.8-beta.15",
+  "peerDependencies": {
+    "@angular/common": "^6.0.0 || ^7.0.0 || ^8.0.0",
+    "@angular/core": "^6.0.0 || ^7.0.0 || ^8.0.0",
+    "@angular/animation": "^4.0.0-beta.8",
+    "@angular/animations": "^7.2.11 || ^8.0.0",
+    "@angular/material": "^8.0.0",
+    "lodash": "^4.17.10",
+    "@iapps/ngx-dhis2-data-filter": "^1.0.0-beta.15",
+    "@iapps/ngx-dhis2-org-unit-filter": "^1.1.21-beta.1",
+    "@iapps/ngx-dhis2-period-filter": "^1.0.0-beta.6",
+    "ngx-color-picker": "^7.4.0",
+    "ng2-dragula": "^2.1.1"
+  }
+}

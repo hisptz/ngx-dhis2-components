@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 @Component({
   selector: 'app-data-set',
   templateUrl: './data-set.component.html',
-  styleUrls: ['./data-set.component.css']
+  styleUrls: ['./data-set.component.css'],
 })
 export class DataSetComponent implements OnInit {
   @Input() dataSetInfo: any;
@@ -30,7 +30,7 @@ export class DataSetComponent implements OnInit {
   formatTextToSentenceFormat(text) {
     text
       .split('_')
-      .map(function(stringSection) {
+      .map((stringSection) => {
         return (
           stringSection.slice(0, 1).toUpperCase() +
           stringSection.slice(1).toLowerCase()
@@ -38,16 +38,8 @@ export class DataSetComponent implements OnInit {
       })
       .join(' ');
     return (
-      text
-        .split('_')
-        .join(' ')
-        .slice(0, 1)
-        .toUpperCase() +
-      text
-        .split('_')
-        .join(' ')
-        .slice(1)
-        .toLowerCase()
+      text.split('_').join(' ').slice(0, 1).toUpperCase() +
+      text.split('_').join(' ').slice(1).toLowerCase()
     );
   }
 

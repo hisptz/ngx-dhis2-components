@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 @Component({
   selector: 'app-program-indicator',
   templateUrl: './program-indicator.component.html',
-  styleUrls: ['./program-indicator.component.css']
+  styleUrls: ['./program-indicator.component.css'],
 })
 export class ProgramIndicatorComponent implements OnInit {
   @Input() programIndicatorInfo: any;
@@ -25,7 +25,7 @@ export class ProgramIndicatorComponent implements OnInit {
   formatTextToSentenceFormat(text) {
     text
       .split('_')
-      .map(function(stringSection) {
+      .map((stringSection) => {
         return (
           stringSection.slice(0, 1).toUpperCase() +
           stringSection.slice(1).toLowerCase()
@@ -33,16 +33,8 @@ export class ProgramIndicatorComponent implements OnInit {
       })
       .join(' ');
     return (
-      text
-        .split('_')
-        .join(' ')
-        .slice(0, 1)
-        .toUpperCase() +
-      text
-        .split('_')
-        .join(' ')
-        .slice(1)
-        .toLowerCase()
+      text.split('_').join(' ').slice(0, 1).toUpperCase() +
+      text.split('_').join(' ').slice(1).toLowerCase()
     );
   }
 
@@ -56,24 +48,26 @@ export class ProgramIndicatorComponent implements OnInit {
   }
 
   formatFilter(filter) {
-    this.programIndicatorInfo.data.dataElements.forEach(element => {
+    this.programIndicatorInfo.data.dataElements.forEach((element) => {
       if (filter.indexOf(element.id) > -1) {
         filter = filter.split(element.id).join(element.name);
       }
     });
-    this.programIndicatorInfo.data.programStages.forEach(element => {
+    this.programIndicatorInfo.data.programStages.forEach((element) => {
       if (filter.indexOf(element.id) > -1) {
         filter = filter.split(element.id).join(element.name);
       }
     });
-    this.programIndicatorInfo.data.trackedEntityAttributes.forEach(element => {
-      if (filter.indexOf('A' + element.id) > -1) {
-        filter = filter.split('A' + element.id).join(element.name);
+    this.programIndicatorInfo.data.trackedEntityAttributes.forEach(
+      (element) => {
+        if (filter.indexOf('A' + element.id) > -1) {
+          filter = filter.split('A' + element.id).join(element.name);
+        }
+        if (filter.indexOf(element.id) > -1) {
+          filter = filter.split(element.id).join(element.name);
+        }
       }
-      if (filter.indexOf(element.id) > -1) {
-        filter = filter.split(element.id).join(element.name);
-      }
-    });
+    );
     return filter;
   }
 }

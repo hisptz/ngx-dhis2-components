@@ -3,13 +3,13 @@ import { ActionReducerMap } from '@ngrx/store';
 
 import {
   IndicatorsAction,
-  IndicatorsActions
+  IndicatorsActions,
 } from '../actions/indicators.actions';
 import {
   AllIndicatorsState,
   IndicatorGroupsState,
   IndicatorsState,
-  programIndicatorGroupsState
+  ProgramIndicatorGroupsState,
 } from '../state/indicators.state';
 
 export interface State extends EntityState<AllIndicatorsState> {
@@ -25,7 +25,7 @@ export const adapter: EntityAdapter<AllIndicatorsState> = createEntityAdapter<
 export const INITIAL_STATE_LOADED_INDICATORS: State = adapter.getInitialState({
   indicators: null,
   programIndicators: null,
-  progressLoadingValue: 0
+  progressLoadingValue: 0,
 });
 
 export function indicatorsListReducer(
@@ -36,7 +36,7 @@ export function indicatorsListReducer(
     case IndicatorsActions.LoadIndicatorsSuccess:
       return {
         ...state,
-        ...action.payload
+        ...action.payload,
       };
     default:
       return state;
@@ -51,7 +51,7 @@ export function programIndicatorsListReducer(
     case IndicatorsActions.LoadProgramIndicatorsSuccess:
       return {
         ...state,
-        ...action.payload
+        ...action.payload,
       };
     default:
       return state;
@@ -66,12 +66,12 @@ export function allIndicatorsRedcuer(
     case IndicatorsActions.LoadIndicatorsByPagesSuccess:
       return {
         ...state,
-        indicators: action.payload
+        indicators: action.payload,
       };
     case IndicatorsActions.LoadProgramIndicatorsByPagesSuccess:
       return {
         ...state,
-        programIndicators: action.payload
+        programIndicators: action.payload,
       };
     default:
       return state;
@@ -85,7 +85,7 @@ export function indicatorGroupsReducer(
   switch (action.type) {
     case IndicatorsActions.LoadIndicatorGroupsSuccess:
       return {
-        ...action.payload
+        ...action.payload,
       };
     default:
       return state;
@@ -93,13 +93,13 @@ export function indicatorGroupsReducer(
 }
 
 export function programIndicatorGroupsReducer(
-  state: programIndicatorGroupsState = null,
+  state: ProgramIndicatorGroupsState = null,
   action: IndicatorsAction
 ) {
   switch (action.type) {
     case IndicatorsActions.LoadProgramIndicatorGroupsSuccess:
       return {
-        ...action.payload
+        ...action.payload,
       };
     default:
       return state;
@@ -111,7 +111,7 @@ export interface AppState {
   programIndicatorsList: any;
   allIndicators: AllIndicatorsState;
   indicatorGroups: IndicatorGroupsState;
-  programIndicatorGroups: programIndicatorGroupsState;
+  programIndicatorGroups: ProgramIndicatorGroupsState;
 }
 
 export const indicatorsReducers: ActionReducerMap<AppState> = {
@@ -119,5 +119,5 @@ export const indicatorsReducers: ActionReducerMap<AppState> = {
   programIndicatorsList: programIndicatorsListReducer,
   allIndicators: allIndicatorsRedcuer,
   indicatorGroups: indicatorGroupsReducer,
-  programIndicatorGroups: programIndicatorGroupsReducer
+  programIndicatorGroups: programIndicatorGroupsReducer,
 };

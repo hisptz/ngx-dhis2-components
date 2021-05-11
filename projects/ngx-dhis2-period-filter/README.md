@@ -2,24 +2,259 @@
 
 This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.2.0.
 
-## Code scaffolding
+## Installation
 
-Run `ng generate component component-name --project ngx-dhis2-period-filter` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ngx-dhis2-period-filter`.
+`npm i @iapps/ngx-dhis2-period-filter --save`
 
-> Note: Don't forget to add `--project ngx-dhis2-period-filter` or else it will be added to the default project in your `angular.json` file.
+## Contents
 
-## Build
+`ngx-dhis2-period-filter` provides three period selection types
 
-Run `ng build ngx-dhis2-period-filter` to build the project. The build artifacts will be stored in the `dist/` directory.
+- Fixed periods
+- Relative periods
+- Periods range (Dates range)
 
-## Publishing
+## Usage
 
-After building your library with `ng build ngx-dhis2-period-filter`, go to the dist folder `cd dist/ngx-dhis2-period-filter` and run `npm publish`.
+**1. Import NgxDhis2PeriodFilterModule**
 
-## Running unit tests
+```ts
+.........
+import { NgxDhis2PeriodFilterModule } from '@iapps/ngx-dhis2-period-filter';
 
-Run `ng test ngx-dhis2-period-filter` to execute the unit tests via [Karma](https://karma-runner.github.io).
+........
+@NgModule({
+  declarations: [AppComponent],
+  imports: [
+   ..........
+    NgxDhis2PeriodFilterModule
+    .......
+    ]
+    ......
+    })
+```
 
-## Further help
+**2. Injecting into components.ts to use**
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+```ts
+.........
+@Component({
+  selector: 'app-period-filter',
+  templateUrl: './period-filter.component.html',
+  styleUrls: ['./period-filter.component.scss']
+})
+export class PeriodFilterComponent {
+    periodFilterConfig: any = {
+        singleSelection: true,
+        emitOnSelection: false,
+        childrenPeriodSortOrder: 'ASC',
+        allowDateRangeSelection: true,
+        allowRelativePeriodSelection: true,
+        allowFixedPeriodSelection: true
+    };
+    selectedPeriodItems: any[] = [
+        {
+        id: '201102',
+        type: 'Monthly',
+        name: 'February 2011'
+        },
+        {
+        id: '201101',
+        type: 'Monthly',
+        name: 'January 2011'
+        }
+    ];
+
+    ........
+
+    onPeriodUpdate(periodObject, action) {
+        this.periodObject = periodObject; // see on example of outputs
+        this.action = action; // See on example outputs
+    }
+
+ }
+
+
+```
+
+**3. Injecting into components.html to use**
+The selection period types to be see depends on the setting of the configuration, just set it true to allow a required selection type (Fixed, Relative or Range)
+
+```
+<div>
+    <ngx-dhis2-period-filter
+        [selectedPeriods]="selectedPeriodItems"
+        [periodFilterConfig]="periodFilterConfig"
+        [selectedPeriodType]="'Monthly'"
+        (update)="onPeriodUpdate($event, 'UPDATE')"
+        (change)="onPeriodUpdate($event, 'CHANGE')"
+        (close)="onPeriodUpdate($event, 'CLOSE')"
+        >
+    </ngx-dhis2-period-filter>
+</div>
+
+```
+
+Others
+
+- Fixed period Only (set true `allowFixedPeriodSelection: true`)
+
+```
+<div>
+    <ngx-dhis2-period-filter
+        [selectedPeriods]="selectedPeriodItems"
+        [periodFilterConfig]="periodFilterConfig"
+        [selectedPeriodType]="'Relative Year'"
+        (update)="onPeriodUpdate($event, 'UPDATE')"
+        (change)="onPeriodUpdate($event, 'CHANGE')"
+        (close)="onPeriodUpdate($event, 'CLOSE')"
+        >
+    </ngx-dhis2-period-filter>
+</div>
+
+```
+
+- Relative period Only (set true `allowRelativePeriodSelection: true`)
+
+```
+<div>
+    <ngx-dhis2-period-filter
+        [selectedPeriods]="selectedPeriodItems"
+        [periodFilterConfig]="periodFilterConfig"
+        [selectedPeriodType]="'Relative Year'"
+        (update)="onPeriodUpdate($event, 'UPDATE')"
+        (change)="onPeriodUpdate($event, 'CHANGE')"
+        (close)="onPeriodUpdate($event, 'CLOSE')"
+        >
+    </ngx-dhis2-period-filter>
+</div>
+
+```
+
+- Range period Only (set true `allowDateRangeSelection: true`)
+
+```
+<div>
+    <ngx-dhis2-period-filter
+        [selectedPeriods]="selectedPeriodItems"
+        [periodFilterConfig]="periodFilterConfig"
+        (update)="onPeriodUpdate($event, 'UPDATE')"
+        (change)="onPeriodUpdate($event, 'CHANGE')"
+        (close)="onPeriodUpdate($event, 'CLOSE')"
+        >
+    </ngx-dhis2-period-filter>
+</div>
+
+```
+
+**4. Sample outputs**
+
+- Example 1: Fixed periods
+
+  - action
+    `UPDATE`
+  - payload
+
+  ````
+   {
+      "items": [
+          {
+              "id": "201109",
+              "type": "Monthly",
+              "name": "Genbot 2011"
+          },
+          {
+              "id": "201108",
+              "type": "Monthly",
+              "name": "Miazia 2011"
+          },
+          {
+              "id": "201107",
+              "type": "Monthly",
+              "name": "Megabit 2011"
+          },
+          {
+              "id": "201106",
+              "type": "Monthly",
+              "name": "Yekatit 2011"
+          }
+          ],
+          "dimension": "pe",
+          "changed": true
+      }
+
+      ```
+
+  ````
+
+- Example 2: Relative periods
+
+  - action
+    `UPDATE`
+  - payload
+
+  ````
+   {
+      "items": [
+          {
+          "id": "LAST_6_MONTHS",
+          "type": "RelativeMonth",
+          "name": "Last 6 Months"
+          }
+      ],
+      "dimension": "pe",
+      "changed": true
+      }
+
+      ```
+
+  ````
+
+- Example 3: Range periods
+
+  - action
+    `UPDATE`
+  - payload
+
+  ````
+   {
+  "items": [
+      {
+      "id": "dates-range",
+      "type": "dates-range",
+      "name": "2020-04-01 to 2020-05-22",
+      "dimension": "ou",
+      "startDate": {
+          "id": "2020-04-01",
+          "name": "2020-04-01"
+      },
+      "endDate": {
+          "id": "2020-05-22",
+          "name": "2020-05-22"
+      }
+      }
+  ],
+  "dimension": "pe",
+  "changed": true
+  }
+
+      ```
+  ````
+
+  **5. Setting Default filter type**
+  The selection period filter type determines which periods filter type to load by default when the period filter is opened(Fixed, Relative or Range)
+
+```
+<div>
+    <ngx-dhis2-period-filter
+        [selectedPeriods]="selectedPeriodItems"
+        [periodFilterConfig]="periodFilterConfig"
+        [selectedPeriodFilterType] = "'Range'"
+        (update)="onPeriodUpdate($event, 'UPDATE')"
+        (change)="onPeriodUpdate($event, 'CHANGE')"
+        (close)="onPeriodUpdate($event, 'CLOSE')"
+        >
+    </ngx-dhis2-period-filter>
+</div>
+
+```

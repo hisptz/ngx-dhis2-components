@@ -25,6 +25,24 @@
   position: relative;
 }
 
+::ng-deep .mat-checkbox-inner-container {
+  height: 12px !important;
+  width: 12px !important;
+}
+
+.ngx-dhis2-org-unit-filter__selection-container {
+  margin-top: 10px;
+  display: flex;
+  width: 100%;
+}
+
+.ngx-dhis2-org-unit-filter__footer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 5px;
+}
+
 .ngx-dhis2-org-unit-filter__org-unit-buttons {
   display: flex;
   justify-content: flex-end;
@@ -34,8 +52,10 @@
 .ngx-dhis2-org-unit-filter__org-unit-buttons button {
   outline: none;
 }
-
-::ng-deep .mat-checkbox-inner-container {
-  height: 12px !important;
-  width: 12px !important;
+::ng-deep .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background,::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+  background-color: #00907B !important;
+}
+  
+::ng-deep .mat-checkbox-checked.mat-accent.mat-checkbox-disabled .mat-checkbox-background, ::ng-deep .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color:  #ccc !important;
 }

@@ -7,4 +7,6 @@ export const PERIOD_FILTER_CONFIG: PeriodFilterConfig = {
   allowDateRangeSelection: true,
   allowFixedPeriodSelection: true,
   allowRelativePeriodSelection: true,
+  hideActionButtons: false,
+  contentHeight: '372px',
 };

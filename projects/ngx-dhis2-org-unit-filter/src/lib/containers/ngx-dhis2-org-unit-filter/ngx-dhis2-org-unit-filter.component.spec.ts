@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { NgxDhis2OrgUnitFilterComponent } from './ngx-dhis2-org-unit-filter.component';
 import { NgxDhis2OrgUnitSelectedOrgUnitComponent } from '../../components/ngx-dhis2-org-unit-selected-org-unit/ngx-dhis2-org-unit-selected-org-unit.component';
@@ -7,26 +7,25 @@ import { NgxDhis2UserOrgUnitSelectionComponent } from '../../components/ngx-dhis
 import { NgxDhis2OrgUnitLevelGroupComponent } from '../../components/ngx-dhis2-org-unit-level-group/ngx-dhis2-org-unit-level-group.component';
 import { NgxDhis2OrgUnitProgressComponent } from '../../components/ngx-dhis2-org-unit-progress/ngx-dhis2-org-unit-progress.component';
 import { NgxDhis2OrgUnitTreeItemComponent } from '../../components/ngx-dhis2-org-unit-tree-item/ngx-dhis2-org-unit-tree-item.component';
-import { FilterByOrgUnitGroupLevelPipe } from '../../pipes';
 import { StoreModule } from '@ngrx/store';
-import { reducers, effects } from 'src/app/store';
 import { EffectsModule } from '@ngrx/effects';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { FilterByOrgUnitGroupLevelPipe } from '../../pipes/org-unit-group-level-filter.pipe';
 
 describe('NgxDhis2OrgUnitFilterComponent', () => {
   let component: NgxDhis2OrgUnitFilterComponent;
   let fixture: ComponentFixture<NgxDhis2OrgUnitFilterComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot(reducers),
-        EffectsModule.forRoot(effects),
+        StoreModule.forRoot({}),
+        EffectsModule.forRoot([]),
         RouterTestingModule,
         HttpClientModule,
-        FormsModule
+        FormsModule,
       ],
       declarations: [
         NgxDhis2OrgUnitFilterComponent,
@@ -36,8 +35,8 @@ describe('NgxDhis2OrgUnitFilterComponent', () => {
         NgxDhis2OrgUnitLevelGroupComponent,
         NgxDhis2OrgUnitProgressComponent,
         NgxDhis2OrgUnitTreeItemComponent,
-        FilterByOrgUnitGroupLevelPipe
-      ]
+        FilterByOrgUnitGroupLevelPipe,
+      ],
     }).compileComponents();
   }));
 

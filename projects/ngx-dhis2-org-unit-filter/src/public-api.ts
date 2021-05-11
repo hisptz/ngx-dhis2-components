@@ -11,25 +11,7 @@ export { OrgUnitGroup } from './lib/models/org-unit-group.model';
 export { OrgUnitLevel } from './lib/models/org-unit-level.model';
 export { OrgUnit } from './lib/models/org-unit.model';
 
-export {
-  getOrgUnitGroups,
-  getOrgUnitGroupLoaded
-} from './lib/store/selectors/org-unit-group.selectors';
-export {
-  getOrgUnitLevels,
-  getOrgUnitLevelLoaded
-} from './lib/store/selectors/org-unit-level.selectors';
-export {
-  getOrgUnitById,
-  getOrgUnits,
-  getOrgUnitLoaded
-} from './lib/store/selectors/org-unit.selectors';
-
-export { loadOrgUnitGroups } from './lib/store/actions/org-unit-group.actions';
-export { loadOrgUnits } from './lib/store/actions/org-unit.actions';
-export { loadOrgUnitLevels } from './lib/store/actions/org-unit-level.actions';
-
 export { getOrgUnitsWithoutChildrenAndGroups } from './lib/helpers/get-org-units-without-children.helper';
 export { getOrgUnitsWithChildren } from './lib/helpers/get-org-units-with-children.helper';
 export { getOrgUnitsByType } from './lib/helpers/get-org-units-by-type.helper';
-export { getUserOrgUnitIds } from './lib/helpers/get-user-org-unit-ids.helper';
+export { getUserOrgUnits as getUserOrgUnitIds } from './lib/helpers/get-user-org-units.helper';

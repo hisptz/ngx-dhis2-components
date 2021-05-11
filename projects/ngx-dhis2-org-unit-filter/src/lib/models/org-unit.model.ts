@@ -4,7 +4,7 @@ export interface OrgUnit {
   level?: number;
   path?: string;
   selected?: boolean;
-  children?: string[];
+  children?: OrgUnit[];
   parent?: { id: string };
   type?: string;
   icon?: string;

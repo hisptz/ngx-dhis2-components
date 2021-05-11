@@ -48,6 +48,6 @@ export interface IndicatorGroupsState {
   indicatorGroups: any;
 }
 
-export interface programIndicatorGroupsState {
+export interface ProgramIndicatorGroupsState {
   programIndicatorGroups: any;
 }

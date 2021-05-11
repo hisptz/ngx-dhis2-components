@@ -17,7 +17,7 @@ import {
   LoadProgramIndicatorGroupsFailAction,
   LoadProgramIndicatorGroupsSuccessAction,
   LoadProgramIndicatorsByPagesSuccessAction,
-  loadProgramIndicatorsSuccessAction
+  loadProgramIndicatorsSuccessAction,
 } from '../actions/indicators.actions';
 import { IndicatorGroupsState } from '../state/indicators.state';
 
@@ -32,7 +32,7 @@ export class IndicatorsEffects {
           (indicatorsListObject: any) =>
             new loadIndicatorsSuccessAction(indicatorsListObject)
         ),
-        catchError(error => of(new loadIndicatorsFailAction(error)))
+        catchError((error) => of(new loadIndicatorsFailAction(error)))
       )
     )
   );
@@ -46,7 +46,7 @@ export class IndicatorsEffects {
           (programIndicatorsListObject: any) =>
             new loadProgramIndicatorsSuccessAction(programIndicatorsListObject)
         ),
-        catchError(error => of(new loadIndicatorsFailAction(error)))
+        catchError((error) => of(new loadIndicatorsFailAction(error)))
       )
     )
   );
@@ -64,7 +64,7 @@ export class IndicatorsEffects {
             (indicatorGroupsObject: IndicatorGroupsState) =>
               new LoadIndicatorGroupsSuccessAction(indicatorGroupsObject)
           ),
-          catchError(error => of(new LoadIndicatorGroupsFailAction(error)))
+          catchError((error) => of(new LoadIndicatorGroupsFailAction(error)))
         )
     )
   );
@@ -84,7 +84,7 @@ export class IndicatorsEffects {
                 programIndicatorGroupsObject
               )
           ),
-          catchError(error =>
+          catchError((error) =>
             of(new LoadProgramIndicatorGroupsFailAction(error))
           )
         )
@@ -97,9 +97,9 @@ export class IndicatorsEffects {
     tap((action: any) => {
       let indicatorsArr: any[] = [];
       this.indicatorService
-        ._loadAllIndicators(action.payload['pager'])
-        .subscribe(allIndicators => {
-          indicatorsArr = [...indicatorsArr, ...allIndicators['indicators']];
+        ._loadAllIndicators(action.payload.pager)
+        .subscribe((allIndicators) => {
+          indicatorsArr = [...indicatorsArr, ...allIndicators.indicators];
           this.store.dispatch(
             new LoadIndicatorsByPagesSuccessAction(indicatorsArr)
           );
@@ -113,11 +113,11 @@ export class IndicatorsEffects {
     tap((action: any) => {
       let programIndicatorsArr: any[] = [];
       this.indicatorService
-        ._loadAllProgramIndicators(action.payload['pager'])
-        .subscribe(allIndicators => {
+        ._loadAllProgramIndicators(action.payload.pager)
+        .subscribe((allIndicators) => {
           programIndicatorsArr = [
             ...programIndicatorsArr,
-            ...allIndicators['programIndicators']
+            ...allIndicators.programIndicators,
           ];
           this.store.dispatch(
             new LoadProgramIndicatorsByPagesSuccessAction(programIndicatorsArr)

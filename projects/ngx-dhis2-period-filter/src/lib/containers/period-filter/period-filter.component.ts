@@ -6,14 +6,14 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges,
+  SimpleChanges
 } from '@angular/core';
 import { Fn } from '@iapps/function-analytics';
 import {
   NgxDhis2HttpClientService,
-  SystemInfo,
+  SystemInfo
 } from '@iapps/ngx-dhis2-http-client';
-import { find } from 'lodash';
+import { find, map, flattenDeep, uniqBy, filter } from 'lodash';
 
 import { PERIOD_FILTER_CONFIG } from '../../constants/period-filter-config.constant';
 import { getAvailablePeriods } from '../../helpers/get-available-periods.helper';
@@ -25,23 +25,26 @@ import { getPeriodTypesByFilterType } from '../../helpers/get-period-types-by-fi
 import { PeriodFilterType } from '../../models/period-filter-type.model';
 import {
   PERIOD_FILTER_TYPES,
-  PeriodFilterTypes,
+  PeriodFilterTypes
 } from '../../constants/period-filter-types.constant';
 import { getPeriodFilterTypesByConfig } from '../../helpers/get-period-filter-types-by-config.helper';
+import { getCurrentPeriodFilterType } from '../../helpers/get-current-period-filter-type.helper';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'ngx-dhis2-period-filter',
   templateUrl: './period-filter.component.html',
-  styleUrls: ['./period-filter.component.css'],
+  styleUrls: ['./period-filter.component.css']
 })
 export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   @Input() selectedPeriodType: string;
   @Input() selectedPeriods: any[];
   @Input() periodFilterConfig: PeriodFilterConfig;
+  @Input() selectedPeriodFilterType: string;
 
   @Output() update = new EventEmitter();
   @Output() close = new EventEmitter();
-  @Output() change = new EventEmitter();
+  @Output() changePeriod = new EventEmitter();
 
   /* For data range picker */
   minStartDate: Date;
@@ -62,6 +65,8 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   periodFilterTypes: PeriodFilterType[];
   periodFilterTypeEnum: any;
   currentPeriodFilterType: string;
+  selectedPeriodList = [];
+  deselectedPeriodList = [];
 
   constructor(private httpClient: NgxDhis2HttpClientService) {
     this.periodTypeInstance = new Fn.PeriodType();
@@ -90,30 +95,42 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
+    this.startDate =
+      this.selectedPeriods &&
+      this.selectedPeriods[0] &&
+      this.selectedPeriods[0]['startDate']
+        ? this.selectedPeriods[0]['startDate']['id']
+        : null;
+
+    this.endDate =
+      this.selectedPeriods &&
+      this.selectedPeriods[0] &&
+      this.selectedPeriods[0]['endDate']
+        ? this.selectedPeriods[0]['endDate']['id']
+        : null;
+
     this.periodFilterConfig = {
       ...PERIOD_FILTER_CONFIG,
-      ...(this.periodFilterConfig || {}),
+      ...(this.periodFilterConfig || {})
     };
 
     this.periodFilterTypes = getPeriodFilterTypesByConfig(
       PERIOD_FILTER_TYPES,
       this.periodFilterConfig
     );
-    this.currentPeriodFilterType =
-      this.periodFilterTypes.length > 0
-        ? this.periodFilterTypes[0].id
-        : this.selectedPeriodType
-        ? this.selectedPeriodType.indexOf('Relative') !== -1
-          ? PeriodFilterTypes.RELATIVE
-          : PeriodFilterTypes.FIXED
-        : '';
+
+    this.currentPeriodFilterType = getCurrentPeriodFilterType(
+      this.periodFilterTypes,
+      this.selectedPeriodFilterType
+    );
 
     this.periodFilterTypeEnum = PeriodFilterTypes;
 
     const lowestPeriodType = find(this.periodTypes, [
       'id',
-      this.periodFilterConfig.lowestPeriodType,
+      this.periodFilterConfig.lowestPeriodType
     ]);
+
     if (lowestPeriodType) {
       this.periodTypes = this.periodTypes.filter(
         (periodType: any) => periodType.rank >= lowestPeriodType.rank
@@ -129,7 +146,11 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onSetPeriodFilterType(e, periodFilterType) {
-    e.stopPropagation();
+    if (e) {
+      e.stopPropagation();
+    }
+
+    //console.log('here ::: ', periodFilterType.value);
 
     if (
       periodFilterType &&
@@ -138,16 +159,23 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
       this.currentPeriodFilterType = periodFilterType.value;
       this.periodTypes = getPeriodTypesByFilterType(
         this.periodTypeInstance.get(),
-        this.currentPeriodFilterType
+        periodFilterType.value
       );
+
+      if (periodFilterType.value === PeriodFilterTypes.DATE_RANGE) {
+        this.selectedPeriods = [];
+        this.periodTypes = [];
+        this.currentPeriodFilterType = periodFilterType.value;
+      }
+
+      //console.log('pe typers :: ', this.periodTypes);
 
       if (this.periodTypes.length > 0) {
         this.selectedPeriodType = this.periodTypes[0].id;
-        this._setPeriodProperties(this.selectedPeriodType);
-      }
 
-      if (periodFilterType === PeriodFilterTypes.DATE_RANGE) {
-        this.selectedPeriods = [];
+        this._setPeriodProperties(this.selectedPeriodType);
+
+        this.onUpdatePeriodType(null, this.selectedPeriodType);
       }
 
       this.startDate = null;
@@ -167,55 +195,79 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this.endDate = formatDateToYYMMDD(dateValue);
     }
-    if (this.startDate && this.endDate) {
-      this.selectedPeriods.push({
+    if (this.startDate || this.endDate) {
+      let periodObject = {
         id: 'dates-range',
         type: 'dates-range',
-        name: this.startDate + ' to ' + this.endDate,
-        dimension: 'ou',
-        startDate: {
+        name:
+          this.startDate && this.endDate
+            ? this.startDate + ' to ' + this.endDate
+            : this.startDate
+            ? `from ${this.startDate}`
+            : `to ${this.endDate}`,
+        dimension: 'ou'
+      };
+
+      if (this.startDate) {
+        periodObject['startDate'] = {
           id: this.startDate,
-          name: this.startDate,
-        },
-        endDate: {
-          id: this.endDate,
-          name: this.endDate,
-        },
-      });
+          name: this.startDate
+        };
+      }
+
+      if (this.endDate) {
+        periodObject['endDate'] = { id: this.endDate, name: this.endDate };
+      }
+
+      this.selectedPeriods.push(periodObject);
+
+      if (this.periodFilterConfig.emitOnSelection) {
+        this._onUpdatePeriod();
+      }
     }
   }
 
   private _setPeriodProperties(selectedPeriodType) {
-    this.httpClient.systemInfo().subscribe((systemInfo: SystemInfo) => {
-      this.selectedPeriods = getSanitizedPeriods(
-        this.selectedPeriods,
-        this.periodFilterConfig,
-        systemInfo.keyCalendar
-      );
+    //console.log('do i get clade');
+    this.httpClient.systemInfo().subscribe(
+      (systemInfo: SystemInfo) => {
+        //console.log('do i get results ??');
+        this.selectedPeriods = getSanitizedPeriods(
+          this.selectedPeriods,
+          this.periodFilterConfig,
+          systemInfo.keyCalendar
+        );
 
-      // Get selected period type if not supplied
-      if (!selectedPeriodType) {
-        if (this.selectedPeriods[0]) {
-          this.selectedPeriodType = this.selectedPeriods[0].type || 'Monthly';
-        } else {
-          this.selectedPeriodType = 'Monthly';
+        // Get selected period type if not supplied
+        //console.log('seleceted pe type ::', selectedPeriodType);
+        if (!selectedPeriodType) {
+          if (this.selectedPeriods[0]) {
+            this.selectedPeriodType = this.selectedPeriods[0].type || 'Monthly';
+          } else {
+            this.selectedPeriodType = 'Monthly';
+          }
         }
+
+        //console.log('this.selectedPeriodType :: ', this.selectedPeriodType);
+
+        this.periodInstance
+          .setType(this.selectedPeriodType)
+          .setCalendar(systemInfo.keyCalendar)
+          .setPreferences({
+            childrenPeriodSortOrder:
+              this.periodFilterConfig.childrenPeriodSortOrder || 'DESC',
+            allowFuturePeriods: true
+          })
+          .get();
+
+        this.selectedYear = this.currentYear = this.periodInstance.currentYear();
+
+        this._setAvailablePeriods();
+      },
+      error => {
+        //console.log('here is the issue :: ', error);
       }
-
-      this.periodInstance
-        .setType(this.selectedPeriodType)
-        .setCalendar(systemInfo.keyCalendar)
-        .setPreferences({
-          childrenPeriodSortOrder:
-            this.periodFilterConfig.childrenPeriodSortOrder || 'DESC',
-          allowFuturePeriods: true,
-        })
-        .get();
-
-      this.selectedYear = this.currentYear = this.periodInstance.currentYear();
-
-      this._setAvailablePeriods();
-    });
+    );
   }
 
   onSelectPeriod(period, e) {
@@ -235,8 +287,174 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
     this.selectedPeriods = [...this.selectedPeriods, period];
 
     if (this.periodFilterConfig.emitOnSelection) {
-      this._onUpdatePeriod(false);
+      this._onUpdatePeriod();
     }
+  }
+  onClickToSelectPeriod(period, e, type) {
+    //console.log({ config: this.periodFilterConfig });
+    if (
+      this.periodFilterConfig &&
+      this.periodFilterConfig.hasOwnProperty('singleSelection') &&
+      !this.periodFilterConfig.singleSelection
+    ) {
+      const { ctrlKey, shiftKey } = e;
+      e.stopPropagation();
+      switch (type) {
+        case 'SELECT': {
+          this.updateSelectedPeriodList(period, ctrlKey, shiftKey);
+          break;
+        }
+        case 'DESELECT': {
+          this.updateDeselectedPeriodList(period, ctrlKey, shiftKey);
+          break;
+        }
+
+        default:
+          break;
+      }
+    } else {
+      switch (type) {
+        case 'SELECT': {
+          this.updateSingleSelectedPeriodList(period);
+          break;
+        }
+        case 'DESELECT': {
+          this.updateSingleDeselectedPeriodList(period);
+          break;
+        }
+
+        default:
+          break;
+      }
+    }
+  }
+  moveSingleSelectedPeriod(availablePeriod, e) {
+    this.onSelectPeriod(availablePeriod, e);
+    this.selectedPeriodList = [];
+  }
+  moveSingleDeselectedPeriod(period, e) {
+    this.onDeselectPeriod(period, e);
+    this.deselectedPeriodList = [];
+  }
+  updateSingleSelectedPeriodList(period) {
+    this.selectedPeriodList = [...[], period];
+  }
+  updateSingleDeselectedPeriodList(period) {
+    this.deselectedPeriodList = [...[], period];
+  }
+  updateSelectedPeriodList(period, ctrlKey, shiftKey) {
+    if ((ctrlKey && shiftKey) || shiftKey) {
+      const periodIndex =
+        period && period.hasOwnProperty('id') && this.availablePeriods
+          ? this.availablePeriods.findIndex(
+              availablePeriod => availablePeriod.id === period.id
+            ) || 0
+          : 0;
+
+      this.selectedPeriodList =
+        this.availablePeriods && this.availablePeriods.length >= 0
+          ? uniqBy(
+              [
+                ...this.selectedPeriodList,
+                ...this.availablePeriods.slice(0, periodIndex + 1)
+              ],
+              'id'
+            ) || this.selectedPeriodList
+          : [];
+    } else if (ctrlKey) {
+      const periodInList =
+        period && period.hasOwnProperty('id')
+          ? find(
+              this.selectedPeriodList || [],
+              selectedPeriod => selectedPeriod.id === period.id
+            )
+          : null;
+      this.selectedPeriodList =
+        periodInList && periodInList.hasOwnProperty('id')
+          ? filter(
+              this.selectedPeriodList || [],
+              periodListItem => periodListItem.id !== periodInList.id
+            ) || this.selectedPeriodList
+          : [...this.selectedPeriodList, period];
+    } else {
+      this.selectedPeriodList = [...[], period];
+    }
+  }
+
+  updateDeselectedPeriodList(period, ctrlKey, shiftKey) {
+    if ((ctrlKey && shiftKey) || shiftKey) {
+      const periodIndex =
+        period && period.hasOwnProperty('id') && this.availablePeriods
+          ? this.selectedPeriods.findIndex(
+              selectedPeriod => selectedPeriod.id === period.id
+            )
+          : 0;
+
+      this.deselectedPeriodList =
+        this.selectedPeriods && this.selectedPeriods.length >= 0
+          ? uniqBy(
+              [
+                ...this.deselectedPeriodList,
+                ...this.selectedPeriods.slice(0, periodIndex + 1)
+              ],
+              'id'
+            ) || this.deselectedPeriodList
+          : [];
+    } else if (ctrlKey) {
+      const periodInList =
+        period && period.hasOwnProperty('id')
+          ? find(
+              this.deselectedPeriodList || [],
+              deselectedPeriod => deselectedPeriod.id === period.id
+            )
+          : null;
+      this.deselectedPeriodList =
+        periodInList && periodInList.hasOwnProperty('id')
+          ? filter(
+              this.deselectedPeriodList || [],
+              periodListItem => periodListItem.id !== periodInList.id
+            ) || this.deselectedPeriodList
+          : [...this.deselectedPeriodList, period];
+    } else {
+      this.deselectedPeriodList = [...[], period];
+    }
+  }
+
+  moveSelectedPeriods(e) {
+    this.selectedPeriodList = flattenDeep(
+      map(this.selectedPeriodList || [], periodItem => {
+        this.onSelectPeriod(periodItem, e);
+        const periodMoved =
+          periodItem && periodItem.hasOwnProperty('id') && periodItem.id
+            ? find(
+                this.selectedPeriods || [],
+                selectedPeriod => selectedPeriod.id === periodItem.id
+              )
+            : null;
+        return periodMoved ? [] : periodItem;
+      }) || []
+    );
+  }
+
+  moveDeselectedPeriods(e) {
+    this.deselectedPeriodList = flattenDeep(
+      map(this.deselectedPeriodList || [], periodItem => {
+        this.onDeselectPeriod(periodItem, e);
+        const periodMoved =
+          periodItem && periodItem.hasOwnProperty('id') && periodItem.id
+            ? find(
+                this.selectedPeriods || [],
+                selectedPeriod => selectedPeriod.id === periodItem.id
+              )
+            : null;
+        return periodMoved ? periodItem : [];
+      }) || []
+    );
+  }
+
+  isInArray(arr: any[], id) {
+    const item = find(arr || [], arrItem => arrItem.id === id) || '';
+    return item ? true : false;
   }
 
   onDeselectPeriod(period: any, e) {
@@ -249,12 +467,14 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
     this._setAvailablePeriods();
 
     if (this.periodFilterConfig.emitOnSelection) {
-      this._onUpdatePeriod(false);
+      this._onUpdatePeriod();
     }
   }
 
   onUpdatePeriodType(e, selectedPeriodType: string) {
-    e.stopPropagation();
+    if (e) {
+      e.stopPropagation();
+    }
     if (this.periodFilterConfig.resetOnPeriodTypeChange) {
       this.selectedPeriods = [];
     }
@@ -293,7 +513,7 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
     this.availablePeriods = [];
 
     if (this.periodFilterConfig.emitOnSelection) {
-      this._onUpdatePeriod(false);
+      this._onUpdatePeriod();
     }
   }
 
@@ -306,7 +526,7 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
     this.availablePeriods = getAvailablePeriods([], this.periodInstance.list());
 
     if (this.periodFilterConfig.emitOnSelection) {
-      this._onUpdatePeriod(false);
+      this._onUpdatePeriod();
     }
   }
 
@@ -336,22 +556,25 @@ export class PeriodFilterComponent implements OnInit, OnChanges, OnDestroy {
       items: this.selectedPeriods,
       dimension: 'pe',
       lowestPeriodType: this.periodFilterConfig.lowestPeriodType,
-      changed: true,
+      changed: true
     };
   }
 
-  private _onUpdatePeriod(isUpdate: boolean = true) {
-    if (isUpdate) {
-      this.update.emit(this._getPeriodSelection());
-    } else {
-      this.change.emit(this._getPeriodSelection());
-    }
+  private _onUpdatePeriod() {
+    this.update.emit(this._getPeriodSelection());
   }
 
   private _setAvailablePeriods() {
     this.availablePeriods = getAvailablePeriods(
       this.selectedPeriods,
       this.periodInstance.list()
+    );
+  }
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(
+      this.selectedPeriods,
+      event.previousIndex,
+      event.currentIndex
     );
   }
 }

@@ -11,7 +11,7 @@ import {
   AddDictionaryMetadataListAction,
   DictionaryActionTypes,
   InitializeDictionaryMetadataAction,
-  UpdateDictionaryMetadataAction
+  UpdateDictionaryMetadataAction,
 } from '../actions/dictionary.actions';
 import { DictionaryState } from '../reducers/dictionary.reducer';
 import { getDictionaryList } from '../selectors/dictionary.selectors';
@@ -35,7 +35,7 @@ export class DictionaryEffects {
           map((dictionaryList: any[]) =>
             _.filter(
               action.dictionaryMetadataIdentifiers,
-              metadataId => !_.find(dictionaryList, ['id', metadataId])
+              (metadataId) => !_.find(dictionaryList, ['id', metadataId])
             )
           )
         )
@@ -46,7 +46,7 @@ export class DictionaryEffects {
        */
       this.store.dispatch(
         new AddDictionaryMetadataListAction(
-          _.map(identifiers, id => {
+          _.map(identifiers, (id) => {
             return {
               id,
               name: '',
@@ -54,8 +54,8 @@ export class DictionaryEffects {
               progress: {
                 loading: true,
                 loadingSucceeded: false,
-                loadingFailed: false
-              }
+                loadingFailed: false,
+              },
             };
           })
         )
@@ -68,7 +68,7 @@ export class DictionaryEffects {
           mergeMap((identifier: any) => {
             return this.httpClient
               .get(`identifiableObjects/${identifier}.json`)
-              .pipe(catchError(err => of(identifier)));
+              .pipe(catchError((err) => of(identifier)));
           })
         )
         .subscribe(
@@ -82,8 +82,8 @@ export class DictionaryEffects {
                     progress: {
                       loading: true,
                       loadingSucceeded: true,
-                      loadingFailed: false
-                    }
+                      loadingFailed: false,
+                    },
                   })
                 );
                 const indicatorUrl =
@@ -106,8 +106,8 @@ export class DictionaryEffects {
                     progress: {
                       loading: true,
                       loadingSucceeded: true,
-                      loadingFailed: false
-                    }
+                      loadingFailed: false,
+                    },
                   })
                 );
                 const programIndicatorUrl =
@@ -127,8 +127,8 @@ export class DictionaryEffects {
                     progress: {
                       loading: true,
                       loadingSucceeded: true,
-                      loadingFailed: false
-                    }
+                      loadingFailed: false,
+                    },
                   })
                 );
                 const dataElementUrl =
@@ -148,8 +148,8 @@ export class DictionaryEffects {
                     progress: {
                       loading: true,
                       loadingSucceeded: true,
-                      loadingFailed: false
-                    }
+                      loadingFailed: false,
+                    },
                   })
                 );
                 const dataElementGroupUrl =
@@ -168,8 +168,8 @@ export class DictionaryEffects {
                     progress: {
                       loading: true,
                       loadingSucceeded: true,
-                      loadingFailed: false
-                    }
+                      loadingFailed: false,
+                    },
                   })
                 );
                 const dataSetUrl =
@@ -192,8 +192,8 @@ export class DictionaryEffects {
 
               this.httpClient
                 .get('dataStore/functions/' + functionIdentifier + '/metaData')
-                .pipe(catchError(err => of(functionIdentifier)))
-                .subscribe(functionInfo => {
+                .pipe(catchError((err) => of(functionIdentifier)))
+                .subscribe((functionInfo) => {
                   if (functionInfo.key) {
                     const functionInfos = this.formatFunctionsObject(
                       functionInfo
@@ -205,8 +205,8 @@ export class DictionaryEffects {
                         progress: {
                           loading: true,
                           loadingSucceeded: true,
-                          loadingFailed: false
-                        }
+                          loadingFailed: false,
+                        },
                       })
                     );
                     this.displayFunctionsInfo(functionInfos, ruleId, metadata);
@@ -218,15 +218,15 @@ export class DictionaryEffects {
                         progress: {
                           loading: true,
                           loadingSucceeded: true,
-                          loadingFailed: false
-                        }
+                          loadingFailed: false,
+                        },
                       })
                     );
                   }
                 });
             }
           },
-          err => {
+          (err) => {
             if (err.status === 404) {
               console.log(err);
             }
@@ -240,7 +240,7 @@ export class DictionaryEffects {
       type: 'dataSet',
       metadata: {},
       legendSetsInformation: [],
-      dataElements: []
+      dataElements: [],
     };
     const dataSetDescription = '';
     this.httpClient.get(`${dataSetUrl}`).subscribe((dataSet: any) => {
@@ -252,15 +252,15 @@ export class DictionaryEffects {
           progress: {
             loading: true,
             loadingSucceeded: true,
-            loadingFailed: false
-          }
+            loadingFailed: false,
+          },
         })
       );
       /**
        * Data elements informnation
        */
       const dataElementsArr = [];
-      dataSet['dataSetElements'].forEach(element => {
+      (dataSet ? dataSet.dataSetElements : []).forEach((element) => {
         dataElementsArr.push(element.dataElement.id);
       });
 
@@ -273,7 +273,7 @@ export class DictionaryEffects {
         .subscribe((dataElementResponse: any) => {
           metadataInfoLoaded = {
             ...metadataInfoLoaded,
-            dataElements: dataElementResponse.dataElements
+            dataElements: dataElementResponse.dataElements,
           };
           this.store.dispatch(
             new UpdateDictionaryMetadataAction(dataSetId, {
@@ -282,8 +282,8 @@ export class DictionaryEffects {
               progress: {
                 loading: true,
                 loadingSucceeded: true,
-                loadingFailed: false
-              }
+                loadingFailed: false,
+              },
             })
           );
 
@@ -292,7 +292,7 @@ export class DictionaryEffects {
            */
           const legendSetsIds = [];
           if (dataSet.legendSets) {
-            dataSet.legendSets.forEach(legendSet => {
+            dataSet.legendSets.forEach((legendSet) => {
               legendSetsIds.push(legendSet.id);
             });
           }
@@ -311,7 +311,7 @@ export class DictionaryEffects {
                 metadataInfoLoaded = {
                   ...metadataInfoLoaded,
                   legendSetsInformation:
-                    legendSetsInformationResponse.legendSets[0]
+                    legendSetsInformationResponse.legendSets[0],
                 };
               }
               this.store.dispatch(
@@ -321,8 +321,8 @@ export class DictionaryEffects {
                   progress: {
                     loading: false,
                     loadingSucceeded: true,
-                    loadingFailed: false
-                  }
+                    loadingFailed: false,
+                  },
                 })
               );
             });
@@ -334,14 +334,14 @@ export class DictionaryEffects {
     let metadataInfoLoaded = {
       type: 'dataElementGroup',
       metadata: {},
-      dataElements: []
+      dataElements: [],
     };
     this.httpClient
       .get(`${dataElementGroupUrl}`)
       .subscribe((dataElementGroup: any) => {
         metadataInfoLoaded = {
           ...metadataInfoLoaded,
-          metadata: dataElementGroup
+          metadata: dataElementGroup,
         };
         const dataElementDescription = '';
         this.store.dispatch(
@@ -351,8 +351,8 @@ export class DictionaryEffects {
             progress: {
               loading: true,
               loadingSucceeded: true,
-              loadingFailed: false
-            }
+              loadingFailed: false,
+            },
           })
         );
 
@@ -360,7 +360,7 @@ export class DictionaryEffects {
          * Data elements informnation
          */
         const dataElementsArr = [];
-        dataElementGroup['dataElements'].forEach(element => {
+        dataElementGroup.dataElements.forEach((element) => {
           dataElementsArr.push(element.id);
         });
 
@@ -373,7 +373,7 @@ export class DictionaryEffects {
           .subscribe((dataElementResponse: any) => {
             metadataInfoLoaded = {
               ...metadataInfoLoaded,
-              dataElements: dataElementResponse.dataElements
+              dataElements: dataElementResponse.dataElements,
             };
             this.store.dispatch(
               new UpdateDictionaryMetadataAction(groupId, {
@@ -382,8 +382,8 @@ export class DictionaryEffects {
                 progress: {
                   loading: false,
                   loadingSucceeded: true,
-                  loadingFailed: false
-                }
+                  loadingFailed: false,
+                },
               })
             );
           });
@@ -395,7 +395,7 @@ export class DictionaryEffects {
       type: 'dataElement',
       metadata: {},
       dataElementGroups: [],
-      legendSetsInformation: {}
+      legendSetsInformation: {},
     };
     this.httpClient.get(`${dataElementUrl}`).subscribe((dataElement: any) => {
       metadataInfoLoaded = { ...metadataInfoLoaded, metadata: dataElement };
@@ -408,8 +408,8 @@ export class DictionaryEffects {
           progress: {
             loading: true,
             loadingSucceeded: true,
-            loadingFailed: false
-          }
+            loadingFailed: false,
+          },
         })
       );
 
@@ -417,7 +417,7 @@ export class DictionaryEffects {
        * Data element groups
        */
       const dataElementGroupsArr = [];
-      dataElement.dataElementGroups.forEach(group => {
+      dataElement.dataElementGroups.forEach((group) => {
         dataElementGroupsArr.push(group.id);
       });
 
@@ -430,7 +430,7 @@ export class DictionaryEffects {
         .subscribe((dataElementGroupResponse: any) => {
           metadataInfoLoaded = {
             ...metadataInfoLoaded,
-            dataElementGroups: dataElementGroupResponse.dataElementGroups
+            dataElementGroups: dataElementGroupResponse.dataElementGroups,
           };
           this.store.dispatch(
             new UpdateDictionaryMetadataAction(dataElementId, {
@@ -439,8 +439,8 @@ export class DictionaryEffects {
               progress: {
                 loading: true,
                 loadingSucceeded: true,
-                loadingFailed: false
-              }
+                loadingFailed: false,
+              },
             })
           );
           /**
@@ -448,7 +448,7 @@ export class DictionaryEffects {
            */
           const legendSetsIds = [];
           if (dataElement.legendSets) {
-            dataElement.legendSets.forEach(legendSet => {
+            dataElement.legendSets.forEach((legendSet) => {
               legendSetsIds.push(legendSet.id);
             });
           }
@@ -467,7 +467,7 @@ export class DictionaryEffects {
                 metadataInfoLoaded = {
                   ...metadataInfoLoaded,
                   legendSetsInformation:
-                    legendSetsInformationResponse.legendSets[0]
+                    legendSetsInformationResponse.legendSets[0],
                 };
               }
 
@@ -478,8 +478,8 @@ export class DictionaryEffects {
                   progress: {
                     loading: false,
                     loadingSucceeded: true,
-                    loadingFailed: false
-                  }
+                    loadingFailed: false,
+                  },
                 })
               );
             });
@@ -498,7 +498,7 @@ export class DictionaryEffects {
       denominatorExpression: {},
       denominatorDatasets: [],
       legendSetsInformation: [],
-      dataElements: []
+      dataElements: [],
     };
     metadataInfoLoaded.type = 'indicator';
     this.httpClient.get(`${indicatorUrl}`).subscribe((indicator: any) => {
@@ -511,8 +511,8 @@ export class DictionaryEffects {
           progress: {
             loading: true,
             loadingSucceeded: true,
-            loadingFailed: false
-          }
+            loadingFailed: false,
+          },
         })
       );
 
@@ -534,7 +534,7 @@ export class DictionaryEffects {
         if (numeratorResults[0]) {
           metadataInfoLoaded = {
             ...metadataInfoLoaded,
-            numeratorExpression: numeratorResults[0]
+            numeratorExpression: numeratorResults[0],
           };
         }
 
@@ -542,7 +542,7 @@ export class DictionaryEffects {
           const dataSets = numeratorResults[1].dataSets;
           metadataInfoLoaded = {
             ...metadataInfoLoaded,
-            numeratorDatasets: dataSets
+            numeratorDatasets: dataSets,
           };
 
           this.httpClient
@@ -577,14 +577,14 @@ export class DictionaryEffects {
 
                   return {
                     ...dataSet,
-                    reportingRate
+                    reportingRate,
                   };
                 }
               );
 
               metadataInfoLoaded = {
                 ...metadataInfoLoaded,
-                numeratorDatasets: dataSetsWithReportingRate
+                numeratorDatasets: dataSetsWithReportingRate,
               };
 
               this.store.dispatch(
@@ -594,8 +594,8 @@ export class DictionaryEffects {
                   progress: {
                     loading: true,
                     loadingSucceeded: true,
-                    loadingFailed: false
-                  }
+                    loadingFailed: false,
+                  },
                 })
               );
             });
@@ -619,7 +619,7 @@ export class DictionaryEffects {
           if (denominatorResults[0]) {
             metadataInfoLoaded = {
               ...metadataInfoLoaded,
-              denominatorExpression: denominatorResults[0]
+              denominatorExpression: denominatorResults[0],
             };
           }
 
@@ -627,7 +627,7 @@ export class DictionaryEffects {
             const dataSets = denominatorResults[1].dataSets;
             metadataInfoLoaded = {
               ...metadataInfoLoaded,
-              denominatorDatasets: dataSets
+              denominatorDatasets: dataSets,
             };
 
             this.httpClient
@@ -664,14 +664,14 @@ export class DictionaryEffects {
 
                     return {
                       ...dataSet,
-                      reportingRate
+                      reportingRate,
                     };
                   }
                 );
 
                 metadataInfoLoaded = {
                   ...metadataInfoLoaded,
-                  denominatorDatasets: dataSetsWithReportingRate
+                  denominatorDatasets: dataSetsWithReportingRate,
                 };
 
                 this.store.dispatch(
@@ -681,8 +681,8 @@ export class DictionaryEffects {
                     progress: {
                       loading: true,
                       loadingSucceeded: true,
-                      loadingFailed: false
-                    }
+                      loadingFailed: false,
+                    },
                   })
                 );
               });
@@ -692,7 +692,7 @@ export class DictionaryEffects {
            * Legend set
            */
           const legendSetsIds = [];
-          indicator.legendSets.forEach(legendSet => {
+          indicator.legendSets.forEach((legendSet) => {
             legendSetsIds.push(legendSet.id);
           });
 
@@ -702,14 +702,14 @@ export class DictionaryEffects {
                 legendSetsIds.join(';') +
                 ']'
             )
-            .subscribe(legendSetsInformation => {
+            .subscribe((legendSetsInformation) => {
               if (
                 legendSetsInformation &&
                 legendSetsInformation.legendSets[0]
               ) {
                 metadataInfoLoaded = {
                   ...metadataInfoLoaded,
-                  legendSetsInformation
+                  legendSetsInformation,
                 };
               }
 
@@ -720,8 +720,8 @@ export class DictionaryEffects {
                   progress: {
                     loading: true,
                     loadingSucceeded: true,
-                    loadingFailed: false
-                  }
+                    loadingFailed: false,
+                  },
                 })
               );
 
@@ -740,7 +740,7 @@ export class DictionaryEffects {
                 .subscribe((dataElementResponse: any) => {
                   metadataInfoLoaded = {
                     ...metadataInfoLoaded,
-                    dataElements: dataElementResponse.dataElements
+                    dataElements: dataElementResponse.dataElements,
                   };
 
                   this.store.dispatch(
@@ -750,8 +750,8 @@ export class DictionaryEffects {
                       progress: {
                         loading: false,
                         loadingSucceeded: true,
-                        loadingFailed: false
-                      }
+                        loadingFailed: false,
+                      },
                     })
                   );
                 });
@@ -771,7 +771,7 @@ export class DictionaryEffects {
       filter: {},
       programIndicatorDescriptionExpression: {},
       legendSetsInformation: [],
-      trackedEntityAttributes: []
+      trackedEntityAttributes: [],
     };
     this.httpClient
       .get(`${programIndicatorUrl}`)
@@ -793,22 +793,22 @@ export class DictionaryEffects {
             programIndicator.filter,
             'programStage'
           );
-          filterElements.split(',').forEach(element => {
+          filterElements.split(',').forEach((element) => {
             if (element.length === 11) {
               allDataElements.push(element);
               associatedMetadata.push(element);
             }
           });
 
-          filterElements.split(',').forEach(elementId => {
+          filterElements.split(',').forEach((elementId) => {
             associatedMetadata.push(elementId);
           });
-          const programStagesList = this.getAvailableDataElements(
+          const programStagesListRes = this.getAvailableDataElements(
             programIndicator.filter
           );
-          programStagesList.split(',').forEach(programStage => {
+          programStagesListRes.split(',').forEach((programStage) => {
             if (programStage.length === 11) {
-              programStages.push(programStage);
+              programStagesListRes.push(programStage);
               associatedMetadata.push(programStage);
             }
           });
@@ -817,8 +817,8 @@ export class DictionaryEffects {
           programIndicator.expression,
           'programStage'
         );
-        expressionDataElements.split(',').forEach(element => {
-          if (element.length == 11) {
+        expressionDataElements.split(',').forEach((element) => {
+          if (element.length === 11) {
             allDataElements.push(element);
             associatedMetadata.push(element);
           }
@@ -826,16 +826,16 @@ export class DictionaryEffects {
         const programStagesList = this.getAvailableDataElements(
           programIndicator.expression
         );
-        programStagesList.split(',').forEach(programStage => {
-          if (programStage.length == 11) {
+        programStagesList.split(',').forEach((programStage) => {
+          if (programStage.length === 11) {
             programStages.push(programStage);
             associatedMetadata.push(programStage);
           }
         });
-        _.uniq(associatedMetadata).forEach(elementId => {
+        _.uniq(associatedMetadata).forEach((elementId) => {
           this.httpClient
             .get('identifiableObjects/' + elementId + '.json')
-            .subscribe(identifiableElement => {
+            .subscribe((identifiableElement) => {
               if (
                 identifiableElement.href.indexOf('trackedEntityAttributes/') >
                 -1
@@ -846,14 +846,14 @@ export class DictionaryEffects {
                       identifiableElement.id +
                       '.json?fields=*'
                   )
-                  .subscribe(trackedEntityAttributeResult => {
+                  .subscribe((trackedEntityAttributeResult) => {
                     trackedEntityAttributesAvailable = [
                       ...trackedEntityAttributesAvailable,
-                      trackedEntityAttributeResult
+                      trackedEntityAttributeResult,
                     ];
                     metadataInfoLoaded = {
                       ...metadataInfoLoaded,
-                      trackedEntityAttributes: trackedEntityAttributesAvailable
+                      trackedEntityAttributes: trackedEntityAttributesAvailable,
                     };
                     this.store.dispatch(
                       new UpdateDictionaryMetadataAction(programIndicatorId, {
@@ -862,8 +862,8 @@ export class DictionaryEffects {
                         progress: {
                           loading: false,
                           loadingSucceeded: true,
-                          loadingFailed: false
-                        }
+                          loadingFailed: false,
+                        },
                       })
                     );
                   });
@@ -874,11 +874,11 @@ export class DictionaryEffects {
                       identifiableElement.id +
                       '.json?fields=id,name,href,description,shortName,code,indicatorGroups[id,name],numerator,denominator,lastUpdated'
                   )
-                  .subscribe(indicator => {
+                  .subscribe((indicator) => {
                     indicatorsAvailable = [...dataElementsAvailable, indicator];
                     metadataInfoLoaded = {
                       ...metadataInfoLoaded,
-                      indicators: indicatorsAvailable
+                      indicators: indicatorsAvailable,
                     };
                     this.store.dispatch(
                       new UpdateDictionaryMetadataAction(programIndicatorId, {
@@ -887,8 +887,8 @@ export class DictionaryEffects {
                         progress: {
                           loading: false,
                           loadingSucceeded: true,
-                          loadingFailed: false
-                        }
+                          loadingFailed: false,
+                        },
                       })
                     );
                   });
@@ -901,14 +901,14 @@ export class DictionaryEffects {
                       identifiableElement.id +
                       '.json?fields=*,id,name,href,description,shortName,code,valueType,dataElementGroups[id,name],dataSetElements[id,name,dataSet],lastUpdated'
                   )
-                  .subscribe(dataElement => {
+                  .subscribe((dataElement) => {
                     dataElementsAvailable = [
                       ...dataElementsAvailable,
-                      dataElement
+                      dataElement,
                     ];
                     metadataInfoLoaded = {
                       ...metadataInfoLoaded,
-                      dataElements: dataElementsAvailable
+                      dataElements: dataElementsAvailable,
                     };
                     this.store.dispatch(
                       new UpdateDictionaryMetadataAction(programIndicatorId, {
@@ -917,8 +917,8 @@ export class DictionaryEffects {
                         progress: {
                           loading: false,
                           loadingSucceeded: true,
-                          loadingFailed: false
-                        }
+                          loadingFailed: false,
+                        },
                       })
                     );
                   });
@@ -931,14 +931,14 @@ export class DictionaryEffects {
                       identifiableElement.id +
                       '.json?fields=*,id,name,user,created,description,formType,programStageDataElements~size'
                   )
-                  .subscribe(programStages => {
+                  .subscribe((programStagesResult: any) => {
                     programStagesAvailable = [
                       ...dataElementsAvailable,
-                      programStages
+                      programStagesResult,
                     ];
                     metadataInfoLoaded = {
                       ...metadataInfoLoaded,
-                      programStages: programStagesAvailable
+                      programStages: programStagesAvailable,
                     };
                     this.store.dispatch(
                       new UpdateDictionaryMetadataAction(programIndicatorId, {
@@ -947,8 +947,8 @@ export class DictionaryEffects {
                         progress: {
                           loading: false,
                           loadingSucceeded: true,
-                          loadingFailed: false
-                        }
+                          loadingFailed: false,
+                        },
                       })
                     );
                   });
@@ -968,7 +968,7 @@ export class DictionaryEffects {
           )
         ).subscribe((results: any) => {
           // metadataInfoLoaded = {...metadataInfoLoaded, programStages: results[0]['programStages']};
-          results[0]['programStages'].forEach(stage => {
+          results[0].programStages.forEach((stage) => {
             programIndicatorDescriptionExpression = programIndicatorDescriptionExpression
               .split(stage.id + '.')
               .join(stage.name);
@@ -981,7 +981,7 @@ export class DictionaryEffects {
           });
 
           // metadataInfoLoaded = {...metadataInfoLoaded, dataElements: results[1]['dataElements']};
-          results[1]['dataElements'].forEach(dataElement => {
+          results[1].dataElements.forEach((dataElement) => {
             programIndicatorDescriptionExpression = programIndicatorDescriptionExpression
               .split(dataElement.id)
               .join(dataElement.name);
@@ -991,18 +991,18 @@ export class DictionaryEffects {
           });
           metadataInfoLoaded = {
             ...metadataInfoLoaded,
-            metadata: programIndicator
+            metadata: programIndicator,
           };
 
           metadataInfoLoaded = {
             ...metadataInfoLoaded,
-            filter: this.formatProgramIndicatorExpression(filterDescription)
+            filter: this.formatProgramIndicatorExpression(filterDescription),
           };
           metadataInfoLoaded = {
             ...metadataInfoLoaded,
             programIndicatorDescriptionExpression: this.formatProgramIndicatorExpression(
               programIndicatorDescriptionExpression
-            )
+            ),
           };
           this.store.dispatch(
             new UpdateDictionaryMetadataAction(programIndicatorId, {
@@ -1011,8 +1011,8 @@ export class DictionaryEffects {
               progress: {
                 loading: true,
                 loadingSucceeded: true,
-                loadingFailed: false
-              }
+                loadingFailed: false,
+              },
             })
           );
 
@@ -1021,7 +1021,7 @@ export class DictionaryEffects {
            */
           const legendSetsIds = [];
           if (programIndicator.legendSets) {
-            programIndicator.legendSets.forEach(legendSet => {
+            programIndicator.legendSets.forEach((legendSet) => {
               legendSetsIds.push(legendSet.id);
             });
           }
@@ -1032,14 +1032,14 @@ export class DictionaryEffects {
                 legendSetsIds.join(';') +
                 ']'
             )
-            .subscribe(legendSetsInformation => {
+            .subscribe((legendSetsInformation) => {
               if (
                 legendSetsInformation &&
                 legendSetsInformation.legendSets[0]
               ) {
                 metadataInfoLoaded = {
                   ...metadataInfoLoaded,
-                  legendSetsInformation
+                  legendSetsInformation,
                 };
               }
 
@@ -1050,8 +1050,8 @@ export class DictionaryEffects {
                   progress: {
                     loading: false,
                     loadingSucceeded: true,
-                    loadingFailed: false
-                  }
+                    loadingFailed: false,
+                  },
                 })
               );
             });
@@ -1086,14 +1086,15 @@ export class DictionaryEffects {
       '/',
       ':',
       '\\?',
-      '\\>='
+      '\\>=',
     ];
     const metadataElements = data.split(new RegExp(separators.join('|'), 'g'));
     if (!condition) {
-      metadataElements.forEach(dataElement => {
-        if (dataElement != '') {
+      metadataElements.forEach((dataElement) => {
+        if (dataElement !== '') {
           if (
-            this.dataElementWithCategoryOptionCheck(dataElement)[0].length == 11
+            this.dataElementWithCategoryOptionCheck(dataElement)[0].length ===
+            11
           ) {
             dataElementUids.push(
               this.dataElementWithCategoryOptionCheck(dataElement)[0]
@@ -1102,13 +1103,13 @@ export class DictionaryEffects {
         }
       });
     } else {
-      metadataElements.forEach(dataElement => {
-        if (dataElement != '') {
+      metadataElements.forEach((dataElement) => {
+        if (dataElement !== '') {
           if (
             this.dataElementWithCategoryOptionCheck(
               dataElement,
               'comboOrStage'
-            )[0].length == 11
+            )[0].length === 11
           ) {
             dataElementUids.push(
               this.dataElementWithCategoryOptionCheck(
@@ -1143,10 +1144,7 @@ export class DictionaryEffects {
       );
     } else {
       uid.push(
-        dataElement
-          .replace(/#/g, '')
-          .replace(/{/g, '')
-          .replace(/}/g, '')
+        dataElement.replace(/#/g, '').replace(/{/g, '').replace(/}/g, '')
       );
     }
 
@@ -1194,8 +1192,8 @@ export class DictionaryEffects {
 
   getDataSetFromDataElement(dataSets) {
     let listOfElements = '';
-    dataSets.forEach(dataSet => {
-      listOfElements += '<li>' + dataSet['dataSet'].name + '</li>';
+    dataSets.forEach((dataSet) => {
+      listOfElements += '<li>' + dataSet.dataSet.name + '</li>';
     });
     return listOfElements;
   }
@@ -1203,15 +1201,15 @@ export class DictionaryEffects {
   getCategories(categoryCombos) {
     const categories = [];
     let categoriesHtml = '';
-    categoryCombos.forEach(categoryCombo => {
-      categoryCombo['categoryOptions'].forEach(option => {
-        _.map(option['categories'], (category: any) => {
+    categoryCombos.forEach((categoryCombo) => {
+      categoryCombo.categoryOptions.forEach((option) => {
+        _.map(option.categories, (category: any) => {
           categories.push(category);
         });
       });
     });
-    _.uniqBy(categories, 'id').forEach(category => {
-      if (category.name.toLowerCase() == 'default') {
+    _.uniqBy(categories, 'id').forEach((category) => {
+      if (category.name.toLowerCase() === 'default') {
         categoriesHtml += '<li> None </li>';
       } else {
         categoriesHtml += '<li>' + category.name + '</li>';
@@ -1223,7 +1221,7 @@ export class DictionaryEffects {
 
   getDataElementsGroups(groups) {
     let groupsHtml = '';
-    _.map(groups, group => {
+    _.map(groups, (group) => {
       groupsHtml =
         '<li style="margin: 3px;">' +
         group.name +
@@ -1236,7 +1234,7 @@ export class DictionaryEffects {
 
   listAllDataSets(dataSets) {
     let listOfDataSets = '';
-    dataSets.forEach(dataset => {
+    dataSets.forEach((dataset) => {
       listOfDataSets +=
         '<li><span><strong>' +
         dataset.name +
@@ -1253,7 +1251,7 @@ export class DictionaryEffects {
     let metadataInfoLoaded = {
       type: 'functions',
       metadata: {},
-      metadataWithinFunctionDetails: []
+      metadataWithinFunctionDetails: [],
     };
     const functionDescription = '';
     metadataInfoLoaded = { ...metadataInfoLoaded, metadata: functionInfo };
@@ -1264,8 +1262,8 @@ export class DictionaryEffects {
         progress: {
           loading: true,
           loadingSucceeded: true,
-          loadingFailed: false
-        }
+          loadingFailed: false,
+        },
       })
     );
 
@@ -1273,21 +1271,21 @@ export class DictionaryEffects {
      * Identifiables from rules
      */
     const metadataInFunctions = [];
-    functionInfo.rules.forEach(rule => {
+    functionInfo.rules.forEach((rule) => {
       if (rule.json.data && rule.json.data.length === 11) {
         metadataInFunctions.push(rule.json.data);
       } else {
         const identifiedUids = this.getItemsFromRule(rule.json);
-        identifiedUids.split(',').forEach(uid => {
+        identifiedUids.split(',').forEach((uid) => {
           metadataInFunctions.push(uid);
         });
       }
     });
     let metadataWithinFunctionDetails = [];
-    _.uniq(metadataInFunctions).forEach(identifier => {
+    _.uniq(metadataInFunctions).forEach((identifier) => {
       this.httpClient
         .get('identifiableObjects/' + identifier + '.json')
-        .subscribe(metadata => {
+        .subscribe((metadata) => {
           if (metadata.href.indexOf('dataSets/') > -1) {
             this.httpClient
               .get(
@@ -1295,23 +1293,23 @@ export class DictionaryEffects {
                   metadata.id +
                   '.json?fields=id,name,description,href,shortName,code,formType,timelyDays,periodType,lastUpdated'
               )
-              .subscribe(dataSet => {
+              .subscribe((dataSet) => {
                 const metadataInfo = {
                   type: 'dataSet',
-                  info: dataSet
+                  info: dataSet,
                 };
                 metadataWithinFunctionDetails = [
                   ...metadataWithinFunctionDetails,
-                  metadataInfo
+                  metadataInfo,
                 ];
                 metadataInfoLoaded = {
                   ...metadataInfoLoaded,
-                  metadataWithinFunctionDetails: metadataWithinFunctionDetails
+                  metadataWithinFunctionDetails,
                 };
 
                 metadataInfoLoaded = {
                   ...metadataInfoLoaded,
-                  metadataWithinFunctionDetails: metadataWithinFunctionDetails
+                  metadataWithinFunctionDetails,
                 };
                 this.store.dispatch(
                   new UpdateDictionaryMetadataAction(metadataId, {
@@ -1320,8 +1318,8 @@ export class DictionaryEffects {
                     progress: {
                       loading: false,
                       loadingSucceeded: true,
-                      loadingFailed: false
-                    }
+                      loadingFailed: false,
+                    },
                   })
                 );
               });
@@ -1332,23 +1330,23 @@ export class DictionaryEffects {
                   metadata.id +
                   '.json?fields=id,name,href,description,shortName,code,indicatorGroups[id,name],numerator,denominator,lastUpdated'
               )
-              .subscribe(indicator => {
+              .subscribe((indicator) => {
                 const metadataInfo = {
                   type: 'indicator',
-                  info: indicator
+                  info: indicator,
                 };
                 metadataWithinFunctionDetails = [
                   ...metadataWithinFunctionDetails,
-                  metadataInfo
+                  metadataInfo,
                 ];
                 metadataInfoLoaded = {
                   ...metadataInfoLoaded,
-                  metadataWithinFunctionDetails: metadataWithinFunctionDetails
+                  metadataWithinFunctionDetails,
                 };
 
                 metadataInfoLoaded = {
                   ...metadataInfoLoaded,
-                  metadataWithinFunctionDetails: metadataWithinFunctionDetails
+                  metadataWithinFunctionDetails,
                 };
                 this.store.dispatch(
                   new UpdateDictionaryMetadataAction(metadataId, {
@@ -1357,8 +1355,8 @@ export class DictionaryEffects {
                     progress: {
                       loading: false,
                       loadingSucceeded: true,
-                      loadingFailed: false
-                    }
+                      loadingFailed: false,
+                    },
                   })
                 );
               });
@@ -1369,23 +1367,23 @@ export class DictionaryEffects {
                   metadata.id +
                   '.json?fields=*,id,name,href,description,shortName,code,valueType,dataElementGroups[id,name],dataSetElements[id,name,dataSet],lastUpdated'
               )
-              .subscribe(dataElement => {
+              .subscribe((dataElement) => {
                 const metadataInfo = {
                   type: 'dataElement',
-                  info: dataElement
+                  info: dataElement,
                 };
                 metadataWithinFunctionDetails = [
                   ...metadataWithinFunctionDetails,
-                  metadataInfo
+                  metadataInfo,
                 ];
                 metadataInfoLoaded = {
                   ...metadataInfoLoaded,
-                  metadataWithinFunctionDetails: metadataWithinFunctionDetails
+                  metadataWithinFunctionDetails,
                 };
 
                 metadataInfoLoaded = {
                   ...metadataInfoLoaded,
-                  metadataWithinFunctionDetails: metadataWithinFunctionDetails
+                  metadataWithinFunctionDetails,
                 };
                 this.store.dispatch(
                   new UpdateDictionaryMetadataAction(metadataId, {
@@ -1394,8 +1392,8 @@ export class DictionaryEffects {
                     progress: {
                       loading: false,
                       loadingSucceeded: true,
-                      loadingFailed: false
-                    }
+                      loadingFailed: false,
+                    },
                   })
                 );
               });
@@ -1406,23 +1404,23 @@ export class DictionaryEffects {
                   metadata.id +
                   '.json?fields=id,name,href,description,shortName,code,categoryOptions[id,name,code],lastUpdated'
               )
-              .subscribe(categoryOptionCombo => {
+              .subscribe((categoryOptionCombo) => {
                 const metadataInfo = {
                   type: 'category option combination',
-                  info: categoryOptionCombo
+                  info: categoryOptionCombo,
                 };
                 metadataWithinFunctionDetails = [
                   ...metadataWithinFunctionDetails,
-                  metadataInfo
+                  metadataInfo,
                 ];
                 metadataInfoLoaded = {
                   ...metadataInfoLoaded,
-                  metadataWithinFunctionDetails: metadataWithinFunctionDetails
+                  metadataWithinFunctionDetails,
                 };
 
                 metadataInfoLoaded = {
                   ...metadataInfoLoaded,
-                  metadataWithinFunctionDetails: metadataWithinFunctionDetails
+                  metadataWithinFunctionDetails,
                 };
                 this.store.dispatch(
                   new UpdateDictionaryMetadataAction(metadataId, {
@@ -1431,8 +1429,8 @@ export class DictionaryEffects {
                     progress: {
                       loading: false,
                       loadingSucceeded: true,
-                      loadingFailed: false
-                    }
+                      loadingFailed: false,
+                    },
                   })
                 );
               });
@@ -1468,7 +1466,7 @@ export class DictionaryEffects {
       rules: JSON.parse(functionInfo.value).rules,
       publicAccess: functionInfo.publicAccess,
       externalAccess: functionInfo.externalAccess,
-      function: JSON.parse(functionInfo.value).function
+      function: JSON.parse(functionInfo.value).function,
     };
 
     return newMetadataTemplate;
@@ -1498,14 +1496,14 @@ export class DictionaryEffects {
   listRelatedIndicators(programIndicators, programIndicatorId) {
     let listOfRelatedIndicators = '';
     programIndicators.forEach((programIndicator, index) => {
-      if (programIndicator.id != programIndicatorId && index < 3) {
-        if (programIndicators.length == 1) {
+      if (programIndicator.id !== programIndicatorId && index < 3) {
+        if (programIndicators.length === 1) {
           listOfRelatedIndicators +=
             '<span style="color: #325E80;">' +
             programIndicator.name +
             '</span>';
-        } else if (programIndicators.length == 2) {
-          if (index == 0) {
+        } else if (programIndicators.length === 2) {
+          if (index === 0) {
             listOfRelatedIndicators +=
               '<span style="color: #325E80;">' +
               programIndicator.name +
@@ -1517,12 +1515,12 @@ export class DictionaryEffects {
               '</span>';
           }
         } else {
-          if (index == 0) {
+          if (index === 0) {
             listOfRelatedIndicators +=
               '<span style="color: #325E80;">' +
               programIndicator.name +
               '</span>,';
-          } else if (index == 1) {
+          } else if (index === 1) {
             listOfRelatedIndicators +=
               '<span style="color: #325E80;">' +
               programIndicator.name +
@@ -1542,7 +1540,7 @@ export class DictionaryEffects {
   formatTextToSentenceFormat(text) {
     text
       .split('_')
-      .map(function(stringSection) {
+      .map(function (stringSection) {
         return (
           stringSection.slice(0, 1).toUpperCase() +
           stringSection.slice(1).toLowerCase()
@@ -1550,16 +1548,8 @@ export class DictionaryEffects {
       })
       .join(' ');
     return (
-      text
-        .split('_')
-        .join(' ')
-        .slice(0, 1)
-        .toUpperCase() +
-      text
-        .split('_')
-        .join(' ')
-        .slice(1)
-        .toLowerCase()
+      text.split('_').join(' ').slice(0, 1).toUpperCase() +
+      text.split('_').join(' ').slice(1).toLowerCase()
     );
   }
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 declare var unescape: any;
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ExportService {
   exportXLS(fileName: string, htmlTable: any) {
     if (this._getMsieVersion() || this._isFirefox()) {
@@ -18,7 +18,7 @@ export class ExportService {
           '<x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/>' +
           '</x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->' +
           '</head><body><table border="1">{table}</table><br /><table border="1">{table}</table></body></html>',
-        base64 = s => window.btoa(unescape(encodeURIComponent(s))),
+        base64 = (s) => window.btoa(unescape(encodeURIComponent(s))),
         format = (s, c) => s.replace(/{(\w+)}/g, (m, p) => c[p]);
 
       const ctx = { worksheet: 'Sheet 1', filename: fileName };
@@ -37,10 +37,9 @@ export class ExportService {
       //     ? matchedTableContent[1]
       //     : '';
       ctx['div'] = htmlTable;
-      console.log(ctx['div'])
+      console.log(ctx['div']);
 
-      str +=
-        '{div}</body></html>';
+      str += '{div}</body></html>';
 
       setTimeout(() => {
         const link = document.createElement('a');
@@ -132,10 +131,10 @@ export class ExportService {
 
     return slice
       .call(table.rows)
-      .map(function(row) {
+      .map(function (row) {
         return slice
           .call(row.cells)
-          .map(function(cell) {
+          .map(function (cell) {
             return '"t"'.replace('t', cell.textContent);
           })
           .join(',');

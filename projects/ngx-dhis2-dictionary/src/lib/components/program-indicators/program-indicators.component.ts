@@ -6,18 +6,18 @@ import * as _ from 'lodash';
 import {
   getListOfProgramIndicators,
   getAllProgramIndicators,
-  getProgramIndicatorGroups
+  getProgramIndicatorGroups,
 } from '../../store/selectors/indicators.selectors';
 import { DatePipe } from '@angular/common';
 import {
   LoadProgramIndicatorGroupsAction,
-  loadProgramIndicatorsAction
+  loadProgramIndicatorsAction,
 } from '../../store/actions/indicators.actions';
 
 @Component({
   selector: 'app-program-indicators',
   templateUrl: './program-indicators.component.html',
-  styleUrls: ['./program-indicators.component.css']
+  styleUrls: ['./program-indicators.component.css'],
 })
 export class ProgramIndicatorsComponent implements OnInit {
   @Input() metadataIdentifiers: any;
@@ -26,13 +26,13 @@ export class ProgramIndicatorsComponent implements OnInit {
   @Output() selectedMetadataGroups = new EventEmitter<any>();
   programIndicatorsList$: Observable<any> = null;
   allProgramIndicators$: Observable<any>;
-  error: boolean = false;
-  loading: boolean = true;
+  error = false;
+  loading = true;
   hoverState = 'notHovered';
   itemsPerPageCount = 10;
   selectedIndicator: any = null;
   searchText: string;
-  currentPage: number = 1;
+  currentPage = 1;
   searchingTextForIndicatorGroup: string;
   indicatorGroupsForSearching = [];
   showIndicatorGroups = false;
@@ -53,14 +53,11 @@ export class ProgramIndicatorsComponent implements OnInit {
     { value: 50, symbol: '50' },
     { value: 100, symbol: '100' },
     { value: 200, symbol: '200' },
-    { value: 'all', symbol: 'all' }
+    { value: 'all', symbol: 'all' },
   ];
   programIndicatorGroups$: Observable<any>;
   programIndicatorGroups: any;
-  constructor(
-    private metadataStore: Store<AppState>,
-    private datePipe: DatePipe
-  ) {
+  constructor(private metadataStore: Store<AppState>) {
     this.searchText = '';
     this.searchingTextForIndicatorGroup = '';
     this.listingIsSet = true;
@@ -107,13 +104,13 @@ export class ProgramIndicatorsComponent implements OnInit {
 
   groupNames() {
     if (this.indicatorGroupsForSearching.length < 5) {
-      return this.indicatorGroupsForSearching.map(g => g.name).join(', ');
+      return this.indicatorGroupsForSearching.map((g) => g.name).join(', ');
     } else {
       const diff = this.indicatorGroupsForSearching.length - 4;
       return (
         this.indicatorGroupsForSearching
           .slice(0, 4)
-          .map(g => g.name)
+          .map((g) => g.name)
           .join(', ') +
         ' and ' +
         diff +
@@ -126,7 +123,7 @@ export class ProgramIndicatorsComponent implements OnInit {
     if (event) {
       this.indicatorGroupsForSearching.push(group);
     } else {
-      let index = this.indicatorGroupsForSearching.indexOf(group);
+      const index = this.indicatorGroupsForSearching.indexOf(group);
       this.indicatorGroupsForSearching.splice(index, 1);
     }
     this.programIndicatorGroups = this.indicatorGroupsForSearching;
@@ -145,20 +142,20 @@ export class ProgramIndicatorsComponent implements OnInit {
     this.allProgramIndicators$ = this.metadataStore.select(
       pipe(getAllProgramIndicators)
     );
-    this.programIndicatorsList$.subscribe(list => {
+    this.programIndicatorsList$.subscribe((list) => {
       if (list) {
-        this.totalAvailableProgramIndicators = list['pager']['total'];
-        this.allProgramIndicators$.subscribe(indicatorsLoaded => {
+        this.totalAvailableProgramIndicators = list.pager['total'];
+        this.allProgramIndicators$.subscribe((indicatorsLoaded) => {
           if (indicatorsLoaded) {
             this.programIndicators = [];
-            _.map(indicatorsLoaded, indicatorsByPage => {
+            _.map(indicatorsLoaded, (indicatorsByPage) => {
               this.programIndicators = [
                 ...this.programIndicators,
-                ...indicatorsByPage
+                ...indicatorsByPage,
               ];
               this.loadedMetadata.emit({
                 type: 'programIndicator',
-                data: this.programIndicators
+                data: this.programIndicators,
               });
               this.completedPercentage =
                 100 *
@@ -180,16 +177,16 @@ export class ProgramIndicatorsComponent implements OnInit {
           pipe(getAllProgramIndicators)
         );
         if (this.programIndicatorsList$) {
-          this.programIndicatorsList$.subscribe(list => {
+          this.programIndicatorsList$.subscribe((list) => {
             if (list) {
-              this.totalAvailableProgramIndicators = list['pager']['total'];
-              this.allProgramIndicators$.subscribe(indicatorsLoaded => {
+              this.totalAvailableProgramIndicators = list.pager['total'];
+              this.allProgramIndicators$.subscribe((indicatorsLoaded) => {
                 if (indicatorsLoaded) {
                   this.programIndicators = [];
-                  _.map(indicatorsLoaded, indicatorsByPage => {
+                  _.map(indicatorsLoaded, (indicatorsByPage) => {
                     this.programIndicators = [
                       ...this.programIndicators,
-                      ...indicatorsByPage
+                      ...indicatorsByPage,
                     ];
                     this.completedPercentage =
                       100 *
@@ -207,17 +204,17 @@ export class ProgramIndicatorsComponent implements OnInit {
         }
       }
     });
-    this.programIndicatorGroups$.subscribe(groups => {
+    this.programIndicatorGroups$.subscribe((groups) => {
       if (groups) {
-        this.programIndicatorGroups = groups['programIndicatorGroups'];
+        this.programIndicatorGroups = groups.programIndicatorGroups;
         this.selectedMetadataGroups.emit(this.programIndicatorGroups);
       }
     });
   }
 
   dwndToCSV(metadataObject$) {
-    metadataObject$.subscribe(metadataArr => {
-      let arr = [];
+    metadataObject$.subscribe((metadataArr) => {
+      const arr = [];
       arr.push('UID');
       arr.push('Indicator Name');
       arr.push('Aggregation type');
@@ -226,8 +223,8 @@ export class ProgramIndicatorsComponent implements OnInit {
       arr.push('Filter');
       this.dataToDownload.push(arr);
       if (metadataArr) {
-        metadataArr.forEach(metadata => {
-          let arr = [];
+        metadataArr.forEach((metadata) => {
+          const arr = [];
           arr.push(metadata.id);
           arr.push(metadata.name);
           arr.push(metadata.aggregationType);
@@ -245,12 +242,12 @@ export class ProgramIndicatorsComponent implements OnInit {
           this.dataToDownload.push(arr);
         });
       }
-      (function() {
+      (function () {
         let asUtf16, downloadExcelCsv, makeExcelCsvBlob, toTsv;
         let rows = this.dataToDownload;
 
-        asUtf16 = function(str) {
-          var buffer, bufferView, i, val, _i, _ref;
+        asUtf16 = function (str) {
+          let buffer, bufferView, i, val, _i, _ref;
           buffer = new ArrayBuffer(str.length * 2);
           bufferView = new Uint16Array(buffer);
           bufferView[0] = 0xfeff;
@@ -265,15 +262,15 @@ export class ProgramIndicatorsComponent implements OnInit {
           return bufferView;
         };
 
-        makeExcelCsvBlob = function(rows) {
+        makeExcelCsvBlob = function (rows) {
           return new Blob([asUtf16(toTsv(rows)).buffer], {
-            type: 'text/csv;charset=UTF-16'
+            type: 'text/csv;charset=UTF-16',
           });
         };
 
-        toTsv = function(rows) {
-          var escapeValue;
-          escapeValue = function(val) {
+        toTsv = function (rows) {
+          let escapeValue;
+          escapeValue = function (val) {
             if (typeof val === 'string') {
               return '"' + val.replace(/"/g, '""') + '"';
             } else if (val != null) {
@@ -284,15 +281,15 @@ export class ProgramIndicatorsComponent implements OnInit {
           };
           return (
             rows
-              .map(function(row) {
+              .map(function (row) {
                 return row.map(escapeValue).join(',');
               })
               .join('\n') + '\n'
           );
         };
 
-        downloadExcelCsv = function(rows, attachmentFilename) {
-          var a, blob;
+        downloadExcelCsv = function (rows, attachmentFilename) {
+          let a, blob;
           blob = makeExcelCsvBlob(rows);
           a = document.createElement('a');
           a.style.display = 'none';

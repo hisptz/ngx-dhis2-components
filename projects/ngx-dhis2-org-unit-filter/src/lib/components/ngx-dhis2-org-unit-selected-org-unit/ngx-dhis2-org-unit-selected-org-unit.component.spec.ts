@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { NgxDhis2OrgUnitSelectedOrgUnitComponent } from './ngx-dhis2-org-unit-selected-org-unit.component';
 
@@ -6,7 +6,7 @@ describe('NgxDhis2OrgUnitSelectedOrgUnitComponent', () => {
   let component: NgxDhis2OrgUnitSelectedOrgUnitComponent;
   let fixture: ComponentFixture<NgxDhis2OrgUnitSelectedOrgUnitComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ NgxDhis2OrgUnitSelectedOrgUnitComponent ]
     })

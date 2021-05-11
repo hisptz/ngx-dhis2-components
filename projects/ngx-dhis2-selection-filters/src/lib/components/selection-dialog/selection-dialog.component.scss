@@ -1,0 +1,15 @@
+.button-text {
+  margin-left: 5px;
+}
+.tab-icon {
+  margin-right: 15px;
+}
+
+::ng-deep .mat-tab-label {
+  justify-content: space-between !important;
+  padding: 0 10px !important;
+}
+
+.selection-filter-content {
+  padding-top: 15px;
+}
